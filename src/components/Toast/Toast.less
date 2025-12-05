@@ -1,0 +1,109 @@
+// Toast CSS Variables
+.apron-toast-root {
+  // Light mode (default)
+  --toast-bg: rgba(0, 0, 0, 0.8);
+  --toast-text: #ffffff;
+  --toast-success: #22c55e;
+  --toast-fail: #ef4444;
+  --toast-danger: #f59e0b;
+  --toast-loading: #ffffff;
+}
+
+[data-theme='dark'] .apron-toast-root {
+  --toast-bg: rgba(255, 255, 255, 0.9);
+  --toast-text: #18181b;
+  --toast-success: #22c55e;
+  --toast-fail: #ef4444;
+  --toast-danger: #f59e0b;
+  --toast-loading: #18181b;
+}
+
+// Base styles
+.apron-toast-root {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+  font-family: var(--apron-font-family);
+  pointer-events: none;
+}
+
+.apron-toast {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--toast-bg);
+  border-radius: var(--apron-radius-lg);
+  min-width: 100px;
+
+  &__overlay {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+  }
+
+  &__icon {
+    width: 36px;
+    height: 36px;
+    color: var(--toast-text);
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &__text {
+    font-size: 0.875rem;
+    color: var(--toast-text);
+    text-align: center;
+    max-width: 200px;
+    word-break: break-word;
+  }
+
+  &--success &__icon {
+    color: var(--toast-success);
+  }
+
+  &--fail &__icon {
+    color: var(--toast-fail);
+  }
+
+  &--danger &__icon {
+    color: var(--toast-danger);
+  }
+
+  &--loading &__icon {
+    color: var(--toast-loading);
+
+    svg {
+      animation: apron-toast-spin 1s linear infinite;
+    }
+  }
+}
+
+// Animations
+.apron-toast-enter-active,
+.apron-toast-leave-active {
+  transition: all 0.2s ease;
+}
+
+.apron-toast-enter-from,
+.apron-toast-leave-to {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+@keyframes apron-toast-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+

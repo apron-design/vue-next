@@ -1,0 +1,201 @@
+// Select CSS Variables
+.apron-select {
+  // Light mode (default)
+  --select-bg: #ffffff;
+  --select-border: #e4e4e7;
+  --select-border-focus: #393939;
+  --select-text: #18181b;
+  --select-placeholder: #a1a1aa;
+  --select-disabled-bg: #f4f4f5;
+  --select-disabled-text: #a1a1aa;
+  --select-dropdown-bg: #ffffff;
+  --select-dropdown-border: #e4e4e7;
+  --select-dropdown-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --select-option-hover: #f4f4f5;
+  --select-option-selected: #393939;
+  --select-option-selected-text: #ffffff;
+  --select-icon: #71717a;
+}
+
+[data-theme='dark'] .apron-select {
+  --select-bg: #27272a;
+  --select-border: #3f3f46;
+  --select-border-focus: #fafafa;
+  --select-text: #fafafa;
+  --select-placeholder: #71717a;
+  --select-disabled-bg: #18181b;
+  --select-disabled-text: #52525b;
+  --select-dropdown-bg: #27272a;
+  --select-dropdown-border: #3f3f46;
+  --select-dropdown-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --select-option-hover: #3f3f46;
+  --select-option-selected: #fafafa;
+  --select-option-selected-text: #18181b;
+  --select-icon: #a1a1aa;
+}
+
+// Base styles
+.apron-select {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  font-family: var(--apron-font-family);
+  font-size: 0.875rem;
+
+  &__trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 40px;
+    padding: 0 12px;
+    background: var(--select-bg);
+    border: 1px solid var(--select-border);
+    border-radius: var(--apron-radius-md);
+    color: var(--select-text);
+    cursor: pointer;
+    outline: none;
+    transition: all var(--apron-transition-fast);
+
+    &:focus {
+      border-color: var(--select-border-focus);
+      box-shadow: 0 0 0 2px rgba(57, 57, 57, 0.1);
+    }
+  }
+
+  &__value {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__placeholder {
+    flex: 1;
+    color: var(--select-placeholder);
+  }
+
+  &__suffix {
+    display: flex;
+    align-items: center;
+    margin-left: 8px;
+    color: var(--select-icon);
+  }
+
+  &__arrow {
+    width: 16px;
+    height: 16px;
+    transition: transform var(--apron-transition-fast);
+  }
+
+  &__loading {
+    width: 16px;
+    height: 16px;
+
+    svg {
+      width: 100%;
+      height: 100%;
+      animation: apron-select-spin 1s linear infinite;
+    }
+  }
+
+  &__dropdown {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: var(--select-dropdown-bg);
+    border: 1px solid var(--select-dropdown-border);
+    border-radius: var(--apron-radius-md);
+    box-shadow: var(--select-dropdown-shadow);
+    overflow: hidden;
+  }
+
+  &__options {
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 4px 0;
+  }
+
+  &__option {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: all var(--apron-transition-fast);
+
+    &:hover:not(&--disabled):not(&--selected) {
+      background: var(--select-option-hover);
+    }
+
+    &--selected {
+      background: var(--select-option-selected);
+      color: var(--select-option-selected-text);
+    }
+
+    &--disabled {
+      color: var(--select-disabled-text);
+      cursor: not-allowed;
+    }
+  }
+
+  // Open state
+  &--open &__trigger {
+    border-color: var(--select-border-focus);
+  }
+
+  &--open &__arrow {
+    transform: rotate(180deg);
+  }
+
+  // Disabled state
+  &--disabled &__trigger {
+    background: var(--select-disabled-bg);
+    color: var(--select-disabled-text);
+    cursor: not-allowed;
+  }
+
+  // Loading state
+  &--loading &__trigger {
+    cursor: wait;
+  }
+
+  // Inflow mode
+  &--inflow &__trigger {
+    background: transparent;
+    border-color: transparent;
+    padding: 0;
+    height: auto;
+
+    &:focus {
+      box-shadow: none;
+    }
+  }
+
+  &--inflow &__dropdown {
+    min-width: 120px;
+  }
+}
+
+// Dropdown animation
+.apron-select-dropdown-enter-active,
+.apron-select-dropdown-leave-active {
+  transition: all var(--apron-transition-fast);
+}
+
+.apron-select-dropdown-enter-from,
+.apron-select-dropdown-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+@keyframes apron-select-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+

@@ -1,0 +1,112 @@
+{
+  "name": "@apron-design/vue",
+  "version": "21.0.1",
+  "description": "Apron Design - A modern, intelligent Vue 3 component library built with TypeScript and Less. Featuring 40+ components with dark mode support.",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./styles": "./dist/styles/index.css"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "sideEffects": [
+    "**/*.css",
+    "**/*.less"
+  ],
+  "scripts": {
+    "dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs",
+    "build": "vite build && vue-tsc --declaration --emitDeclarationOnly",
+    "build:storybook": "storybook build",
+    "lint": "eslint src --ext .ts,.vue",
+    "lint:fix": "eslint src --ext .ts,.vue --fix",
+    "format": "prettier --write \"src/**/*.{ts,vue,less}\"",
+    "test": "vitest",
+    "test:coverage": "vitest --coverage",
+    "prepublishOnly": "npm run build"
+  },
+  "peerDependencies": {
+    "vue": ">=3.3.0"
+  },
+  "devDependencies": {
+    "@storybook/addon-essentials": "^8.4.2",
+    "@storybook/addon-interactions": "^8.4.2",
+    "@storybook/addon-links": "^8.4.2",
+    "@storybook/blocks": "^8.4.2",
+    "@storybook/test": "^8.4.2",
+    "@storybook/vue3": "^8.4.2",
+    "@storybook/vue3-vite": "^8.4.2",
+    "@testing-library/vue": "^8.1.0",
+    "@types/node": "^22.10.1",
+    "@typescript-eslint/eslint-plugin": "^8.16.0",
+    "@typescript-eslint/parser": "^8.16.0",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "@vue/test-utils": "^2.4.6",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-vue": "^9.31.0",
+    "jsdom": "^25.0.1",
+    "less": "^4.4.2",
+    "prettier": "^3.4.1",
+    "storybook": "^8.4.2",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.1",
+    "vite-plugin-dts": "^4.3.0",
+    "vitepress": "^1.6.4",
+    "vitest": "^2.1.6",
+    "vue": "^3.5.13",
+    "vue-tsc": "^2.1.10"
+  },
+  "keywords": [
+    "vue",
+    "vue3",
+    "vue-components",
+    "components",
+    "ui",
+    "ui-components",
+    "design-system",
+    "component-library",
+    "less",
+    "typescript",
+    "dark-mode",
+    "form",
+    "modal",
+    "toast",
+    "grid",
+    "responsive",
+    "ssr"
+  ],
+  "author": "Apron Design Team, Offontime Inc.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apron-design/vue.git"
+  },
+  "homepage": "https://github.com/apron-design/vue#readme",
+  "bugs": {
+    "url": "https://github.com/apron-design/vue/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

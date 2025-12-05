@@ -1,0 +1,64 @@
+// Card CSS Variables
+.apron-card {
+  // Light mode (default)
+  --card-bg: #ffffff;
+  --card-border: #e4e4e7;
+  --card-header-border: #e4e4e7;
+  --card-title: #18181b;
+  --card-extra: #71717a;
+  --card-text: #3f3f46;
+}
+
+[data-theme='dark'] .apron-card {
+  --card-bg: #27272a;
+  --card-border: #3f3f46;
+  --card-header-border: #3f3f46;
+  --card-title: #fafafa;
+  --card-extra: #a1a1aa;
+  --card-text: #d4d4d8;
+}
+
+// Base styles
+.apron-card {
+  background: var(--card-bg);
+  border-radius: var(--apron-radius-lg);
+  font-family: var(--apron-font-family);
+  overflow: hidden;
+
+  &--bordered {
+    border: 1px solid var(--card-border);
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--card-header-border);
+  }
+
+  &__title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--card-title);
+    line-height: 1.4;
+  }
+
+  &__extra {
+    font-size: 0.875rem;
+    color: var(--card-extra);
+  }
+
+  &__body {
+    padding: 1.25rem;
+    color: var(--card-text);
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+
+  &__footer {
+    padding: 0.75rem 1.25rem;
+    border-top: 1px solid var(--card-header-border);
+  }
+}
+

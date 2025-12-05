@@ -1,0 +1,113 @@
+// Tabs CSS Variables
+.apron-tabs {
+  // Light mode (default)
+  --tabs-border: #e4e4e7;
+  --tabs-text: #71717a;
+  --tabs-text-active: #18181b;
+  --tabs-indicator: #393939;
+  --tabs-bg-hover: #f4f4f5;
+  --tabs-capsule-bg: #f4f4f5;
+  --tabs-capsule-active-bg: #393939;
+  --tabs-capsule-active-text: #ffffff;
+}
+
+[data-theme='dark'] .apron-tabs {
+  --tabs-border: #3f3f46;
+  --tabs-text: #a1a1aa;
+  --tabs-text-active: #fafafa;
+  --tabs-indicator: #fafafa;
+  --tabs-bg-hover: #3f3f46;
+  --tabs-capsule-bg: #3f3f46;
+  --tabs-capsule-active-bg: #fafafa;
+  --tabs-capsule-active-text: #18181b;
+}
+
+// Base styles
+.apron-tabs {
+  font-family: var(--apron-font-family);
+
+  &__list {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--tabs-border);
+  }
+
+  &__nav {
+    display: flex;
+    gap: 0.25rem;
+  }
+
+  &__extra {
+    font-size: 0.875rem;
+    color: var(--tabs-text);
+  }
+
+  &__tab {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    font-family: inherit;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--tabs-text);
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    cursor: pointer;
+    transition: all var(--apron-transition-fast);
+
+    &:hover:not(&--disabled) {
+      color: var(--tabs-text-active);
+    }
+
+    &--active {
+      color: var(--tabs-text-active);
+      border-bottom-color: var(--tabs-indicator);
+    }
+
+    &--disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  &__panel {
+    padding: 1rem 0;
+  }
+
+  // Capsule mode
+  &--capsule {
+    .apron-tabs__list {
+      border-bottom: none;
+    }
+
+    .apron-tabs__nav {
+      display: inline-flex;
+      padding: 4px;
+      background: var(--tabs-capsule-bg);
+      border-radius: var(--apron-radius-lg);
+      gap: 0;
+    }
+
+    .apron-tabs__tab {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: var(--apron-radius-md);
+      margin: 0;
+
+      &:hover:not(&--disabled):not(&--active) {
+        background: var(--tabs-bg-hover);
+      }
+
+      &--active {
+        background: var(--tabs-capsule-active-bg);
+        color: var(--tabs-capsule-active-text);
+      }
+    }
+  }
+}
+

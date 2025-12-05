@@ -1,0 +1,119 @@
+// Collapse CSS Variables
+.apron-collapse {
+  // Light mode (default)
+  --collapse-bg: #ffffff;
+  --collapse-border: #e4e4e7;
+  --collapse-header-bg: #fafafa;
+  --collapse-header-hover: #f4f4f5;
+  --collapse-title: #18181b;
+  --collapse-arrow: #71717a;
+  --collapse-content-bg: #ffffff;
+  --collapse-text: #3f3f46;
+  --collapse-disabled: #a1a1aa;
+}
+
+[data-theme='dark'] .apron-collapse {
+  --collapse-bg: #27272a;
+  --collapse-border: #3f3f46;
+  --collapse-header-bg: #27272a;
+  --collapse-header-hover: #3f3f46;
+  --collapse-title: #fafafa;
+  --collapse-arrow: #a1a1aa;
+  --collapse-content-bg: #27272a;
+  --collapse-text: #d4d4d8;
+  --collapse-disabled: #52525b;
+}
+
+// Base styles
+.apron-collapse {
+  font-family: var(--apron-font-family);
+  border: 1px solid var(--collapse-border);
+  border-radius: var(--apron-radius-lg);
+  overflow: hidden;
+}
+
+// Collapse Item
+.apron-collapse-item {
+  border-bottom: 1px solid var(--collapse-border);
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    background: var(--collapse-header-bg);
+    cursor: pointer;
+    transition: background var(--apron-transition-fast);
+
+    &:hover {
+      background: var(--collapse-header-hover);
+    }
+  }
+
+  &__arrow {
+    width: 16px;
+    height: 16px;
+    color: var(--collapse-arrow);
+    flex-shrink: 0;
+    transition: transform var(--apron-transition-fast);
+  }
+
+  &__title {
+    flex: 1;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--collapse-title);
+    line-height: 1.4;
+  }
+
+  &__content {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows var(--apron-transition-normal);
+  }
+
+  &__body {
+    overflow: hidden;
+    padding: 0 1.25rem;
+    background: var(--collapse-content-bg);
+    color: var(--collapse-text);
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+
+  // Active state
+  &--active {
+    .apron-collapse-item__arrow {
+      transform: rotate(90deg);
+    }
+
+    .apron-collapse-item__content {
+      grid-template-rows: 1fr;
+    }
+
+    .apron-collapse-item__body {
+      padding: 1rem 1.25rem;
+    }
+  }
+
+  // Disabled state
+  &--disabled {
+    .apron-collapse-item__header {
+      cursor: not-allowed;
+      opacity: 0.6;
+
+      &:hover {
+        background: var(--collapse-header-bg);
+      }
+    }
+
+    .apron-collapse-item__title {
+      color: var(--collapse-disabled);
+    }
+  }
+}
+

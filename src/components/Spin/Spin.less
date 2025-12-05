@@ -1,0 +1,167 @@
+// Spin CSS Variables
+.apron-spin,
+.apron-spin-root {
+  // Light mode (default)
+  --spin-color: #393939;
+  --spin-text: #3f3f46;
+  --spin-overlay: rgba(255, 255, 255, 0.75);
+}
+
+[data-theme='dark'] .apron-spin,
+[data-theme='dark'] .apron-spin-root {
+  --spin-color: #fafafa;
+  --spin-text: #d4d4d8;
+  --spin-overlay: rgba(24, 24, 27, 0.75);
+}
+
+// Base styles
+.apron-spin {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--apron-font-family);
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    color: var(--spin-color);
+
+    svg {
+      width: 100%;
+      height: 100%;
+      animation: apron-spin-rotate 1s linear infinite;
+    }
+  }
+
+  &__text {
+    font-size: 0.875rem;
+    color: var(--spin-text);
+  }
+
+  // Wrapper mode
+  &--wrapper {
+    position: relative;
+    width: 100%;
+  }
+
+  &__content {
+    transition: all var(--apron-transition-normal);
+
+    &--blur {
+      opacity: 0.5;
+      pointer-events: none;
+      filter: blur(1px);
+    }
+  }
+
+  &__indicator {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    z-index: 10;
+  }
+
+  // Placement
+  &--center &__indicator {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  &--top &__indicator {
+    top: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  &--bottom &__indicator {
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  &--left &__indicator {
+    top: 50%;
+    left: 1rem;
+    transform: translateY(-50%);
+    flex-direction: row;
+  }
+
+  &--right &__indicator {
+    top: 50%;
+    right: 1rem;
+    transform: translateY(-50%);
+    flex-direction: row;
+  }
+}
+
+// Fullscreen mode
+.apron-spin-root {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+  font-family: var(--apron-font-family);
+}
+
+.apron-spin--fullscreen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  z-index: 1;
+
+  .apron-spin__overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--spin-overlay);
+    z-index: -1;
+  }
+
+  .apron-spin__icon {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+// Animations
+@keyframes apron-spin-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.apron-spin-fade-enter-active,
+.apron-spin-fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.apron-spin-fade-enter-from,
+.apron-spin-fade-leave-to {
+  opacity: 0;
+}
+
+.apron-spin-fullscreen-enter-active,
+.apron-spin-fullscreen-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.apron-spin-fullscreen-enter-from,
+.apron-spin-fullscreen-leave-to {
+  opacity: 0;
+}
+

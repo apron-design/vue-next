@@ -1,0 +1,95 @@
+// Pagination CSS Variables
+.apron-pagination {
+  // Light mode (default)
+  --pagination-bg: #ffffff;
+  --pagination-bg-hover: #f4f4f5;
+  --pagination-bg-active: #393939;
+  --pagination-border: #e4e4e7;
+  --pagination-text: #3f3f46;
+  --pagination-text-active: #ffffff;
+  --pagination-text-disabled: #a1a1aa;
+}
+
+[data-theme='dark'] .apron-pagination {
+  --pagination-bg: #27272a;
+  --pagination-bg-hover: #3f3f46;
+  --pagination-bg-active: #fafafa;
+  --pagination-border: #3f3f46;
+  --pagination-text: #d4d4d8;
+  --pagination-text-active: #18181b;
+  --pagination-text-disabled: #52525b;
+}
+
+// Base styles
+.apron-pagination {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--apron-font-family);
+
+  &__total {
+    font-size: 0.875rem;
+    color: var(--pagination-text);
+    margin-right: 0.5rem;
+  }
+
+  &__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+    padding: 0 8px;
+    background: var(--pagination-bg);
+    border: 1px solid var(--pagination-border);
+    border-radius: var(--apron-radius-md);
+    color: var(--pagination-text);
+    font-family: inherit;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all var(--apron-transition-fast);
+
+    &:hover:not(:disabled) {
+      background: var(--pagination-bg-hover);
+    }
+
+    &:disabled {
+      color: var(--pagination-text-disabled);
+      cursor: not-allowed;
+    }
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  &__page {
+    &--active {
+      background: var(--pagination-bg-active);
+      border-color: var(--pagination-bg-active);
+      color: var(--pagination-text-active);
+
+      &:hover:not(:disabled) {
+        background: var(--pagination-bg-active);
+      }
+    }
+  }
+
+  &__ellipsis {
+    border-color: transparent;
+    background: transparent;
+    letter-spacing: 1px;
+
+    &:hover:not(:disabled) {
+      background: transparent;
+      color: var(--pagination-bg-active);
+    }
+  }
+
+  &--disabled {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+}
+

@@ -1,0 +1,90 @@
+// Avatar CSS Variables
+.apron-avatar {
+  // Light mode (default)
+  --avatar-bg: #e4e4e7;
+  --avatar-text: #71717a;
+  --avatar-border: #ffffff;
+}
+
+[data-theme='dark'] .apron-avatar {
+  --avatar-bg: #3f3f46;
+  --avatar-text: #a1a1aa;
+  --avatar-border: #27272a;
+}
+
+// Base styles
+.apron-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--avatar-bg);
+  color: var(--avatar-text);
+  border-radius: 50%;
+  overflow: hidden;
+  font-family: var(--apron-font-family);
+  font-weight: 500;
+  user-select: none;
+
+  &--mini {
+    width: 24px;
+    height: 24px;
+    font-size: 0.625rem;
+  }
+
+  &--small {
+    width: 32px;
+    height: 32px;
+    font-size: 0.75rem;
+  }
+
+  &--middle {
+    width: 40px;
+    height: 40px;
+    font-size: 0.875rem;
+  }
+
+  &--large {
+    width: 56px;
+    height: 56px;
+    font-size: 1.125rem;
+  }
+
+  &--square {
+    border-radius: var(--apron-radius-md);
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &__content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+
+    svg {
+      width: 60%;
+      height: 60%;
+    }
+  }
+}
+
+// Avatar Group
+.apron-avatar-group {
+  display: inline-flex;
+  flex-direction: row-reverse;
+
+  .apron-avatar {
+    border: 2px solid var(--avatar-border);
+    margin-left: -8px;
+
+    &:last-child {
+      margin-left: 0;
+    }
+  }
+}
+

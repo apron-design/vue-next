@@ -1,0 +1,64 @@
+// Tooltip CSS Variables
+.apron-tooltip {
+  // Light mode (default)
+  --tooltip-bg: #18181b;
+  --tooltip-text: #ffffff;
+  --tooltip-arrow: #18181b;
+}
+
+[data-theme='dark'] .apron-tooltip {
+  --tooltip-bg: #fafafa;
+  --tooltip-text: #18181b;
+  --tooltip-arrow: #fafafa;
+}
+
+// Base styles
+.apron-tooltip-trigger {
+  display: inline-flex;
+}
+
+.apron-tooltip {
+  position: fixed;
+  z-index: 1070;
+  font-family: var(--apron-font-family);
+  pointer-events: auto;
+
+  &__arrow {
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid var(--tooltip-arrow);
+  }
+
+  &__content {
+    padding: 6px 10px;
+    background: var(--tooltip-bg);
+    color: var(--tooltip-text);
+    font-size: 0.75rem;
+    line-height: 1.4;
+    border-radius: var(--apron-radius-md);
+    white-space: nowrap;
+    max-width: 250px;
+    overflow-wrap: break-word;
+    white-space: normal;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+}
+
+// Animations
+.apron-tooltip-enter-active,
+.apron-tooltip-leave-active {
+  transition: all 0.15s ease;
+}
+
+.apron-tooltip-enter-from,
+.apron-tooltip-leave-to {
+  opacity: 0;
+  transform: translateY(4px);
+}
+

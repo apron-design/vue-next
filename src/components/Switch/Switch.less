@@ -1,0 +1,151 @@
+// Switch CSS Variables
+.apron-switch {
+  // Light mode (default)
+  --switch-bg: #d4d4d8;
+  --switch-bg-hover: #a1a1aa;
+  --switch-checked-bg: #393939;
+  --switch-checked-bg-hover: #2b2b2b;
+  --switch-thumb: #ffffff;
+  --switch-disabled-bg: #e4e4e7;
+  --switch-disabled-thumb: #f4f4f5;
+}
+
+[data-theme='dark'] .apron-switch {
+  --switch-bg: #52525b;
+  --switch-bg-hover: #71717a;
+  --switch-checked-bg: #fafafa;
+  --switch-checked-bg-hover: #e4e4e7;
+  --switch-thumb: #18181b;
+  --switch-disabled-bg: #3f3f46;
+  --switch-disabled-thumb: #52525b;
+}
+
+// Base styles
+.apron-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+
+  &__native {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &__track {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: var(--switch-bg);
+    border-radius: 9999px;
+    transition: all var(--apron-transition-fast);
+  }
+
+  &__thumb {
+    position: absolute;
+    background: var(--switch-thumb);
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: all var(--apron-transition-fast);
+  }
+
+  // Size: default
+  &--default &__track {
+    width: 44px;
+    height: 24px;
+  }
+
+  &--default &__thumb {
+    width: 20px;
+    height: 20px;
+    left: 2px;
+  }
+
+  &--default&--checked &__thumb {
+    transform: translateX(20px);
+  }
+
+  // Size: small
+  &--small &__track {
+    width: 36px;
+    height: 20px;
+  }
+
+  &--small &__thumb {
+    width: 16px;
+    height: 16px;
+    left: 2px;
+  }
+
+  &--small&--checked &__thumb {
+    transform: translateX(16px);
+  }
+
+  // Size: mini
+  &--mini &__track {
+    width: 28px;
+    height: 16px;
+  }
+
+  &--mini &__thumb {
+    width: 12px;
+    height: 12px;
+    left: 2px;
+  }
+
+  &--mini&--checked &__thumb {
+    transform: translateX(12px);
+  }
+
+  // Hover state
+  &:hover:not(&--disabled) &__track {
+    background: var(--switch-bg-hover);
+  }
+
+  &--checked:hover:not(&--disabled) &__track {
+    background: var(--switch-checked-bg-hover);
+  }
+
+  // Checked state
+  &--checked &__track {
+    background: var(--switch-checked-bg);
+  }
+
+  // Variant: primary (same as default checked)
+  &--primary&--checked &__track {
+    background: var(--switch-checked-bg);
+  }
+
+  // Variant: secondary
+  &--secondary&--checked &__track {
+    background: #4C9EEA;
+  }
+
+  &--secondary&--checked:hover:not(&--disabled) &__track {
+    background: #3182CE;
+  }
+
+  // Disabled state
+  &--disabled {
+    cursor: not-allowed;
+
+    .apron-switch__track {
+      background: var(--switch-disabled-bg);
+    }
+
+    .apron-switch__thumb {
+      background: var(--switch-disabled-thumb);
+      box-shadow: none;
+    }
+  }
+
+  // Focus state
+  &__native:focus-visible + &__track {
+    box-shadow: 0 0 0 2px rgba(57, 57, 57, 0.2);
+  }
+}
+

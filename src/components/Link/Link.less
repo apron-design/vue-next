@@ -1,0 +1,80 @@
+// Link CSS Variables
+.apron-link {
+  // Light mode (default)
+  --link-primary: #4C9EEA;
+  --link-primary-hover: #3182CE;
+  --link-secondary: #71717a;
+  --link-secondary-hover: #52525b;
+  --link-danger: #ef4444;
+  --link-danger-hover: #dc2626;
+}
+
+[data-theme='dark'] .apron-link {
+  --link-primary: #6DAEEF;
+  --link-primary-hover: #8FBEF3;
+  --link-secondary: #a1a1aa;
+  --link-secondary-hover: #d4d4d8;
+  --link-danger: #f87171;
+  --link-danger-hover: #fca5a5;
+}
+
+// Base styles
+.apron-link {
+  display: inline;
+  font-family: var(--apron-font-family);
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  cursor: pointer;
+  transition: color var(--apron-transition-fast);
+  text-decoration: none;
+
+  &--primary {
+    color: var(--link-primary);
+
+    &:hover {
+      color: var(--link-primary-hover);
+    }
+  }
+
+  &--secondary {
+    color: var(--link-secondary);
+
+    &:hover {
+      color: var(--link-secondary-hover);
+    }
+  }
+
+  &--danger {
+    color: var(--link-danger);
+
+    &:hover {
+      color: var(--link-danger-hover);
+    }
+  }
+
+  &--underline-always {
+    text-decoration: underline;
+  }
+
+  &--underline-hover {
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &--underline-never {
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+

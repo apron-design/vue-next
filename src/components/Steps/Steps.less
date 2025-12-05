@@ -1,0 +1,171 @@
+// Steps CSS Variables
+.apron-steps {
+  // Light mode (default)
+  --steps-icon-bg: #f4f4f5;
+  --steps-icon-text: #71717a;
+  --steps-icon-border: #e4e4e7;
+  --steps-current-bg: #393939;
+  --steps-current-text: #ffffff;
+  --steps-completed-bg: #22c55e;
+  --steps-completed-text: #ffffff;
+  --steps-error-bg: #ef4444;
+  --steps-error-text: #ffffff;
+  --steps-line: #e4e4e7;
+  --steps-line-completed: #22c55e;
+  --steps-title: #18181b;
+  --steps-subtitle: #71717a;
+}
+
+[data-theme='dark'] .apron-steps {
+  --steps-icon-bg: #3f3f46;
+  --steps-icon-text: #a1a1aa;
+  --steps-icon-border: #52525b;
+  --steps-current-bg: #fafafa;
+  --steps-current-text: #18181b;
+  --steps-completed-bg: #22c55e;
+  --steps-completed-text: #ffffff;
+  --steps-error-bg: #ef4444;
+  --steps-error-text: #ffffff;
+  --steps-line: #3f3f46;
+  --steps-line-completed: #22c55e;
+  --steps-title: #fafafa;
+  --steps-subtitle: #a1a1aa;
+}
+
+// Base styles
+.apron-steps {
+  display: flex;
+  font-family: var(--apron-font-family);
+
+  &__step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    position: relative;
+
+    &:last-child {
+      flex: none;
+    }
+  }
+
+  &__content {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--steps-icon-bg);
+    border: 2px solid var(--steps-icon-border);
+    color: var(--steps-icon-text);
+    font-size: 0.875rem;
+    font-weight: 600;
+    flex-shrink: 0;
+    transition: all var(--apron-transition-fast);
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  &__line {
+    flex: 1;
+    height: 2px;
+    background: var(--steps-line);
+    margin: 0 8px;
+    transition: all var(--apron-transition-fast);
+  }
+
+  &__label {
+    margin-top: 0.5rem;
+    text-align: center;
+  }
+
+  &__title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--steps-title);
+    line-height: 1.4;
+  }
+
+  &__subtitle {
+    font-size: 0.75rem;
+    color: var(--steps-subtitle);
+    margin-top: 0.125rem;
+  }
+
+  // Status: current
+  &__step--current {
+    .apron-steps__icon {
+      background: var(--steps-current-bg);
+      border-color: var(--steps-current-bg);
+      color: var(--steps-current-text);
+    }
+  }
+
+  // Status: completed
+  &__step--completed {
+    .apron-steps__icon {
+      background: var(--steps-completed-bg);
+      border-color: var(--steps-completed-bg);
+      color: var(--steps-completed-text);
+    }
+
+    .apron-steps__line {
+      background: var(--steps-line-completed);
+    }
+  }
+
+  // Status: error
+  &__step--error {
+    .apron-steps__icon {
+      background: var(--steps-error-bg);
+      border-color: var(--steps-error-bg);
+      color: var(--steps-error-text);
+    }
+  }
+
+  // Label placement: top
+  &--label-top {
+    .apron-steps__step {
+      flex-direction: column-reverse;
+    }
+
+    .apron-steps__label {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  // Label placement: both
+  &--label-both {
+    .apron-steps__step {
+      &:nth-child(odd) {
+        flex-direction: column;
+
+        .apron-steps__label {
+          margin-top: 0.5rem;
+          margin-bottom: 0;
+        }
+      }
+
+      &:nth-child(even) {
+        flex-direction: column-reverse;
+
+        .apron-steps__label {
+          margin-top: 0;
+          margin-bottom: 0.5rem;
+        }
+      }
+    }
+  }
+}
+
