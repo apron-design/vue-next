@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onBeforeUnmount, Teleport, Transition, useAttrs, nextTick } from 'vue'
+import { ref, onMounted, onBeforeUnmount, useAttrs, nextTick } from 'vue'
 import Button from '../Button/Button.vue'
 
 export interface PopoverConfirmProps {

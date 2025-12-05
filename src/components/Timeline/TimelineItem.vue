@@ -13,7 +13,7 @@ export interface TimelineItemProps {
 const props = defineProps<TimelineItemProps>()
 
 const attrs = useAttrs()
-const timelineContext = inject<TimelineContext | null>(timelineContextKey, null)
+inject<TimelineContext | null>(timelineContextKey, null)
 
 const itemClasses = computed(() => [
   'apron-timeline-item'

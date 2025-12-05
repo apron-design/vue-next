@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, onBeforeUnmount, Teleport, Transition, useAttrs, nextTick } from 'vue'
+import { ref, onBeforeUnmount, useAttrs, nextTick } from 'vue'
 
 export interface TooltipProps {
   content?: string

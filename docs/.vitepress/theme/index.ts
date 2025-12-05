@@ -1,9 +1,12 @@
 import DefaultTheme from 'vitepress/theme'
-import '@apron-design/vue/styles'
+import ApronDesign from '../../../src/index'
+import '../../../src/styles/index.less'
+import './custom.css'
 
 export default {
   extends: DefaultTheme,
   enhanceApp({ app }) {
-    // 在这里可以全局注册组件
+    // 全局注册组件
+    app.use(ApronDesign)
   },
 }

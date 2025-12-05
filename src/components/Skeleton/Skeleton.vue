@@ -14,6 +14,7 @@ const props = withDefaults(defineProps<SkeletonProps>(), {
 const attrs = useAttrs()
 const slots = defineSlots<{
   default?: () => any
+  template?: () => any
 }>()
 
 const skeletonClasses = computed(() => [

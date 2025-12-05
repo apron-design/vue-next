@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, onBeforeUnmount, Teleport, Transition, useAttrs } from 'vue'
+import { ref, computed, watch, onMounted, onBeforeUnmount, useAttrs } from 'vue'
 import Button from '../Button/Button.vue'
 import type { ButtonProps } from '../Button/Button.vue'
 

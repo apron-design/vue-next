@@ -1,5 +1,4 @@
-<script setup lang="ts">
-import { ref, computed, provide, watch, useAttrs } from 'vue'
+<script lang="ts">
 import type { InjectionKey } from 'vue'
 
 export interface CollapseContext {
@@ -8,6 +7,10 @@ export interface CollapseContext {
 }
 
 export const collapseContextKey: InjectionKey<CollapseContext> = Symbol('collapseContext')
+</script>
+
+<script setup lang="ts">
+import { ref, computed, provide, watch, useAttrs } from 'vue'
 
 export interface CollapseProps {
   modelValue?: string[]

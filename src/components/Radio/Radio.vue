@@ -1,5 +1,4 @@
-<script setup lang="ts">
-import { ref, computed, watch, inject, useAttrs } from 'vue'
+<script lang="ts">
 import type { InjectionKey } from 'vue'
 
 export interface RadioGroupContext {
@@ -11,6 +10,10 @@ export interface RadioGroupContext {
 }
 
 export const radioGroupKey: InjectionKey<RadioGroupContext | null> = Symbol('radioGroup')
+</script>
+
+<script setup lang="ts">
+import { ref, computed, watch, inject, useAttrs } from 'vue'
 
 export interface RadioProps {
   modelValue?: boolean

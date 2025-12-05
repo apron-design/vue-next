@@ -80,5 +80,10 @@ export default defineConfig({
         },
       },
     },
+    resolve: {
+      alias: {
+        '@apron-design/vue': '../../src/index.ts',
+      },
+    },
   },
 })

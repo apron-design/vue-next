@@ -1,5 +1,4 @@
-<script setup lang="ts">
-import { ref, computed, watch, inject, useAttrs } from 'vue'
+<script lang="ts">
 import type { InjectionKey } from 'vue'
 
 export interface CheckboxGroupContext {
@@ -10,6 +9,10 @@ export interface CheckboxGroupContext {
 }
 
 export const checkboxGroupKey: InjectionKey<CheckboxGroupContext | null> = Symbol('checkboxGroup')
+</script>
+
+<script setup lang="ts">
+import { ref, computed, watch, inject, useAttrs } from 'vue'
 
 export interface CheckboxProps {
   modelValue?: boolean

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, Teleport, Transition, useAttrs } from 'vue'
+import { ref, computed, watch, onMounted, useAttrs } from 'vue'
 import type { Component } from 'vue'
 
 export type ToastType = 'success' | 'fail' | 'danger' | 'loading'

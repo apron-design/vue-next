@@ -1,7 +1,7 @@
-import { ref } from 'vue'
+import { ref, type Ref } from 'vue'
 import type { FormInstance } from './Form.vue'
 
-export function useForm(): [typeof formRef, FormInstance] {
+export function useForm(): [Ref<FormInstance | null>, FormInstance] {
   const formRef = ref<FormInstance | null>(null)
 
   const formInstance: FormInstance = {

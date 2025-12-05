@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, useAttrs, Teleport, Transition } from 'vue'
+import { computed, useAttrs } from 'vue'
 import type { Component } from 'vue'
 
 export type SpinPlacement = 'top' | 'bottom' | 'left' | 'right' | 'center'

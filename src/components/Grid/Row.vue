@@ -1,6 +1,5 @@
-<script setup lang="ts">
-import { computed, provide, useAttrs } from 'vue'
-import type { InjectionKey, CSSProperties } from 'vue'
+<script lang="ts">
+import type { InjectionKey } from 'vue'
 
 export type Gutter = number | [number, number] | { xs?: number; sm?: number; md?: number; lg?: number; xl?: number; xxl?: number }
 export type Justify = 'start' | 'end' | 'center' | 'space-around' | 'space-between' | 'space-evenly'
@@ -11,6 +10,11 @@ export interface RowContext {
 }
 
 export const rowContextKey: InjectionKey<RowContext> = Symbol('rowContext')
+</script>
+
+<script setup lang="ts">
+import { computed, provide, useAttrs } from 'vue'
+import type { CSSProperties } from 'vue'
 
 export interface RowProps {
   gutter?: Gutter

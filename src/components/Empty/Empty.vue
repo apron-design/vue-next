@@ -7,7 +7,7 @@ export interface EmptyProps {
   description?: string
 }
 
-const props = withDefaults(defineProps<EmptyProps>(), {
+withDefaults(defineProps<EmptyProps>(), {
   description: '暂无数据'
 })
 

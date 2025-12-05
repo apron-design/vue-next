@@ -22,7 +22,7 @@ const props = withDefaults(defineProps<FormItemProps>(), {
 })
 
 const attrs = useAttrs()
-const slots = useSlots()
+useSlots()
 const formContext = inject<FormContext | null>(formContextKey, null)
 
 const fieldValue = computed(() => {

@@ -1,6 +1,6 @@
-<script setup lang="ts">
-import { ref, computed, provide, reactive, watch, useAttrs } from 'vue'
+<script lang="ts">
 import type { InjectionKey } from 'vue'
+
 
 export type FormLayout = 'horizontal' | 'vertical' | 'inline'
 export type LabelAlign = 'left' | 'right'
@@ -53,6 +53,10 @@ export interface FormProps {
   disabled?: boolean
   initialValues?: Record<string, any>
 }
+</script>
+
+<script setup lang="ts">
+import { ref, computed, provide, reactive, useAttrs } from 'vue'
 
 const props = withDefaults(defineProps<FormProps>(), {
   layout: 'vertical',

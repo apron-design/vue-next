@@ -5,7 +5,7 @@ export interface AvatarGroupProps {
   max?: number
 }
 
-const props = defineProps<AvatarGroupProps>()
+defineProps<AvatarGroupProps>()
 const attrs = useAttrs()
 
 const groupClasses = computed(() => [

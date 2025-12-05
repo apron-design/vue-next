@@ -6,7 +6,7 @@ export interface CardHeaderProps {
   extra?: string
 }
 
-const props = defineProps<CardHeaderProps>()
+defineProps<CardHeaderProps>()
 const attrs = useAttrs()
 </script>
 

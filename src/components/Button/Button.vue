@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, useAttrs } from 'vue'
-import type { ButtonHTMLAttributes, Component } from 'vue'
+import type { Component } from 'vue'
 
 export type ButtonVariant = 'primary' | 'secondary' | 'default' | 'text' | 'link'
 export type ButtonSize = 'small' | 'middle' | 'large'

@@ -1,5 +1,4 @@
-<script setup lang="ts">
-import { ref, computed, provide, watch, useAttrs } from 'vue'
+<script lang="ts">
 import type { InjectionKey } from 'vue'
 
 export interface TabsContext {
@@ -8,6 +7,10 @@ export interface TabsContext {
 }
 
 export const tabsContextKey: InjectionKey<TabsContext> = Symbol('tabsContext')
+</script>
+
+<script setup lang="ts">
+import { ref, computed, provide, watch, useAttrs } from 'vue'
 
 export interface TabsProps {
   modelValue?: string

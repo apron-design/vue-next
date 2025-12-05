@@ -5,7 +5,7 @@ export interface TabListProps {
   extra?: string
 }
 
-const props = defineProps<TabListProps>()
+defineProps<TabListProps>()
 const attrs = useAttrs()
 </script>
 

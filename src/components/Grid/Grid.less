@@ -80,21 +80,48 @@
     display: none;
   }
   
+  // Define percentage values for each column (1-24)
+  @col-1: 4.1666666667%;
+  @col-2: 8.3333333333%;
+  @col-3: 12.5%;
+  @col-4: 16.6666666667%;
+  @col-5: 20.8333333333%;
+  @col-6: 25%;
+  @col-7: 29.1666666667%;
+  @col-8: 33.3333333333%;
+  @col-9: 37.5%;
+  @col-10: 41.6666666667%;
+  @col-11: 45.8333333333%;
+  @col-12: 50%;
+  @col-13: 54.1666666667%;
+  @col-14: 58.3333333333%;
+  @col-15: 62.5%;
+  @col-16: 66.6666666667%;
+  @col-17: 70.8333333333%;
+  @col-18: 75%;
+  @col-19: 79.1666666667%;
+  @col-20: 83.3333333333%;
+  @col-21: 87.5%;
+  @col-22: 91.6666666667%;
+  @col-23: 95.8333333333%;
+  @col-24: 100%;
+  
   // Generate columns from 1 to 24
   .col-loop(@i) when (@i >= 1) {
+    @col-width: ~'@{col-@{i}}';
     .apron-col@{prefix}-@{i} {
       display: block;
-      flex: 0 0 percentage(@i / 24);
-      max-width: percentage(@i / 24);
+      flex: 0 0 @col-width;
+      max-width: @col-width;
     }
     .apron-col@{prefix}-offset-@{i} {
-      margin-left: percentage(@i / 24);
+      margin-left: @col-width;
     }
     .apron-col@{prefix}-push-@{i} {
-      left: percentage(@i / 24);
+      left: @col-width;
     }
     .apron-col@{prefix}-pull-@{i} {
-      right: percentage(@i / 24);
+      right: @col-width;
     }
     .apron-col@{prefix}-order-@{i} {
       order: @i;
@@ -136,4 +163,5 @@
 @media (min-width: @breakpoint-xxl) {
   .make-grid-columns(-xxl);
 }
+
 

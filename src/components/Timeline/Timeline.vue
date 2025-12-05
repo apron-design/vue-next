@@ -1,5 +1,4 @@
-<script setup lang="ts">
-import { computed, provide, useAttrs } from 'vue'
+<script lang="ts">
 import type { InjectionKey } from 'vue'
 
 export type TimelineSide = 'left' | 'right' | 'both'
@@ -9,6 +8,10 @@ export interface TimelineContext {
 }
 
 export const timelineContextKey: InjectionKey<TimelineContext> = Symbol('timelineContext')
+</script>
+
+<script setup lang="ts">
+import { computed, provide, useAttrs } from 'vue'
 
 export interface TimelineProps {
   side?: TimelineSide
