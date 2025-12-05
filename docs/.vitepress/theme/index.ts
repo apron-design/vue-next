@@ -1,14 +1,9 @@
 import DefaultTheme from 'vitepress/theme'
-import type { Theme } from 'vitepress'
-import './custom.css'
-
-// Import component library styles
-import '../../../src/styles/index.scss'
+import '@apron-design/vue/styles'
 
 export default {
   extends: DefaultTheme,
   enhanceApp({ app }) {
-    // Register components globally if needed
-  }
-} satisfies Theme
-
+    // 在这里可以全局注册组件
+  },
+}

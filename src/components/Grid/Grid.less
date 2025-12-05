@@ -75,11 +75,14 @@
 
 // Generate column classes mixin
 .make-grid-columns(@prefix: ~'') {
-  .col-loop(@i) when (@i >= 0) {
-    .apron-col@{prefix}-@{i} when (@i = 0) {
-      display: none;
-    }
-    .apron-col@{prefix}-@{i} when (@i > 0) {
+  // Handle column 0 separately
+  .apron-col@{prefix}-0 {
+    display: none;
+  }
+  
+  // Generate columns from 1 to 24
+  .col-loop(@i) when (@i >= 1) {
+    .apron-col@{prefix}-@{i} {
       display: block;
       flex: 0 0 percentage(@i / 24);
       max-width: percentage(@i / 24);
@@ -99,6 +102,11 @@
     .col-loop(@i - 1);
   }
   .col-loop(24);
+  
+  // Handle order 0 separately
+  .apron-col@{prefix}-order-0 {
+    order: 0;
+  }
 }
 
 // Generate base columns (no prefix)
