@@ -1,3 +1,9 @@
+<script lang="ts">
+export default {
+  name: 'Button'
+}
+</script>
+
 <script setup lang="ts">
 import { ref, computed, useAttrs } from 'vue'
 import type { Component } from 'vue'

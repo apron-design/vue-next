@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress'
+import { demoBlockPlugin } from './plugins/demoBlockPlugin'
 
 export default defineConfig({
   title: 'Apron Design Vue',
@@ -71,6 +72,12 @@ export default defineConfig({
     socialLinks: [
       { icon: 'github', link: 'https://github.com/apron-design/vue' },
     ],
+  },
+  markdown: {
+    config: (md) => {
+      // 使用我们自己的demoBlockPlugin
+      md.use(demoBlockPlugin)
+    },
   },
   vite: {
     css: {
