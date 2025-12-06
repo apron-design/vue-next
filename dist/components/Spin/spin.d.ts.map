@@ -1,1 +1,0 @@
-{"version":3,"file":"spin.d.ts","sourceRoot":"","sources":["../../../src/components/Spin/spin.ts"],"names":[],"mappings":"AAAA,OAAO,EAA+B,KAAK,SAAS,EAAE,MAAM,KAAK,CAAA;AAGjE,MAAM,WAAW,WAAW;IAC1B,IAAI,CAAC,EAAE,MAAM,CAAA;IACb,IAAI,CAAC,EAAE,SAAS,CAAA;CACjB;AA4CD,eAAO,MAAM,WAAW;qBAhBA,WAAW,GAAG,MAAM;;CAmB3C,CAAA;AAED,eAAe,WAAW,CAAA"}
