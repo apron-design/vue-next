@@ -1,16 +1,11 @@
 import DefaultTheme from 'vitepress/theme'
-import ApronDesign from '../../../src/index'
-import '../../../src/styles/index.less'
-import './custom.css'
-import ApronDesignDemoBlock from '../components/ApronDesignDemoBlock.vue'
+import 'vitepress-theme-demoblock/dist/theme/styles/index.css'
+import { useComponents } from './useComponents'
 
 export default {
-  extends: DefaultTheme,
-  components: {
-    ApronDesignDemoBlock
-  },
-  enhanceApp({ app }) {
-    // 全局注册组件
-    app.use(ApronDesign)
-  },
+  ...DefaultTheme,
+  enhanceApp(ctx) {
+    DefaultTheme.enhanceApp(ctx)
+    useComponents(ctx.app)
+  }
 }

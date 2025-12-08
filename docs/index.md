@@ -1,68 +1,32 @@
 ---
 layout: home
 
+title: Apron Design Vue
+titleTemplate: A modern, intelligent Vue 3 component library
+
 hero:
-  name: Apron Design
-  text: Vue 3 组件库
-  tagline: 一个现代化、智能的 Vue 3 组件库，使用 TypeScript 和 SCSS 构建
-  image:
-    src: /logo.svg
-    alt: Apron Design
+  name: Apron Design Vue
+  text: A modern, intelligent Vue 3 component library
+  tagline: Built with TypeScript and Less. Featuring 40+ components with dark mode support.
   actions:
     - theme: brand
-      text: 快速开始
-      link: /guide/quickstart
+      text: Get Started
+      link: /guide/
     - theme: alt
-      text: 组件一览
-      link: /components/button
-    - theme: alt
-      text: GitHub
-      link: https://github.com/apron-design/vue
+      text: View on GitHub
+      link: https://github.com/apron-design/vue-next
 
 features:
-  - icon: 🎨
-    title: 精心设计
-    details: 基于现代设计理念，提供简洁优雅的视觉体验。每个组件都经过精心打磨，确保一致性和可用性。
-  - icon: 🌙
-    title: 暗黑模式
-    details: 内置完整的暗黑模式支持，只需切换 data-theme 属性即可无缝切换主题，无需额外配置。
-  - icon: 📦
-    title: 40+ 组件
-    details: 涵盖表单、数据展示、反馈、导航等多种场景，满足大部分业务需求，持续更新中。
-  - icon: 🔧
-    title: TypeScript
-    details: 使用 TypeScript 编写，提供完整的类型定义，享受智能提示和类型检查带来的开发体验。
-  - icon: 🎯
-    title: 按需引入
-    details: 支持 Tree Shaking，只打包使用到的组件，有效减少最终打包体积。
-  - icon: ⚡
-    title: 高性能
-    details: 基于 Vue 3 Composition API 构建，充分利用响应式系统，确保组件高效运行。
+  - title: Vue 3 Composition API
+    details: Built with Vue 3 Composition API for better performance and developer experience
+  - title: TypeScript Support
+    details: Full TypeScript support with complete type definitions
+  - title: Dark Mode
+    details: Beautiful dark mode support out of the box
+  - title: Less Styling
+    details: Using Less for more flexible and maintainable styling
+  - title: 40+ Components
+    details: A comprehensive set of components for enterprise applications
+  - title: Responsive Design
+    details: Mobile-first responsive design for all devices
 ---
-
-<style>
-:root {
-  --vp-home-hero-name-color: transparent;
-  --vp-home-hero-name-background: -webkit-linear-gradient(120deg, #393939 30%, #4C9EEA);
-  --vp-home-hero-image-background-image: linear-gradient(-45deg, #4C9EEA50 50%, #39393950 50%);
-  --vp-home-hero-image-filter: blur(44px);
-}
-
-.dark {
-  --vp-home-hero-name-background: -webkit-linear-gradient(120deg, #fafafa 30%, #6DAEEF);
-  --vp-home-hero-image-background-image: linear-gradient(-45deg, #6DAEEF50 50%, #fafafa50 50%);
-}
-
-@media (min-width: 640px) {
-  :root {
-    --vp-home-hero-image-filter: blur(56px);
-  }
-}
-
-@media (min-width: 960px) {
-  :root {
-    --vp-home-hero-image-filter: blur(68px);
-  }
-}
-</style>
-

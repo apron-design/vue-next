@@ -1,167 +1,255 @@
+---
+title: Button 按钮
+group: 通用组件
+order: 0
+---
+
 # Button 按钮
 
-常用的操作按钮。
+按钮用于开始一个即时操作。
 
-<script setup>
-import { Button } from '../../src/components/Button'
-import '../../src/styles/index.less'
-import { ref, h } from 'vue'
+## 何时使用
 
-// 加载状态示例的变量
-const loading = ref(false)
+标记了一个（或封装一组）操作命令，响应用户点击行为，触发相应的业务逻辑。
 
-const handleClick = () => {
-  loading.value = true
-  setTimeout(() => {
-    loading.value = false
-  }, 2000)
-}
+## 代码演示
 
-// 图标按钮示例的组件
-const SearchIcon = () => h('svg', { 
-  viewBox: '0 0 24 24', 
-  fill: 'none', 
-  stroke: 'currentColor', 
-  'stroke-width': '2' 
-}, [
-  h('circle', { cx: '11', cy: '11', r: '8' }),
-  h('path', { d: 'M21 21l-4.35-4.35' })
-])
+### 基本用法
+
+基础的按钮用法。
+
+:::demo
+```vue
+<template>
+  <Button>Button</Button>
+</template>
+
+<script setup lang="ts">
+import { Button } from '@apron-design/vue-next'
 </script>
-
-:::demo
-<template>
-  <div style="display: flex; gap: 8px; margin: 16px 0;">
-    <Button variant="primary">主要按钮</Button>
-    <Button variant="secondary">次要按钮</Button>
-    <Button>默认按钮</Button>
-    <Button variant="text">文字按钮</Button>
-    <Button variant="link">链接按钮</Button>
-  </div>
-</template>
+```
 :::
 
-## 按钮尺寸
+### 按钮类型
 
-提供三种尺寸：`large`、`middle`（默认）和 `small`。
+按钮有五种类型：主按钮、次按钮、默认按钮、文字按钮和链接按钮。
 
 :::demo
+```vue
 <template>
-  <div style="display: flex; gap: 8px; margin: 16px 0;">
-    <Button variant="primary" size="large">大按钮</Button>
-    <Button variant="primary" size="middle">中按钮</Button>
-    <Button variant="primary" size="small">小按钮</Button>
+  <div style="display: flex; gap: 12px; align-items: center;">
+    <Button variant="primary">Primary</Button>
+    <Button variant="secondary">Secondary</Button>
+    <Button variant="default">Default</Button>
+    <Button variant="text">Text</Button>
+    <Button variant="link">Link</Button>
   </div>
 </template>
+
+<script setup lang="ts">
+import { Button } from '@apron-design/vue-next'
+</script>
+```
 :::
 
-## 危险按钮
+### 按钮尺寸
 
-用于危险操作，如删除。
+按钮有两种尺寸：中号（40px）和小号（30px）。
 
 :::demo
+```vue
 <template>
-  <div style="display: flex; gap: 8px; margin: 16px 0;">
-    <Button variant="primary" danger>危险主按钮</Button>
-    <Button danger>危险默认按钮</Button>
-    <Button variant="text" danger>危险文字按钮</Button>
+  <div style="display: flex; gap: 12px; align-items: center;">
+    <Button size="md" variant="primary">Medium (40px)</Button>
+    <Button size="sm" variant="primary">Small (30px)</Button>
   </div>
 </template>
+
+<script setup lang="ts">
+import { Button } from '@apron-design/vue-next'
+</script>
+```
 :::
 
-## 虚线按钮
+### 虚线边框
 
-虚线边框样式的按钮。
+通过 `dashed` 属性设置按钮边框为虚线样式。
 
 :::demo
+```vue
 <template>
-  <div style="display: flex; gap: 8px; margin: 16px 0;">
-    <Button dashed>虚线按钮</Button>
-    <Button dashed danger>虚线危险按钮</Button>
+  <div style="display: flex; gap: 12px; align-items: center;">
+    <Button variant="primary" dashed>Primary Dashed</Button>
+    <Button variant="secondary" dashed>Secondary Dashed</Button>
+    <Button variant="default" dashed>Default Dashed</Button>
   </div>
 </template>
+
+<script setup lang="ts">
+import { Button } from '@apron-design/vue-next'
+</script>
+```
 :::
 
-## 加载状态
+### 危险按钮
 
-添加 `loading` 属性即可让按钮处于加载状态。
+通过 `danger` 属性设置危险按钮样式，可与其他属性组合使用。
 
 :::demo
+```vue
 <template>
-  <div style="display: flex; gap: 8px; margin: 16px 0;">
-    <Button variant="primary" loading>加载中</Button>
-    <Button variant="primary" :loading="loading" @click="handleClick">
-      点击加载
+  <div style="display: flex; gap: 12px; align-items: center;">
+    <Button variant="primary" danger>Primary Danger</Button>
+    <Button variant="secondary" danger>Secondary Danger</Button>
+    <Button variant="default" danger>Default Danger</Button>
+    <Button variant="text" danger>Text Danger</Button>
+    <Button variant="link" danger>Link Danger</Button>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { Button } from '@apron-design/vue-next'
+</script>
+```
+:::
+
+### 危险虚线按钮
+
+危险样式与虚线样式的组合。
+
+:::demo
+```vue
+<template>
+  <div style="display: flex; gap: 12px; align-items: center;">
+    <Button variant="primary" danger dashed>Primary</Button>
+    <Button variant="secondary" danger dashed>Secondary</Button>
+    <Button variant="default" danger dashed>Default</Button>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { Button } from '@apron-design/vue-next'
+</script>
+```
+:::
+
+### 加载中状态
+
+通过 `loading` 属性设置按钮为加载中状态。
+
+:::demo
+```vue
+<template>
+  <Button loading>Loading...</Button>
+</template>
+
+<script setup lang="ts">
+import { Button } from '@apron-design/vue-next'
+</script>
+```
+:::
+
+### 块级按钮
+
+通过 `block` 属性将按钮宽度调整为其父容器宽度。
+
+:::demo
+```vue
+<template>
+  <div style="width: 300px;">
+    <Button block>Block Button</Button>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { Button } from '@apron-design/vue-next'
+</script>
+```
+:::
+
+### 禁用状态
+
+通过 `disabled` 属性禁用按钮。
+
+:::demo
+```vue
+<template>
+  <div style="display: flex; gap: 12px; align-items: center;">
+    <Button variant="primary" disabled>Primary</Button>
+    <Button variant="secondary" disabled>Secondary</Button>
+    <Button variant="default" disabled>Default</Button>
+    <Button variant="text" disabled>Text</Button>
+    <Button variant="link" disabled>Link</Button>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { Button } from '@apron-design/vue-next'
+</script>
+```
+:::
+
+### 带图标按钮
+
+通过 `iconLeft` 和 `iconRight` 属性添加图标。
+
+:::demo
+```vue
+<template>
+  <div style="display: flex; gap: 12px; align-items: center;">
+    <Button>
+      <template #iconLeft>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.35-4.35" />
+        </svg>
+      </template>
+      Search
+    </Button>
+    <Button>
+      <template #iconRight>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7" />
+        </svg>
+      </template>
+      Next
+    </Button>
+    <Button>
+      <template #iconLeft>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.35-4.35" />
+        </svg>
+      </template>
+      <template #iconRight>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7" />
+        </svg>
+      </template>
+      Both Icons
     </Button>
   </div>
 </template>
-:::
 
-## 禁用状态
-
-添加 `disabled` 属性即可让按钮处于不可用状态。
-
-:::demo
-<template>
-  <div style="display: flex; gap: 8px; margin: 16px 0;">
-    <Button variant="primary" disabled>禁用主按钮</Button>
-    <Button disabled>禁用默认按钮</Button>
-    <Button variant="text" disabled>禁用文字按钮</Button>
-  </div>
-</template>
-:::
-
-## 块级按钮
-
-`block` 属性将使按钮占满父容器宽度。
-
-:::demo
-<template>
-  <div style="width: 300px; margin: 16px 0;">
-    <Button variant="primary" block>块级按钮</Button>
-  </div>
-</template>
-:::
-
-## 图标按钮
-
-可以通过 `icon-left` 和 `icon-right` 插槽添加图标。
-
-:::demo
-<template>
-  <div style="display: flex; gap: 8px; margin: 16px 0;">
-    <Button variant="primary" :icon-left="SearchIcon">搜索</Button>
-  </div>
-</template>
+<script setup lang="ts">
+import { Button } from '@apron-design/vue-next'
+</script>
+```
 :::
 
 ## API
 
-### Props
+通过设置 Button 的属性来产生不同的按钮样式。
 
-| 属性 | 说明 | 类型 | 默认值 |
+| 参数 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| variant | 按钮类型 | `'primary' \| 'secondary' \| 'default' \| 'text' \| 'link'` | `'default'` |
-| size | 按钮尺寸 | `'small' \| 'middle' \| 'large'` | `'middle'` |
-| type | 原生 button 的 type 属性 | `'button' \| 'submit' \| 'reset'` | `'button'` |
-| loading | 加载状态 | `boolean` | `false` |
-| disabled | 禁用状态 | `boolean` | `false` |
-| danger | 危险按钮 | `boolean` | `false` |
-| dashed | 虚线边框 | `boolean` | `false` |
-| block | 块级按钮 | `boolean` | `false` |
-| iconLeft | 左侧图标组件 | `Component` | - |
-| iconRight | 右侧图标组件 | `Component` | - |
-| disableRipple | 禁用点击波纹效果 | `boolean` | `false` |
-
-### Events
-
-| 事件名 | 说明 | 参数 |
-| --- | --- | --- |
-| click | 点击按钮时触发 | `(event: MouseEvent) => void` |
-
-### Slots
-
-| 插槽名 | 说明 |
-| --- | --- |
-| default | 按钮内容 |
-
+| variant | 设置按钮类型 | `primary` \| `secondary` \| `default` \| `text` \| `link` | `primary` |
+| size | 设置按钮大小 | `md` \| `sm` | `md` |
+| dashed | 设置按钮边框为虚线 | boolean | false |
+| danger | 设置危险按钮 | boolean | false |
+| loading | 设置按钮载入状态 | boolean | false |
+| block | 将按钮宽度调整为其父宽度的选项 | boolean | false |
+| disabled | 按钮失效状态 | boolean | false |
+| iconLeft | 左侧图标 | slot | - |
+| iconRight | 右侧图标 | slot | - |
+| onClick | 点击按钮时的回调 | (event) => void | - |

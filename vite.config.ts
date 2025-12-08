@@ -1,49 +1,40 @@
-import { defineConfig } from 'vite';
-import vue from '@vitejs/plugin-vue';
-import dts from 'vite-plugin-dts';
-import { resolve } from 'path';
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import { resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = resolve(__filename, '..')
+
+// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    vue(),
-    dts({
-      insertTypesEntry: true,
-      include: ['src/**/*.ts', 'src/**/*.vue'],
-    }),
-  ],
+  plugins: [vue()],
   resolve: {
     alias: {
-      '@': resolve(__dirname, 'src'),
-    },
+      '@': resolve(__dirname, 'src')
+    }
+  },
+  css: {
+    preprocessorOptions: {
+      less: {
+        javascriptEnabled: true,
+        additionalData: `@import "@/styles/variables.less";`
+      }
+    }
   },
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'ApronDesignVue',
-      formats: ['es', 'cjs'],
-      fileName: (format) => `index.${format === 'es' ? 'js' : 'cjs'}`,
+      fileName: 'apron-design-vue'
     },
     rollupOptions: {
       external: ['vue'],
       output: {
         globals: {
-          vue: 'Vue',
-        },
-        assetFileNames: (assetInfo) => {
-          if (assetInfo.name === 'style.css') return 'styles/index.css';
-          return assetInfo.name || 'asset';
-        },
-      },
-    },
-    cssCodeSplit: false,
-  },
-  css: {
-    preprocessorOptions: {
-      less: {
-        additionalData: `@import "./src/styles/variables.less"; @import "./src/styles/mixins.less";`,
-        javascriptEnabled: true,
-      },
-    },
-  },
-});
-
+          vue: 'Vue'
+        }
+      }
+    }
+  }
+})

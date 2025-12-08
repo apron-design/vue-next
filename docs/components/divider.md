@@ -1,81 +1,160 @@
+---
+title: Divider 分割线
+group: 通用组件
+order: 0
+---
+
 # Divider 分割线
 
-区隔内容的分割线。
+区隔内容的分割线，可用于对不同内容进行分组或分隔。
 
-## 基础用法
+## 何时使用
 
-默认为水平分割线。
+- 对不同内容区域进行分隔
+- 对长列表或表单进行分组
+- 创建视觉上的层次感
 
+## 示例
+
+### 基础用法
+
+最简单的用法，渲染一条水平分割线。
+
+:::demo
 ```vue
-<script setup>
-import { Divider } from '@apron-design/vue'
-</script>
-
 <template>
   <div>
-    <p>上方内容</p>
+    <p>这是第一段内容</p>
     <Divider />
-    <p>下方内容</p>
+    <p>这是第二段内容</p>
   </div>
 </template>
+
+<script setup lang="ts">
+import { Divider } from '@apron-design/vue-next'
+</script>
 ```
+:::
 
-## 虚线
+### 虚线分割线
 
-添加 `dashed` 属性显示虚线。
+通过设置 `dashed` 属性渲染虚线分割线。
 
+:::demo
 ```vue
 <template>
   <div>
-    <p>上方内容</p>
+    <p>实线分割线</p>
+    <Divider />
+    <p>虚线分割线</p>
     <Divider dashed />
-    <p>下方内容</p>
+    <p>内容继续</p>
   </div>
 </template>
+
+<script setup lang="ts">
+import { Divider } from '@apron-design/vue-next'
+</script>
 ```
+:::
 
-## 带文字的分割线
+### 带文字的分割线
 
-分割线中可以添加文字内容。
+给分割线添加文字，方便描述或分隔不同内容。
 
+:::demo
 ```vue
 <template>
   <div>
-    <p>内容一</p>
-    <Divider>分割文字</Divider>
-    <p>内容二</p>
-    <Divider dashed>虚线分割</Divider>
-    <p>内容三</p>
+    <p>第一部分内容</p>
+    <Divider>或者</Divider>
+    <p>第二部分内容</p>
   </div>
 </template>
+
+<script setup lang="ts">
+import { Divider } from '@apron-design/vue-next'
+</script>
 ```
+:::
 
-## 文字位置
+### 文字对齐方式
 
-通过 `align` 属性设置文字位置。
+通过 `align` 属性控制文字在分割线中的对齐方式。
 
+:::demo
 ```vue
 <template>
   <div>
     <Divider align="left">左对齐</Divider>
-    <Divider align="center">居中</Divider>
+    <Divider align="center">居中对齐</Divider>
     <Divider align="right">右对齐</Divider>
   </div>
 </template>
+
+<script setup lang="ts">
+import { Divider } from '@apron-design/vue-next'
+</script>
 ```
+:::
+
+### 虚线带文字
+
+结合 `dashed` 和文字内容，创建虚线带文字的分割线。
+
+:::demo
+```vue
+<template>
+  <div>
+    <Divider dashed>虚线分割</Divider>
+    <Divider align="center" dashed>居中虚线分割</Divider>
+    <Divider align="right" dashed>右对齐虚线分割</Divider>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { Divider } from '@apron-design/vue-next'
+</script>
+```
+:::
+
+### 完整示例
+
+展示分割线的各种使用方式。
+
+:::demo
+```vue
+<template>
+  <div>
+    <p>这是第一段内容，展示无文字分割线。</p>
+    <Divider />
+    
+    <p>这是第二段内容，展示虚线分割线。</p>
+    <Divider dashed />
+    
+    <p>这是第三段内容，展示带文字的分割线。</p>
+    <Divider align="center">或者</Divider>
+    
+    <p>这是第四段内容，展示右对齐的虚线分割。</p>
+    <Divider align="right" dashed>结束</Divider>
+    
+    <p>最后一段内容。</p>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { Divider } from '@apron-design/vue-next'
+</script>
+```
+:::
 
 ## API
 
-### Props
+### Divider
 
-| 属性 | 说明 | 类型 | 默认值 |
+| 参数 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
 | dashed | 是否为虚线 | `boolean` | `false` |
-| align | 文字位置 | `'left' \| 'center' \| 'right'` | `'center'` |
-
-### Slots
-
-| 插槽名 | 说明 |
-| --- | --- |
-| default | 分割线中的文字内容 |
-
+| align | 文字对齐方式 | `'left' \| 'center' \| 'right'` | `'left'` |
+| children | 分割线中的文字内容 | `slot` | - |
+| class | 自定义类名 | `string` | - |
