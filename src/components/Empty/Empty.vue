@@ -45,6 +45,7 @@ const classes = computed(() => [
 
 <style lang="less">
 @import '../../styles/variables.less';
+@import '../../styles/mixins.less';
 
 // ============================================
 // Empty CSS Variables (Light Mode)
@@ -84,9 +85,8 @@ const classes = computed(() => [
   // Icon
   // ============================================
   &__icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    .flex-center();
+
     color: var(--apron-empty-icon-color);
     transition: all @transition-slow;
 

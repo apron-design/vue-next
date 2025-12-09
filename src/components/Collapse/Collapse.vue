@@ -55,13 +55,13 @@ defineExpose({
 // Collapse CSS Variables (Light Mode)
 // ============================================
 :root {
+  --apron-collapse-bg: #ffffff;
   --apron-collapse-border-color: @color-neutral-200;
-  --apron-collapse-header-bg: #ffffff;
-  --apron-collapse-header-bg-hover: @color-neutral-50;
-  --apron-collapse-header-color: @color-primary-900;
-  --apron-collapse-header-disabled-color: @color-neutral-400;
-  --apron-collapse-content-bg: #ffffff;
+  --apron-collapse-title-color: @color-primary-900;
+  --apron-collapse-content-color: @color-primary-900;
   --apron-collapse-arrow-color: @color-neutral-500;
+  --apron-collapse-disabled-color: @color-neutral-400;
+  --apron-collapse-disabled-bg: @color-neutral-50;
 }
 
 // ============================================
@@ -69,13 +69,13 @@ defineExpose({
 // ============================================
 .dark,
 [data-prefers-color='dark'] {
+  --apron-collapse-bg: @color-neutral-800;
   --apron-collapse-border-color: @color-neutral-700;
-  --apron-collapse-header-bg: @color-neutral-800;
-  --apron-collapse-header-bg-hover: @color-neutral-700;
-  --apron-collapse-header-color: @color-neutral-100;
-  --apron-collapse-header-disabled-color: @color-neutral-500;
-  --apron-collapse-content-bg: @color-neutral-800;
+  --apron-collapse-title-color: @color-neutral-100;
+  --apron-collapse-content-color: @color-primary-100;
   --apron-collapse-arrow-color: @color-neutral-400;
+  --apron-collapse-disabled-color: @color-neutral-600;
+  --apron-collapse-disabled-bg: @color-neutral-900;
 }
 
 // ============================================
@@ -83,9 +83,8 @@ defineExpose({
 // ============================================
 .apron-collapse {
   border: 1px solid var(--apron-collapse-border-color);
-  border-radius: @radius-md;
+  border-radius: @radius-lg;
   overflow: hidden;
-  font-family: var(--apron-font-family);
   transition: all @transition-slow;
 }
 </style>

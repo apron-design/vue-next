@@ -7,6 +7,7 @@
 <script setup lang="ts">
 import { ref, provide, computed } from 'vue'
 import type { TimelineProps, TimelineSide } from './types'
+import './Timeline.less'
 
 // 默认属性
 const props = withDefaults(defineProps<TimelineProps>(), {

@@ -18,7 +18,7 @@ order: 6
 ```vue
 <template>
   <div style="width: 300px;">
-    <AdCascader 
+    <ad-cascader 
       v-model:value="value" 
       :options="options" 
       placeholder="请选择"
@@ -84,7 +84,7 @@ const handleChange = (value, selectedOptions) => {
 ```vue
 <template>
   <div style="width: 300px;">
-    <AdCascader 
+    <ad-cascader 
       :options="options" 
       placeholder="禁用状态"
       disabled
@@ -119,7 +119,7 @@ const options = [
 ```vue
 <template>
   <div style="width: 300px;">
-    <AdCascader 
+    <ad-cascader 
       :options="options" 
       placeholder="加载中..."
       loading
@@ -143,7 +143,7 @@ const options = []
 ```vue
 <template>
   <div style="width: 300px;">
-    <AdCascader 
+    <ad-cascader 
       v-model:value="value" 
       :options="options" 
       separator=" > "
@@ -176,6 +176,75 @@ const options = [
     ],
   },
 ]
+</script>
+```
+:::
+
+## Inflow 模式
+
+使用 inflow 模式，容器会在下拉框打开时自动扩展。
+
+:::demo
+```vue
+<template>
+  <div style="border: 1px solid #e4e4e7; border-radius: 12px; padding: 16px;">
+    <p style="margin: 0 0 12px; color: #666;">
+      容器将在下拉框打开时扩展
+    </p>
+    <ad-cascader
+      v-model:value="value"
+      :options="options"
+      @change="handleChange"
+      inflow
+      placeholder="请选择地区"
+    />
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { AdCascader } from '@apron-design/vue-next'
+
+const value = ref([])
+
+const options = [
+  {
+    value: 'zhejiang',
+    label: '浙江',
+    children: [
+      {
+        value: 'hangzhou',
+        label: '杭州',
+        children: [
+          {
+            value: 'xihu',
+            label: '西湖',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    value: 'jiangsu',
+    label: '江苏',
+    children: [
+      {
+        value: 'nanjing',
+        label: '南京',
+        children: [
+          {
+            value: 'zhonghuamen',
+            label: '中华门',
+          },
+        ],
+      },
+    ],
+  },
+]
+
+const handleChange = (val: any) => {
+  console.log('Selected value:', val)
+}
 </script>
 ```
 :::

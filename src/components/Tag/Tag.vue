@@ -62,6 +62,7 @@ const handleClose = (e: MouseEvent) => {
 
 <style lang="less">
 @import '../../styles/variables.less';
+@import '../../styles/mixins.less';
 
 // ============================================
 // Tag CSS Variables (Light Mode)
@@ -156,6 +157,8 @@ const handleClose = (e: MouseEvent) => {
   // Close Button
   // ============================================
   &__close {
+    .button-reset();
+
     display: flex;
     align-items: center;
     justify-content: center;
@@ -163,17 +166,11 @@ const handleClose = (e: MouseEvent) => {
     height: 18px;
     margin-left: 6px;
     border-radius: 50%;
-    cursor: pointer;
     transition: all @transition-slow;
     flex-shrink: 0;
-    border: none;
-    background: none;
-    color: inherit;
-    padding: 0;
 
     &:focus-visible {
-      outline: 2px solid var(--apron-alert-text);
-      outline-offset: 2px;
+      .focus-ring();
     }
 
     svg {

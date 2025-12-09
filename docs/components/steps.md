@@ -1,3 +1,9 @@
+---
+title: Steps 步骤条
+group: 导航组件
+order: 4
+---
+
 # Steps 步骤条
 
 Steps 组件用于引导用户按照流程完成任务，显示当前所在步骤和进度。
@@ -17,10 +23,12 @@ Steps 组件用于引导用户按照流程完成任务，显示当前所在步�
 :::demo
 ```vue
 <template>
-  <a-steps :items="defaultItems" :current="2" label-placement="bottom" />
+  <ad-steps :items="defaultItems" :current="2" label-placement="bottom" />
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { Steps } from '@apron-design/vue-next'
+
 const defaultItems = [
   { title: 'Step 1' },
   { title: 'Step 2' },
@@ -40,10 +48,12 @@ Steps 组件支持多种标签位置。
 :::demo
 ```vue
 <template>
-  <a-steps :items="defaultItems" :current="2" label-placement="bottom" />
+  <ad-steps :items="defaultItems" :current="2" label-placement="bottom" />
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { Steps } from '@apron-design/vue-next'
+
 const defaultItems = [
   { title: 'Step 1' },
   { title: 'Step 2' },
@@ -59,10 +69,12 @@ const defaultItems = [
 :::demo
 ```vue
 <template>
-  <a-steps :items="defaultItems" :current="2" label-placement="top" />
+  <ad-steps :items="defaultItems" :current="2" label-placement="top" />
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { Steps } from '@apron-design/vue-next'
+
 const defaultItems = [
   { title: 'Step 1' },
   { title: 'Step 2' },
@@ -78,20 +90,20 @@ const defaultItems = [
 :::demo
 ```vue
 <template>
-  <a-steps
-    :items="items"
+  <ad-steps
+    :items="[
+      { title: 'Step 1', subtitle: 'Step 2' },
+      { title: 'Current', subtitle: 'Step 2' },
+      { title: 'Current', subtitle: 'Not reach' },
+      { title: 'Not reach', subtitle: '' },
+    ]"
     :current="1"
     label-placement="both"
   />
 </template>
 
-<script setup>
-const items = [
-  { title: 'Step 1', subtitle: 'Step 2' },
-  { title: 'Current', subtitle: 'Step 2' },
-  { title: 'Current', subtitle: 'Not reach' },
-  { title: 'Not reach', subtitle: '' },
-]
+<script setup lang="ts">
+import { Steps } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -101,19 +113,24 @@ const items = [
 :::demo
 ```vue
 <template>
-  <div style="display: flex; flex-direction: column; gap: 48px">
+  <div style="display: flex; flex-direction: column; gap: 48px;">
     <div>
-      <p style="margin: 0 0 16px 0; color: #666; font-size: 14px">Label Bottom (Default)</p>
-      <a-steps :items="defaultItems" :current="2" label-placement="bottom" />
+      <p style="margin: 0 0 16px 0; color: #666; font-size: 14px;">Label Bottom (Default)</p>
+      <ad-steps :items="defaultItems" :current="2" label-placement="bottom" />
     </div>
     <div>
-      <p style="margin: 0 0 16px 0; color: #666; font-size: 14px">Label Top</p>
-      <a-steps :items="defaultItems" :current="2" label-placement="top" />
+      <p style="margin: 0 0 16px 0; color: #666; font-size: 14px;">Label Top</p>
+      <ad-steps :items="defaultItems" :current="2" label-placement="top" />
     </div>
     <div>
-      <p style="margin: 0 0 16px 0; color: #666; font-size: 14px">Label Both</p>
-      <a-steps
-        :items="bothItems"
+      <p style="margin: 0 0 16px 0; color: #666; font-size: 14px;">Label Both</p>
+      <ad-steps
+        :items="[
+          { title: 'Step 1', subtitle: 'Step 2' },
+          { title: 'Current', subtitle: 'Step 2' },
+          { title: 'Current', subtitle: 'Not reach' },
+          { title: 'Not reach', subtitle: '' },
+        ]"
         :current="1"
         label-placement="both"
       />
@@ -121,19 +138,14 @@ const items = [
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { Steps } from '@apron-design/vue-next'
+
 const defaultItems = [
   { title: 'Step 1' },
   { title: 'Step 2' },
   { title: 'Current' },
   { title: 'Not reach' },
-]
-
-const bothItems = [
-  { title: 'Step 1', subtitle: 'Step 2' },
-  { title: 'Current', subtitle: 'Step 2' },
-  { title: 'Current', subtitle: 'Not reach' },
-  { title: 'Not reach', subtitle: '' },
 ]
 </script>
 ```
@@ -146,27 +158,29 @@ const bothItems = [
 :::demo
 ```vue
 <template>
-  <div style="display: flex; flex-direction: column; gap: 32px">
+  <div style="display: flex; flex-direction: column; gap: 32px;">
     <div>
-      <p style="margin: 0 0 8px 0; color: #666; font-size: 14px">Current: 0 (First)</p>
-      <a-steps :items="defaultItems" :current="0" />
+      <p style="margin: 0 0 8px 0; color: #666; font-size: 14px;">Current: 0 (First)</p>
+      <ad-steps :items="defaultItems" :current="0" />
     </div>
     <div>
-      <p style="margin: 0 0 8px 0; color: #666; font-size: 14px">Current: 1</p>
-      <a-steps :items="defaultItems" :current="1" />
+      <p style="margin: 0 0 8px 0; color: #666; font-size: 14px;">Current: 1</p>
+      <ad-steps :items="defaultItems" :current="1" />
     </div>
     <div>
-      <p style="margin: 0 0 8px 0; color: #666; font-size: 14px">Current: 2</p>
-      <a-steps :items="defaultItems" :current="2" />
+      <p style="margin: 0 0 8px 0; color: #666; font-size: 14px;">Current: 2</p>
+      <ad-steps :items="defaultItems" :current="2" />
     </div>
     <div>
-      <p style="margin: 0 0 8px 0; color: #666; font-size: 14px">Current: 3 (Last)</p>
-      <a-steps :items="defaultItems" :current="3" />
+      <p style="margin: 0 0 8px 0; color: #666; font-size: 14px;">Current: 3 (Last)</p>
+      <ad-steps :items="defaultItems" :current="3" />
     </div>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { Steps } from '@apron-design/vue-next'
+
 const defaultItems = [
   { title: 'Step 1' },
   { title: 'Step 2' },
@@ -184,19 +198,19 @@ const defaultItems = [
 :::demo
 ```vue
 <template>
-  <a-steps
-    :items="items"
+  <ad-steps
+    :items="[
+      { title: 'Step 1' },
+      { title: 'Step 2' },
+      { title: 'Step 3' },
+      { title: 'Step 4' },
+    ]"
     :current="4"
   />
 </template>
 
-<script setup>
-const items = [
-  { title: 'Step 1' },
-  { title: 'Step 2' },
-  { title: 'Step 3' },
-  { title: 'Step 4' },
-]
+<script setup lang="ts">
+import { Steps } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -208,19 +222,19 @@ const items = [
 :::demo
 ```vue
 <template>
-  <a-steps
-    :items="items"
+  <ad-steps
+    :items="[
+      { title: 'Short', width: 100 },
+      { title: 'Medium Step', width: 150 },
+      { title: 'Longer Step Name', width: 200 },
+      { title: 'End' },
+    ]"
     :current="1"
   />
 </template>
 
-<script setup>
-const items = [
-  { title: 'Short', width: 100 },
-  { title: 'Medium Step', width: 150 },
-  { title: 'Longer Step Name', width: 200 },
-  { title: 'End' },
-]
+<script setup lang="ts">
+import { Steps } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -230,18 +244,18 @@ const items = [
 :::demo
 ```vue
 <template>
-  <a-steps
-    :items="items"
+  <ad-steps
+    :items="[
+      { title: 'First' },
+      { title: 'Second' },
+      { title: 'Third' },
+    ]"
     :current="1"
   />
 </template>
 
-<script setup>
-const items = [
-  { title: 'First' },
-  { title: 'Second' },
-  { title: 'Third' },
-]
+<script setup lang="ts">
+import { Steps } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -251,20 +265,20 @@ const items = [
 :::demo
 ```vue
 <template>
-  <a-steps
-    :items="items"
+  <ad-steps
+    :items="[
+      { title: 'Step 1' },
+      { title: 'Step 2' },
+      { title: 'Step 3' },
+      { title: 'Step 4' },
+      { title: 'Step 5' },
+    ]"
     :current="2"
   />
 </template>
 
-<script setup>
-const items = [
-  { title: 'Step 1' },
-  { title: 'Step 2' },
-  { title: 'Step 3' },
-  { title: 'Step 4' },
-  { title: 'Step 5' },
-]
+<script setup lang="ts">
+import { Steps } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -274,19 +288,19 @@ const items = [
 :::demo
 ```vue
 <template>
-  <a-steps
-    :items="items"
+  <ad-steps
+    :items="[
+      { title: '下单' },
+      { title: '付款' },
+      { title: '发货' },
+      { title: '签收' },
+    ]"
     :current="2"
   />
 </template>
 
-<script setup>
-const items = [
-  { title: '下单' },
-  { title: '付款' },
-  { title: '发货' },
-  { title: '签收' },
-]
+<script setup lang="ts">
+import { Steps } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -296,20 +310,20 @@ const items = [
 :::demo
 ```vue
 <template>
-  <a-steps
-    :items="items"
+  <ad-steps
+    :items="[
+      { title: '填写信息', subtitle: '基本信息' },
+      { title: '验证身份', subtitle: '手机验证' },
+      { title: '设置密码', subtitle: '安全设置' },
+      { title: '完成注册', subtitle: '开始使用' },
+    ]"
     :current="1"
     label-placement="both"
   />
 </template>
 
-<script setup>
-const items = [
-  { title: '填写信息', subtitle: '基本信息' },
-  { title: '验证身份', subtitle: '手机验证' },
-  { title: '设置密码', subtitle: '安全设置' },
-  { title: '完成注册', subtitle: '开始使用' },
-]
+<script setup lang="ts">
+import { Steps } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -329,11 +343,13 @@ Steps 组件在暗色模式下会自动适配主题颜色。
       border-radius: 12px;
     "
   >
-    <a-steps :items="defaultItems" :current="2" />
+    <ad-steps :items="defaultItems" :current="2" />
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { Steps } from '@apron-design/vue-next'
+
 const defaultItems = [
   { title: 'Step 1' },
   { title: 'Step 2' },
@@ -344,25 +360,25 @@ const defaultItems = [
 ```
 :::
 
-## 属性
+## API
 
 ### Steps Props
 
 | 参数 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| items | 步骤数据 | StepItem[] | - |
-| current | 当前步骤索引（从 0 开始） | number | `0` |
-| labelPlacement | 标签位置 | `'top'` \| `'bottom'` \| `'both'` | `'bottom'` |
-| className | 自定义类名 | string | - |
+| items | 步骤数据 | `StepItem[]` | - |
+| current | 当前步骤索引（从 0 开始） | `number` | `0` |
+| labelPlacement | 标签位置 | `'top' \| 'bottom' \| 'both'` | `'bottom'` |
+| className | 自定义类名 | `string` | - |
 
 ### StepItem
 
 | 参数 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| title | 步骤标题 | string | - |
-| subtitle | 步骤副标题（用于 both 模式） | string | - |
-| status | 步骤状态 | `'completed'` \| `'current'` \| `'pending'` | - |
-| width | 单独设置宽度 | number \| string | - |
+| title | 步骤标题 | `string` | - |
+| subtitle | 步骤副标题（用于 both 模式） | `string` | - |
+| status | 步骤状态 | `'completed' \| 'current' \| 'pending'` | - |
+| width | 单独设置宽度 | `number \| string` | - |
 
 ## 注意事项
 

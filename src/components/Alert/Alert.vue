@@ -89,7 +89,15 @@ const classes = computed(() => [
 
   // Static display (no animation)
   &--static {
+    opacity: 1;
+    max-height: none;
+    overflow: visible;
+    transform: none;
     position: relative;
+    margin-bottom: @spacing-3;
+    padding: @spacing-2 @spacing-4;
+    
+    // 页面上静态展示时占满父容器宽度
     width: 100%;
     min-width: unset;
     max-width: unset;

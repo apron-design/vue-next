@@ -1,94 +1,214 @@
+---
+title: Link 链接
+group: 导航组件
+order: 4
+---
+
 # Link 链接
 
-超链接组件，用于页面跳转。
+链接组件，用于页面跳转或外部链接。
 
-## 基础用法
+## 何时使用
 
-:::demo 基础的链接用法。
+- 需要在页面中添加可点击的链接时
+- 需要统一链接样式时
+- 需要区分不同类型链接（主要、次要、危险）时
+
+## 示例
+
+### 基础用法
+
+最简单的用法，创建一个基本链接。
+
+:::demo
 ```vue
 <template>
-  <Link href="#">默认链接</Link>
+  <ad-link href="#">默认链接</ad-link>
 </template>
+
+<script setup lang="ts">
+import { Link } from '@apron-design/vue-next'
+</script>
 ```
 :::
 
-## 不同变种
+### 链接变种
 
-使用 `variant` 属性来定义链接的样式变种。
+支持主色和次色两种变种。
 
-:::demo 支持 `primary` 和 `secondary` 两种变种。
+:::demo
 ```vue
 <template>
   <div style="display: flex; gap: 16px;">
-    <Link href="#" variant="primary">Primary 链接</Link>
-    <Link href="#" variant="secondary">Secondary 链接</Link>
+    <ad-link href="#" variant="primary">
+      Primary 链接
+    </ad-link>
+    <ad-link href="#" variant="secondary">
+      Secondary 链接
+    </ad-link>
   </div>
 </template>
+
+<script setup lang="ts">
+import { Link } from '@apron-design/vue-next'
+</script>
 ```
 :::
 
-## 下划线样式
+### 下划线样式
 
-使用 `underline` 属性控制下划线的显示方式。
+支持三种下划线显示方式：始终显示、悬停显示、从不显示。
 
-:::demo 支持 `always`、`hover` 和 `never` 三种下划线样式。
+:::demo
 ```vue
 <template>
   <div style="display: flex; gap: 16px;">
-    <Link href="#" underline="always">始终有下划线</Link>
-    <Link href="#" underline="hover">悬停时有下划线</Link>
-    <Link href="#" underline="never">从不显示下划线</Link>
+    <ad-link href="#" underline="always">
+      始终有下划线
+    </ad-link>
+    <ad-link href="#" underline="hover">
+      悬停时有下划线
+    </ad-link>
+    <ad-link href="#" underline="never">
+      从不显示下划线
+    </ad-link>
   </div>
 </template>
+
+<script setup lang="ts">
+import { Link } from '@apron-design/vue-next'
+</script>
 ```
 :::
 
-## 危险链接
+### 危险链接
 
-使用 `danger` 属性将链接标记为危险操作。
+用于表示危险操作的链接，显示为红色。
 
-:::demo 危险链接会以红色高亮显示。
+:::demo
 ```vue
 <template>
   <div style="display: flex; gap: 16px;">
-    <Link href="#" danger>危险链接</Link>
-    <Link href="#" danger underline="always">危险链接 (带下划线)</Link>
+    <ad-link href="#" danger>
+      危险链接
+    </ad-link>
+    <ad-link href="#" danger underline="always">
+      危险链接 (带下划线)
+    </ad-link>
   </div>
 </template>
+
+<script setup lang="ts">
+import { Link } from '@apron-design/vue-next'
+</script>
 ```
 :::
 
-## 在新窗口中打开
+### 新窗口打开
 
-通过设置 `target="_blank"` 属性在新窗口中打开链接。
+设置 target="_blank" 使链接在新窗口打开。
 
-:::demo 在新窗口中打开链接，并添加安全相关的 `rel` 属性。
+:::demo
 ```vue
 <template>
-  <Link href="https://example.com" target="_blank" rel="noopener noreferrer">
+  <ad-link href="https://example.com" target="_blank" rel="noopener noreferrer">
     新窗口打开
-  </Link>
+  </ad-link>
 </template>
+
+<script setup lang="ts">
+import { Link } from '@apron-design/vue-next'
+</script>
 ```
 :::
 
-## 内联文本中的链接
+### 内联文本中的链接
 
-链接可以很好地融入到普通文本中。
+链接可以嵌入到普通文本中使用。
 
-:::demo 链接在文本中的使用效果。
+:::demo
 ```vue
 <template>
-  <div>
-    <span>
-      这是一段包含
-      <Link href="#" variant="primary">Primary 链接</Link>
-      和
-      <Link href="#" variant="secondary">Secondary 链接</Link>
-      的文本。
-    </span>
+  <span>
+    这是一段包含
+    <ad-link href="#" variant="primary">
+      Primary 链接
+    </ad-link>
+    和
+    <ad-link href="#" variant="secondary">
+      Secondary 链接
+    </ad-link>
+    的文本。
+  </span>
+</template>
+
+<script setup lang="ts">
+import { Link } from '@apron-design/vue-next'
+</script>
+```
+:::
+
+### 所有变体展示
+
+展示所有链接变体的组合效果。
+
+:::demo
+```vue
+<template>
+  <div style="display: flex; flex-direction: column; gap: 16px;">
+    <h4 style="margin: 0;">变种 (Variant)</h4>
+    <div style="display: flex; gap: 16px;">
+      <ad-link href="#" variant="primary">
+        Primary 链接
+      </ad-link>
+      <ad-link href="#" variant="secondary">
+        Secondary 链接
+      </ad-link>
+    </div>
+
+    <h4 style="margin: 0;">下划线 (Underline)</h4>
+    <div style="display: flex; gap: 16px;">
+      <ad-link href="#" underline="always">
+        Always
+      </ad-link>
+      <ad-link href="#" underline="hover">
+        Hover
+      </ad-link>
+      <ad-link href="#" underline="never">
+        Never
+      </ad-link>
+    </div>
+
+    <h4 style="margin: 0;">危险链接 (Danger)</h4>
+    <div style="display: flex; gap: 16px;">
+      <ad-link href="#" danger>
+        危险链接
+      </ad-link>
+      <ad-link href="#" danger underline="always">
+        危险链接 (带下划线)
+      </ad-link>
+    </div>
+
+    <h4 style="margin: 0;">内联文本</h4>
+    <div>
+      <span>
+        这是一段包含
+        <ad-link href="#" variant="primary">
+          Primary 链接
+        </ad-link>
+        和
+        <ad-link href="#" variant="secondary">
+          Secondary 链接
+        </ad-link>
+        的文本。
+      </span>
+    </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { Link } from '@apron-design/vue-next'
+</script>
 ```
 :::
 
@@ -96,20 +216,17 @@
 
 ### Link Props
 
-| 参数名 | 描述 | 类型 | 默认值 |
+| 参数 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
 | variant | 链接变种 | `'primary' \| 'secondary'` | `'secondary'` |
 | underline | 下划线显示方式 | `'always' \| 'hover' \| 'never'` | `'never'` |
 | danger | 是否为危险链接（红色） | `boolean` | `false` |
-| children | 子元素 | `string` | `-` |
-| class | 自定义类名 | `string` | `-` |
+| href | 链接地址 | `string` | - |
+| target | 链接打开方式 | `'_self' \| '_blank' \| '_parent' \| '_top'` | - |
+| class | 自定义类名 | `string` | - |
 
 ### Link Slots
 
-| 名称 | 描述 |
+| 名称 | 说明 |
 | --- | --- |
-| default | 链接内容 |
-
-### Link Events
-
-支持所有原生 `<a>` 标签的事件。
+| default | 链接文本 |

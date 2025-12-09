@@ -1,106 +1,163 @@
+---
+title: Image 图片
+group: 数据展示
+order: 2
+---
+
 # Image 图片
 
-增强版的 img 标签，提供多种图片填充方式、加载状态和错误状态。
+增强版的 img 标签，提供多种图片填充方式和加载状态处理。
 
-## 基础用法
+## 何时使用
 
-基础的图片展示用法。
+- 需要设置图片的 object-fit 属性
+- 需要优雅地处理图片加载失败的情况
+- 需要在图片加载过程中显示占位内容
 
-:::demo 基础图片展示。
+## 示例
+
+### 基础用法
+
+最简单的用法，直接传入图片地址。
+
+:::demo
 ```vue
 <template>
-  <Image 
-    src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" 
-    alt="风景图片" 
-    style="width: 200px; height: 200px;" 
+  <ad-image
+    src="https://picsum.photos/400/300"
+    alt="示例图片"
+    style="width: 400px; height: 300px;"
   />
 </template>
+
+<script setup lang="ts">
+import { Image } from '@apron-design/vue-next'
+</script>
 ```
 :::
 
-## 填充方式
+### 不同状态
 
-通过 objectFit 属性设置图片的填充方式。
+展示图片组件的不同状态：无图片、正常加载、加载失败。
 
-:::demo 不同的图片填充方式。
+:::demo
 ```vue
 <template>
-  <div style="display: flex; flex-wrap: wrap; gap: 16px;">
+  <div style="display: flex; gap: 24px; flex-wrap: wrap;">
     <div>
-      <Image 
-        src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" 
-        alt="风景图片" 
-        objectFit="cover"
-        style="width: 200px; height: 200px;"
-      />
-      <div style="text-align: center; margin-top: 8px;">cover</div>
+      <p style="margin: 0 0 8px 0; color: #71717a; font-size: 14px;">无图片</p>
+      <ad-image style="width: 150px; height: 100px;" />
     </div>
-    
     <div>
-      <Image 
-        src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" 
-        alt="风景图片" 
-        objectFit="contain"
-        style="width: 200px; height: 200px;"
+      <p style="margin: 0 0 8px 0; color: #71717a; font-size: 14px;">正常加载</p>
+      <ad-image
+        src="https://picsum.photos/150/100?random=1"
+        alt="正常"
+        style="width: 150px; height: 100px;"
       />
-      <div style="text-align: center; margin-top: 8px;">contain</div>
     </div>
-    
     <div>
-      <Image 
-        src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" 
-        alt="风景图片" 
-        objectFit="fill"
-        style="width: 200px; height: 200px;"
+      <p style="margin: 0 0 8px 0; color: #71717a; font-size: 14px;">加载失败</p>
+      <ad-image
+        src="https://invalid-url.com/fail.jpg"
+        alt="失败"
+        style="width: 150px; height: 100px;"
       />
-      <div style="text-align: center; margin-top: 8px;">fill</div>
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { Image } from '@apron-design/vue-next'
+</script>
 ```
 :::
 
-## 加载状态
+### 图片填充方式
 
-图片加载过程中会显示加载状态。
+通过 `objectFit` 属性控制图片在容器中的填充方式。
 
-:::demo 图片加载状态。
+:::demo
 ```vue
 <template>
-  <Image 
-    src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" 
-    alt="大图加载" 
-    style="width: 300px; height: 300px;"
-  />
+  <div style="display: flex; flex-wrap: wrap; gap: 24px;">
+    <div>
+      <p style="margin: 0 0 8px 0; color: #71717a; font-size: 14px;">cover（默认）</p>
+      <ad-image
+        src="https://picsum.photos/400/600"
+        alt="Cover"
+        object-fit="cover"
+        style="width: 150px; height: 100px;"
+      />
+    </div>
+    <div>
+      <p style="margin: 0 0 8px 0; color: #71717a; font-size: 14px;">contain</p>
+      <ad-image
+        src="https://picsum.photos/400/600"
+        alt="Contain"
+        object-fit="contain"
+        style="width: 150px; height: 100px;"
+      />
+    </div>
+    <div>
+      <p style="margin: 0 0 8px 0; color: #71717a; font-size: 14px;">fill</p>
+      <ad-image
+        src="https://picsum.photos/400/600"
+        alt="Fill"
+        object-fit="fill"
+        style="width: 150px; height: 100px;"
+      />
+    </div>
+    <div>
+      <p style="margin: 0 0 8px 0; color: #71717a; font-size: 14px;">scale-down</p>
+      <ad-image
+        src="https://picsum.photos/400/600"
+        alt="Scale Down"
+        object-fit="scale-down"
+        style="width: 150px; height: 100px;"
+      />
+    </div>
+  </div>
 </template>
+
+<script setup lang="ts">
+import { Image } from '@apron-design/vue-next'
+</script>
 ```
 :::
 
-## 错误状态
+### 图片画廊
 
-图片加载失败时会显示错误状态。
+展示多张图片组成的画廊。
 
-:::demo 图片加载失败状态。
+:::demo
 ```vue
 <template>
-  <Image 
-    src="https://invalid-url-that-does-not-exist.com/image.jpg" 
-    alt="无效图片" 
-    style="width: 200px; height: 200px;"
-  />
+  <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+    <ad-image
+      src="https://picsum.photos/200/150?random=1"
+      alt="图片1"
+      style="width: 200px; height: 150px;"
+    />
+    <ad-image
+      src="https://picsum.photos/200/150?random=2"
+      alt="图片2"
+      style="width: 200px; height: 150px;"
+    />
+    <ad-image
+      src="https://picsum.photos/200/150?random=3"
+      alt="图片3"
+      style="width: 200px; height: 150px;"
+    />
+    <ad-image
+      style="width: 200px; height: 150px;"
+    />
+  </div>
 </template>
-```
-:::
 
-## 无图片
-
-未提供 src 时会显示占位符。
-
-:::demo 无图片时的占位符状态。
-```vue
-<template>
-  <Image style="width: 200px; height: 200px;" />
-</template>
+<script setup lang="ts">
+import { Image } from '@apron-design/vue-next'
+</script>
 ```
 :::
 
@@ -108,21 +165,25 @@
 
 ### Image Props
 
-| 参数名 | 描述 | 类型 | 默认值 |
+| 参数 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| src | 图片地址 | `string` | `-` |
-| alt | 图片替代文本 | `string` | `-` |
+| src | 图片地址 | `string` | - |
+| alt | 图片替代文本 | `string` | - |
 | objectFit | 图片填充方式 | `'contain' \| 'cover' \| 'fill' \| 'none' \| 'scale-down'` | `'cover'` |
-| class | 自定义类名 | `string` | `-` |
-| style | 自定义样式 | `object` | `-` |
+| class | 自定义类名 | `string` | - |
+| style | 自定义样式 | `Record<string, any>` | - |
 
 ### Image Events
 
-| 事件名 | 描述 | 参数 |
+| 事件名 | 说明 | 回调参数 |
 | --- | --- | --- |
-| load | 图片加载成功时触发 | `(event: Event)` |
-| error | 图片加载失败时触发 | `(event: Event)` |
+| load | 图片加载完成回调 | `(event: Event) => void` |
+| error | 图片加载失败回调 | `(event: Event) => void` |
 
-### Image Slots
+### objectFit 说明
 
-Image 组件不支持插槽。
+- `cover`: 保持图片纵横比，缩放图片使图片完全覆盖容器
+- `contain`: 保持图片纵横比，缩放图片使图片完整显示在容器内
+- `fill`: 拉伸图片以完全填充容器，可能改变图片纵横比
+- `none`: 保持图片原始尺寸
+- `scale-down`: 在 `none` 和 `contain` 中选择较小的一个

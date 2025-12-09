@@ -25,7 +25,7 @@ order: 0
 <template>
   <div>
     <p>这是第一段内容</p>
-    <Divider />
+    <ad-divider />
     <p>这是第二段内容</p>
   </div>
 </template>
@@ -45,9 +45,9 @@ import { Divider } from '@apron-design/vue-next'
 <template>
   <div>
     <p>实线分割线</p>
-    <Divider />
+    <ad-divider />
     <p>虚线分割线</p>
-    <Divider dashed />
+    <ad-divider dashed />
     <p>内容继续</p>
   </div>
 </template>
@@ -67,7 +67,7 @@ import { Divider } from '@apron-design/vue-next'
 <template>
   <div>
     <p>第一部分内容</p>
-    <Divider>或者</Divider>
+    <ad-divider>或者</ad-divider>
     <p>第二部分内容</p>
   </div>
 </template>
@@ -86,9 +86,9 @@ import { Divider } from '@apron-design/vue-next'
 ```vue
 <template>
   <div>
-    <Divider align="left">左对齐</Divider>
-    <Divider align="center">居中对齐</Divider>
-    <Divider align="right">右对齐</Divider>
+    <ad-divider align="left">左对齐</ad-divider>
+    <ad-divider align="center">居中对齐</ad-divider>
+    <ad-divider align="right">右对齐</ad-divider>
   </div>
 </template>
 
@@ -106,9 +106,9 @@ import { Divider } from '@apron-design/vue-next'
 ```vue
 <template>
   <div>
-    <Divider dashed>虚线分割</Divider>
-    <Divider align="center" dashed>居中虚线分割</Divider>
-    <Divider align="right" dashed>右对齐虚线分割</Divider>
+    <ad-divider dashed>虚线分割</ad-divider>
+    <ad-divider align="center" dashed>居中虚线分割</ad-divider>
+    <ad-divider align="right" dashed>右对齐虚线分割</ad-divider>
   </div>
 </template>
 
@@ -127,16 +127,16 @@ import { Divider } from '@apron-design/vue-next'
 <template>
   <div>
     <p>这是第一段内容，展示无文字分割线。</p>
-    <Divider />
+    <ad-divider />
     
     <p>这是第二段内容，展示虚线分割线。</p>
-    <Divider dashed />
+    <ad-divider dashed />
     
     <p>这是第三段内容，展示带文字的分割线。</p>
-    <Divider align="center">或者</Divider>
+    <ad-divider align="center">或者</ad-divider>
     
     <p>这是第四段内容，展示右对齐的虚线分割。</p>
-    <Divider align="right" dashed>结束</Divider>
+    <ad-divider align="right" dashed>结束</ad-divider>
     
     <p>最后一段内容。</p>
   </div>
@@ -150,11 +150,16 @@ import { Divider } from '@apron-design/vue-next'
 
 ## API
 
-### Divider
+### Divider Props
 
 | 参数 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
 | dashed | 是否为虚线 | `boolean` | `false` |
 | align | 文字对齐方式 | `'left' \| 'center' \| 'right'` | `'left'` |
-| children | 分割线中的文字内容 | `slot` | - |
 | class | 自定义类名 | `string` | - |
+
+### Divider Slots
+
+| 名称 | 说明 |
+| --- | --- |
+| default | 分割线中的文字内容 |

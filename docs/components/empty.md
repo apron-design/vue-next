@@ -1,15 +1,30 @@
-# Empty
+---
+title: Empty 空状态
+group: 数据展示
+order: 2
+---
 
-空状态组件用于在没有数据时展示提示信息。
+# Empty 空状态
 
-## 基本用法
+用于展示空状态的组件，通常在没有数据时显示。
 
-基础的空状态展示。
+## 何时使用
+
+- 数据加载完成但为空时
+- 搜索无结果时
+- 页面初始化状态时
+- 任何需要提示用户当前无数据的场景
+
+## 示例
+
+### 基础用法
+
+最简单的用法，显示默认的空状态图标和文字。
 
 :::demo
 ```vue
 <template>
-  <Empty />
+  <ad-empty />
 </template>
 
 <script setup lang="ts">
@@ -18,17 +33,14 @@ import { Empty } from '@apron-design/vue-next'
 ```
 :::
 
-## 自定义文字
+### 自定义文字
 
-通过 `text` 属性或默认插槽自定义提示文字。
+可以通过插槽来自定义提示文字。
 
 :::demo
 ```vue
 <template>
-  <div style="display: flex; gap: 24px;">
-    <Empty text="这里什么都没有" />
-    <Empty>自定义内容</Empty>
-  </div>
+  <ad-empty>没有找到相关数据</ad-empty>
 </template>
 
 <script setup lang="ts">
@@ -37,39 +49,99 @@ import { Empty } from '@apron-design/vue-next'
 ```
 :::
 
-## 自定义图标
+### 自定义图标
 
-通过 `icon` 插槽自定义图标。
+通过 `icon` 插槽可以自定义空状态图标。
 
 :::demo
 ```vue
 <template>
-  <div style="display: flex; gap: 24px;">
-    <Empty>
-      <template #icon>
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10" />
-          <line x1="12" y1="8" x2="12" y2="12" />
-          <line x1="12" y1="16" x2="12.01" y2="16" />
-        </svg>
-      </template>
-      没有找到相关内容
-    </Empty>
-    
-    <Empty>
-      <template #icon>
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M20 9v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9" />
-          <path d="M9 22V12h6v10M2 10.6L4 8l2-4h12l2 4 2 2.6" />
-        </svg>
-      </template>
-      购物车为空
-    </Empty>
-  </div>
+  <ad-empty>
+    <template #icon>
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8" />
+        <path d="m21 21-4.35-4.35" />
+      </svg>
+    </template>
+    未找到搜索结果
+  </ad-empty>
 </template>
 
 <script setup lang="ts">
 import { Empty } from '@apron-design/vue-next'
+</script>
+```
+:::
+
+### 带操作按钮
+
+可以在空状态中添加操作按钮，引导用户进行下一步操作。
+
+:::demo
+```vue
+<template>
+  <ad-empty>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 16px;">
+      <span>暂无数据</span>
+      <ad-button variant="primary" size="sm">立即创建</ad-button>
+    </div>
+  </ad-empty>
+</template>
+
+<script setup lang="ts">
+import { Empty, Button } from '@apron-design/vue-next'
+</script>
+```
+:::
+
+### 完整示例
+
+展示空状态的各种使用方式。
+
+:::demo
+```vue
+<template>
+  <div style="display: flex; flex-direction: column; gap: 32px;">
+    <div>
+      <h3 style="margin: 0 0 16px 0;">默认空状态</h3>
+      <ad-empty />
+    </div>
+
+    <div>
+      <h3 style="margin: 0 0 16px 0;">自定义文字</h3>
+      <ad-empty>没有找到相关数据</ad-empty>
+    </div>
+
+    <div>
+      <h3 style="margin: 0 0 16px 0;">自定义图标</h3>
+      <ad-empty>
+        <template #icon>
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+            <line x1="16" y1="13" x2="8" y2="13" />
+            <line x1="16" y1="17" x2="8" y2="17" />
+            <polyline points="10 9 9 9 8 9" />
+          </svg>
+        </template>
+        暂无文件
+      </ad-empty>
+    </div>
+
+    <div>
+      <h3 style="margin: 0 0 16px 0;">带操作按钮</h3>
+      <ad-empty>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 16px;">
+          <span>暂无数据</span>
+          <ad-button variant="primary" size="sm">立即创建</ad-button>
+        </div>
+      </ad-empty>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { Empty, Button } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -78,13 +150,14 @@ import { Empty } from '@apron-design/vue-next'
 
 ### Empty Props
 
-| 属性 | 说明 | 类型 | 默认值 |
+| 参数 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| text | 提示文字 | string | '暂无数据' |
+| text | 提示文字 | `string` | `'暂无数据'` |
+| class | 自定义类名 | `string` | - |
 
 ### Empty Slots
 
 | 名称 | 说明 |
 | --- | --- |
-| default | 默认插槽，用于自定义提示文字 |
-| icon | 图标插槽，用于自定义图标 |
+| default | 提示文字（插槽） |
+| icon | 自定义图标 |

@@ -1,17 +1,25 @@
 <template>
-  <div :class="classes" ref="containerRef" v-bind="$attrs">
-    <div 
-      class="apron-datepicker__input"
-      :class="{ 
-        'apron-datepicker__input--active': isActive,
-        'apron-datepicker__input--disabled': disabled,
-        'apron-datepicker__input--loading': loading
-      }"
-      @click="toggleDropdown"
-    >
-      <span v-if="displayValue" class="apron-datepicker__value">{{ displayValue }}</span>
-      <span v-else class="apron-datepicker__placeholder">请选择日期</span>
-      
+  <div
+    :class="classes"
+    ref="containerRef"
+    v-bind="$attrs"
+    tabindex="0"
+    role="combobox"
+    :aria-expanded="isOpen"
+    aria-haspopup="listbox"
+    :aria-disabled="disabled"
+    @keydown="handleKeyDown"
+  >
+    <!-- 选择器头部 -->
+    <div class="apron-datepicker__trigger" @click="toggleDropdown">
+      <span
+        :class="[
+          'apron-datepicker__value',
+          { 'apron-datepicker__value--placeholder': !hasValue }
+        ]"
+      >
+        {{ displayValue }}
+      </span>
       <span class="apron-datepicker__suffix">
         <svg
           v-if="loading"
@@ -31,7 +39,6 @@
           <path d="M4.34 15.66L6.46 13.54" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.7" />
           <path d="M13.54 6.46L15.66 4.34" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.6" />
         </svg>
-        
         <svg
           v-else
           width="20"
@@ -51,15 +58,80 @@
         </svg>
       </span>
     </div>
-    
-    <!-- Dropdown -->
-    <div 
-      v-if="isOpen" 
+
+    <!-- 下拉选项 -->
+    <div
+      v-if="isOpen && !loading"
       class="apron-datepicker__dropdown"
-      :class="{ 'apron-datepicker__dropdown--inflow': inflow }"
+      role="listbox"
     >
+      <!-- 选项列表 -->
+      <div class="apron-datepicker__options">
+        <!-- Year Panel -->
+        <template v-if="activeTab === 'year'">
+          <div
+            v-for="year in years"
+            :key="year"
+            :class="[
+              'apron-datepicker__option',
+              {
+                'apron-datepicker__option--selected': currentValue.year === year
+              }
+            ]"
+            role="option"
+            :aria-selected="currentValue.year === year"
+            @click="selectYear(year)"
+          >
+            {{ year }}
+          </div>
+        </template>
+
+        <!-- Month Panel -->
+        <template v-else-if="activeTab === 'month'">
+          <div
+            v-for="(month, index) in months"
+            :key="month"
+            :class="[
+              'apron-datepicker__option',
+              {
+                'apron-datepicker__option--selected': currentValue.month === month,
+                'apron-datepicker__option--disabled': !currentValue.year
+              }
+            ]"
+            role="option"
+            :aria-selected="currentValue.month === month"
+            :aria-disabled="!currentValue.year"
+            @click="!currentValue.year ? undefined : selectMonth(month)"
+          >
+            {{ monthLabels[index] }}
+          </div>
+        </template>
+
+        <!-- Day Panel -->
+        <template v-else-if="activeTab === 'day'">
+          <div
+            v-for="day in days"
+            :key="day"
+            :class="[
+              'apron-datepicker__option',
+              {
+                'apron-datepicker__option--selected': currentValue.day === day,
+                'apron-datepicker__option--disabled': !currentValue.year || !currentValue.month
+              }
+            ]"
+            role="option"
+            :aria-selected="currentValue.day === day"
+            :aria-disabled="!currentValue.year || !currentValue.month"
+            @click="(!currentValue.year || !currentValue.month) ? undefined : selectDay(day)"
+          >
+            {{ day }}
+          </div>
+        </template>
+      </div>
+
+      <!-- Tab 切换 -->
       <div class="apron-datepicker__tabs">
-        <button 
+        <button
           type="button"
           class="apron-datepicker__tab"
           :class="{ 'apron-datepicker__tab--active': activeTab === 'year' }"
@@ -67,8 +139,7 @@
         >
           {{ yearLabel }}
         </button>
-        <button 
-          v-if="currentValue.year"
+        <button
           type="button"
           class="apron-datepicker__tab"
           :class="{ 'apron-datepicker__tab--active': activeTab === 'month' }"
@@ -76,8 +147,7 @@
         >
           {{ monthLabel }}
         </button>
-        <button 
-          v-if="currentValue.year && currentValue.month"
+        <button
           type="button"
           class="apron-datepicker__tab"
           :class="{ 'apron-datepicker__tab--active': activeTab === 'day' }"
@@ -85,47 +155,6 @@
         >
           {{ dayLabel }}
         </button>
-      </div>
-      
-      <div class="apron-datepicker__panel">
-        <!-- Year Panel -->
-        <div v-show="activeTab === 'year'" class="apron-datepicker__year-panel">
-          <div 
-            v-for="year in years" 
-            :key="year"
-            class="apron-datepicker__item"
-            :class="{ 'apron-datepicker__item--selected': currentValue.year === year }"
-            @click="selectYear(year)"
-          >
-            {{ year }}
-          </div>
-        </div>
-        
-        <!-- Month Panel -->
-        <div v-show="activeTab === 'month'" class="apron-datepicker__month-panel">
-          <div 
-            v-for="(month, index) in months" 
-            :key="month"
-            class="apron-datepicker__item"
-            :class="{ 'apron-datepicker__item--selected': currentValue.month === month }"
-            @click="selectMonth(month)"
-          >
-            {{ monthLabels[index] }}
-          </div>
-        </div>
-        
-        <!-- Day Panel -->
-        <div v-show="activeTab === 'day'" class="apron-datepicker__day-panel">
-          <div 
-            v-for="day in days" 
-            :key="day"
-            class="apron-datepicker__item"
-            :class="{ 'apron-datepicker__item--selected': currentValue.day === day }"
-            @click="selectDay(day)"
-          >
-            {{ day }}
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -151,6 +180,12 @@ export interface DatePickerProps {
   loading?: boolean
   /** 是否使用 inflow 模式（撑开容器） */
   inflow?: boolean
+  /** 选中值改变时的回调 */
+  onChange?: (value: DatePickerValue) => void
+  /** 自定义类名 */
+  className?: string
+  /** 下拉框展开/收起回调 */
+  onOpenChange?: (open: boolean) => void
   /** 年份范围起始 */
   yearStart?: number
   /** 年份范围结束 */
@@ -163,8 +198,6 @@ export interface DatePickerProps {
   dayLabel?: string
   /** 月份标签列表 */
   monthLabels?: string[]
-  /** 自定义类名 */
-  class?: string
 }
 
 const props = withDefaults(defineProps<DatePickerProps>(), {
@@ -195,9 +228,20 @@ const internalValue = ref<DatePickerValue>(props.defaultValue)
 const isControlled = computed(() => props.value !== undefined)
 const currentValue = computed(() => isControlled.value ? props.value! : internalValue.value)
 
+const hasValue = computed(() => 
+  currentValue.value.year !== undefined ||
+  currentValue.value.month !== undefined ||
+  currentValue.value.day !== undefined
+)
+
 const classes = computed(() => [
   'apron-datepicker',
-  props.class,
+  isActive.value && 'apron-datepicker--active',
+  isOpen.value && 'apron-datepicker--open',
+  props.disabled && 'apron-datepicker--disabled',
+  props.loading && 'apron-datepicker--loading',
+  props.inflow && 'apron-datepicker--inflow',
+  props.className,
 ].filter(Boolean).join(' '))
 
 // 获取显示的值
@@ -208,10 +252,7 @@ const displayValue = computed(() => {
   return `${year} / ${month} / ${day}`
 })
 
-const isActive = computed(() => isOpen.value || 
-  (currentValue.value.year !== undefined || 
-   currentValue.value.month !== undefined || 
-   currentValue.value.day !== undefined))
+const isActive = computed(() => isOpen.value || hasValue.value)
 
 // 生成年份列表
 const years = computed(() => {
@@ -243,8 +284,10 @@ const days = computed(() => {
 // 切换下拉框
 const toggleDropdown = () => {
   if (props.disabled || props.loading) return
-  isOpen.value = !isOpen.value
-  emit('open-change', isOpen.value)
+  const newOpen = !isOpen.value
+  isOpen.value = newOpen
+  props.onOpenChange?.(newOpen)
+  emit('open-change', newOpen)
 }
 
 // 设置活动标签页
@@ -262,6 +305,7 @@ const selectYear = (year: number) => {
   
   emit('update:value', newValue)
   emit('change', newValue)
+  props.onChange?.(newValue)
   
   // 自动切换到月份选择
   activeTab.value = 'month'
@@ -277,6 +321,7 @@ const selectMonth = (month: number) => {
   
   emit('update:value', newValue)
   emit('change', newValue)
+  props.onChange?.(newValue)
   
   // 自动切换到日期选择
   activeTab.value = 'day'
@@ -292,23 +337,71 @@ const selectDay = (day: number) => {
   
   emit('update:value', newValue)
   emit('change', newValue)
+  props.onChange?.(newValue)
   
   // 关闭下拉框
   isOpen.value = false
+  props.onOpenChange?.(false)
   emit('open-change', false)
+}
+
+// 键盘导航
+const handleKeyDown = (e: KeyboardEvent) => {
+  if (props.disabled || props.loading) return
+
+  switch (e.key) {
+    case 'Enter':
+    case ' ':
+      e.preventDefault()
+      toggleDropdown()
+      break
+    case 'Escape':
+      isOpen.value = false
+      props.onOpenChange?.(false)
+      emit('open-change', false)
+      break
+    case 'ArrowDown':
+      e.preventDefault()
+      if (!isOpen.value) {
+        isOpen.value = true
+        props.onOpenChange?.(true)
+        emit('open-change', true)
+      }
+      break
+    case 'ArrowUp':
+      e.preventDefault()
+      if (isOpen.value) {
+        isOpen.value = false
+        props.onOpenChange?.(false)
+        emit('open-change', false)
+      }
+      break
+  }
 }
 
 // 点击外部关闭
 const handleClickOutside = (event: MouseEvent) => {
   if (containerRef.value && !containerRef.value.contains(event.target as Node)) {
     isOpen.value = false
+    props.onOpenChange?.(false)
     emit('open-change', false)
   }
 }
 
-// 监听 isOpen 变化
+
+// 打开时初始化活动标签
 watch(isOpen, (newVal) => {
   if (newVal) {
+    // 根据当前值确定初始标签
+    if (!currentValue.value.year) {
+      activeTab.value = 'year'
+    } else if (!currentValue.value.month) {
+      activeTab.value = 'month'
+    } else if (!currentValue.value.day) {
+      activeTab.value = 'day'
+    } else {
+      activeTab.value = 'year'
+    }
     document.addEventListener('mousedown', handleClickOutside)
   } else {
     document.removeEventListener('mousedown', handleClickOutside)
@@ -324,6 +417,7 @@ onUnmounted(() => {
 defineExpose({
   close: () => {
     isOpen.value = false
+    props.onOpenChange?.(false)
     emit('open-change', false)
   }
 })
@@ -331,27 +425,47 @@ defineExpose({
 
 <style lang="less">
 @import '../../styles/variables.less';
+@import '../../styles/mixins.less';
 
 // ============================================
 // DatePicker CSS Variables (Light Mode)
 // ============================================
 :root {
-  --apron-datepicker-bg: #ffffff;
-  --apron-datepicker-border-color: @color-neutral-300;
-  --apron-datepicker-border-color-hover: @color-neutral-400;
-  --apron-datepicker-border-color-focus: @color-primary-500;
-  --apron-datepicker-placeholder-color: @color-neutral-500;
-  --apron-datepicker-text-color: @color-primary-900;
+  // Inactive state
+  --apron-datepicker-bg: @color-primary-50;
+  --apron-datepicker-border: @color-primary-50;
+  --apron-datepicker-text: @color-primary-300;
+  --apron-datepicker-placeholder: @color-primary-300;
+
+  // Active state
+  --apron-datepicker-active-bg: #ffffff;
+  --apron-datepicker-active-border: @color-primary-500;
+  --apron-datepicker-active-text: @color-primary-500;
+
+  // Disabled state
   --apron-datepicker-disabled-bg: @color-neutral-100;
-  --apron-datepicker-disabled-color: @color-neutral-400;
+  --apron-datepicker-disabled-border: @color-neutral-200;
+  --apron-datepicker-disabled-text: @color-neutral-400;
+
+  // Dropdown
   --apron-datepicker-dropdown-bg: #ffffff;
-  --apron-datepicker-tab-bg: @color-neutral-100;
-  --apron-datepicker-tab-bg-active: @color-primary-500;
-  --apron-datepicker-tab-color: @color-neutral-600;
-  --apron-datepicker-tab-color-active: #ffffff;
-  --apron-datepicker-item-hover-bg: @color-neutral-100;
-  --apron-datepicker-item-selected-bg: @color-primary-500;
-  --apron-datepicker-item-selected-color: #ffffff;
+  --apron-datepicker-dropdown-border: @color-neutral-200;
+  --apron-datepicker-dropdown-shadow: @shadow-lg;
+
+  // Option
+  --apron-datepicker-option-text: @color-primary-500;
+  --apron-datepicker-option-hover-bg: @color-neutral-100;
+  --apron-datepicker-option-selected-text: @color-secondary-500;
+  --apron-datepicker-option-disabled-text: @color-neutral-300;
+
+  // Tab
+  --apron-datepicker-tab-bg: transparent;
+  --apron-datepicker-tab-text: @color-primary-300;
+  --apron-datepicker-tab-active-bg: @color-primary-500;
+  --apron-datepicker-tab-active-text: #ffffff;
+
+  // Icon
+  --apron-datepicker-icon-color: @color-primary-300;
 }
 
 // ============================================
@@ -359,22 +473,41 @@ defineExpose({
 // ============================================
 .dark,
 [data-prefers-color='dark'] {
+  // Inactive state
   --apron-datepicker-bg: @color-neutral-800;
-  --apron-datepicker-border-color: @color-neutral-600;
-  --apron-datepicker-border-color-hover: @color-neutral-500;
-  --apron-datepicker-border-color-focus: @color-primary-400;
-  --apron-datepicker-placeholder-color: @color-neutral-400;
-  --apron-datepicker-text-color: @color-neutral-100;
-  --apron-datepicker-disabled-bg: @color-neutral-700;
-  --apron-datepicker-disabled-color: @color-neutral-500;
+  --apron-datepicker-border: @color-neutral-700;
+  --apron-datepicker-text: @color-neutral-400;
+  --apron-datepicker-placeholder: @color-neutral-500;
+
+  // Active state
+  --apron-datepicker-active-bg: @color-neutral-900;
+  --apron-datepicker-active-border: @color-primary-200;
+  --apron-datepicker-active-text: @color-primary-200;
+
+  // Disabled state
+  --apron-datepicker-disabled-bg: @color-neutral-800;
+  --apron-datepicker-disabled-border: @color-neutral-700;
+  --apron-datepicker-disabled-text: @color-neutral-600;
+
+  // Dropdown
   --apron-datepicker-dropdown-bg: @color-neutral-800;
-  --apron-datepicker-tab-bg: @color-neutral-700;
-  --apron-datepicker-tab-bg-active: @color-primary-400;
-  --apron-datepicker-tab-color: @color-neutral-300;
-  --apron-datepicker-tab-color-active: @color-neutral-100;
-  --apron-datepicker-item-hover-bg: @color-neutral-700;
-  --apron-datepicker-item-selected-bg: @color-primary-400;
-  --apron-datepicker-item-selected-color: @color-neutral-100;
+  --apron-datepicker-dropdown-border: @color-neutral-700;
+  --apron-datepicker-dropdown-shadow: 0 10px 25px -5px rgb(0 0 0 / 0.3);
+
+  // Option
+  --apron-datepicker-option-text: @color-primary-200;
+  --apron-datepicker-option-hover-bg: @color-neutral-700;
+  --apron-datepicker-option-selected-text: @color-secondary-400;
+  --apron-datepicker-option-disabled-text: @color-neutral-600;
+
+  // Tab
+  --apron-datepicker-tab-bg: transparent;
+  --apron-datepicker-tab-text: @color-neutral-500;
+  --apron-datepicker-tab-active-bg: @color-primary-300;
+  --apron-datepicker-tab-active-text: @color-neutral-900;
+
+  // Icon
+  --apron-datepicker-icon-color: @color-neutral-500;
 }
 
 // ============================================
@@ -385,194 +518,258 @@ defineExpose({
   display: inline-block;
   width: 100%;
   font-family: var(--apron-font-family);
-  transition: all @transition-slow;
+  font-size: @font-size-base;
+  outline: none;
+  box-sizing: border-box;
 
-  // ============================================
-  // Input
-  // ============================================
-  &__input {
-    position: relative;
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  // Trigger (选择器头部)
+  &__trigger {
     display: flex;
     align-items: center;
     width: 100%;
-    min-height: 40px;
+    height: 40px;
     padding: 0 @spacing-4;
     background-color: var(--apron-datepicker-bg);
-    border: 1px solid var(--apron-datepicker-border-color);
-    border-radius: @radius-md;
+    border: 1px solid var(--apron-datepicker-border);
+    border-radius: 20px;
     cursor: pointer;
-    transition: all @transition-slow;
-
-    &:hover:not(&--disabled, &--loading) {
-      border-color: var(--apron-datepicker-border-color-hover);
-    }
-
-    &--active:not(&--disabled, &--loading) {
-      border-color: var(--apron-datepicker-border-color-focus);
-      box-shadow: 0 0 0 2px rgba(67, 90, 111, 0.15);
-    }
-
-    &--disabled {
-      background-color: var(--apron-datepicker-disabled-bg);
-      color: var(--apron-datepicker-disabled-color);
-      cursor: not-allowed;
-    }
-
-    &--loading {
-      cursor: wait;
-    }
+    transition: all @transition-fast;
   }
 
-  // ============================================
-  // Value
-  // ============================================
+  // Value / Placeholder
   &__value {
     flex: 1;
-    color: var(--apron-datepicker-text-color);
-    font-size: @font-size-base;
-    line-height: @line-height-normal;
+    color: var(--apron-datepicker-text);
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
+
+    &--placeholder {
+      color: var(--apron-datepicker-placeholder);
+    }
   }
 
-  // ============================================
-  // Placeholder
-  // ============================================
-  &__placeholder {
-    flex: 1;
-    color: var(--apron-datepicker-placeholder-color);
-    font-size: @font-size-base;
-    line-height: @line-height-normal;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  // ============================================
-  // Suffix
-  // ============================================
+  // Suffix (arrow / loading)
   &__suffix {
     display: flex;
     align-items: center;
     margin-left: @spacing-2;
-    color: var(--apron-datepicker-placeholder-color);
-    transition: all @transition-slow;
+    color: var(--apron-datepicker-icon-color);
+    flex-shrink: 0;
   }
 
-  // ============================================
-  // Arrow
-  // ============================================
+  // Arrow icon
   &__arrow {
-    transition: transform @transition-slow;
-    
+    transition: transform @transition-fast;
+
     &--open {
       transform: rotate(180deg);
     }
   }
 
-  // ============================================
-  // Loading Icon
-  // ============================================
+  // Loading icon
   &__loading-icon {
     animation: apron-datepicker-spin 1s linear infinite;
   }
 
-  @keyframes apron-datepicker-spin {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-
-  // ============================================
   // Dropdown
-  // ============================================
   &__dropdown {
     position: absolute;
-    top: 100%;
+    top: calc(100% + 8px);
     left: 0;
     right: 0;
-    z-index: 1000;
-    margin-top: @spacing-1;
     background-color: var(--apron-datepicker-dropdown-bg);
-    border: 1px solid var(--apron-datepicker-border-color);
-    border-radius: @radius-md;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transition: all @transition-slow;
-
-    &--inflow {
-      position: static;
-      margin-top: 0;
-    }
+    border: 1px solid var(--apron-datepicker-dropdown-border);
+    border-radius: 20px;
+    box-shadow: var(--apron-datepicker-dropdown-shadow);
+    z-index: @z-index-dropdown;
+    overflow: hidden;
+    // Animation
+    animation: apron-datepicker-dropdown-open @transition-fast forwards;
+    transform-origin: top center;
   }
 
-  // ============================================
-  // Tabs
-  // ============================================
-  &__tabs {
-    display: flex;
-    border-bottom: 1px solid var(--apron-datepicker-border-color);
-  }
-
-  // ============================================
-  // Tab
-  // ============================================
-  &__tab {
-    flex: 1;
-    padding: @spacing-2 @spacing-3;
-    background-color: var(--apron-datepicker-tab-bg);
-    color: var(--apron-datepicker-tab-color);
-    border: none;
-    font-size: @font-size-sm;
-    font-weight: @font-weight-medium;
-    cursor: pointer;
-    transition: all @transition-slow;
-
-    &:hover:not(&--active) {
-      background-color: var(--apron-datepicker-item-hover-bg);
-    }
-
-    &--active {
-      background-color: var(--apron-datepicker-tab-bg-active);
-      color: var(--apron-datepicker-tab-color-active);
-    }
-  }
-
-  // ============================================
-  // Panel
-  // ============================================
-  &__panel {
-    padding: @spacing-2;
-    max-height: 200px;
+  // Options container (scrollable)
+  &__options {
+    max-height: calc(40px * 5 + 1px); // 5 rows max + 1px for border
     overflow-y: auto;
+    border-top: 1px solid var(--apron-datepicker-dropdown-border);
   }
 
-  // ============================================
-  // Item
-  // ============================================
-  &__item {
+  // Single option
+  &__option {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: @spacing-2;
-    margin: @spacing-1;
-    border-radius: @radius-sm;
-    font-size: @font-size-base;
+    height: 40px;
+    padding: 0 @spacing-4;
+    color: var(--apron-datepicker-option-text);
     cursor: pointer;
-    transition: all @transition-slow;
+    transition: background-color @transition-fast;
 
-    &:hover:not(&--selected) {
-      background-color: var(--apron-datepicker-item-hover-bg);
+    &:hover:not(.apron-datepicker__option--disabled) {
+      background-color: var(--apron-datepicker-option-hover-bg);
     }
 
     &--selected {
-      background-color: var(--apron-datepicker-item-selected-bg);
-      color: var(--apron-datepicker-item-selected-color);
+      color: var(--apron-datepicker-option-selected-text);
       font-weight: @font-weight-medium;
     }
+
+    &--disabled {
+      color: var(--apron-datepicker-option-disabled-text);
+      cursor: not-allowed;
+    }
+  }
+
+  // Tabs container
+  &__tabs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: @spacing-3 @spacing-4;
+    gap: @spacing-2;
+    border-top: 1px solid var(--apron-datepicker-dropdown-border);
+  }
+
+  // Single tab
+  &__tab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 48px;
+    height: 32px;
+    padding: 0 @spacing-3;
+    border: none;
+    border-radius: 16px;
+    background-color: var(--apron-datepicker-tab-bg);
+    color: var(--apron-datepicker-tab-text);
+    font-family: inherit;
+    font-size: @font-size-sm;
+    cursor: pointer;
+    transition: all @transition-fast;
+
+    &:hover:not(.apron-datepicker__tab--active) {
+      background-color: var(--apron-datepicker-option-hover-bg);
+    }
+
+    &--active {
+      background-color: var(--apron-datepicker-tab-active-bg);
+      color: var(--apron-datepicker-tab-active-text);
+    }
+  }
+
+  // ============================================
+  // States
+  // ============================================
+
+  // Focus state
+  &:focus-visible {
+    .apron-datepicker__trigger {
+      .focus-ring();
+    }
+  }
+
+  // Active state (有值或展开)
+  &--active {
+    .apron-datepicker__trigger {
+      background-color: var(--apron-datepicker-active-bg);
+      border-color: var(--apron-datepicker-active-border);
+    }
+
+    .apron-datepicker__value {
+      color: var(--apron-datepicker-active-text);
+
+      &--placeholder {
+        color: var(--apron-datepicker-placeholder);
+      }
+    }
+  }
+
+  // Open state
+  &--open {
+    .apron-datepicker__trigger {
+      background-color: var(--apron-datepicker-active-bg);
+      border-color: var(--apron-datepicker-active-border);
+    }
+  }
+
+  // Disabled state
+  &--disabled {
+    .apron-datepicker__trigger {
+      background-color: var(--apron-datepicker-disabled-bg);
+      border-color: var(--apron-datepicker-disabled-border);
+      cursor: not-allowed;
+    }
+
+    .apron-datepicker__value {
+      color: var(--apron-datepicker-disabled-text);
+    }
+
+    .apron-datepicker__suffix {
+      color: var(--apron-datepicker-disabled-text);
+    }
+  }
+
+  // Loading state
+  &--loading {
+    .apron-datepicker__trigger {
+      cursor: wait;
+    }
+  }
+
+  // ============================================
+  // Inflow Mode (撑开容器)
+  // ============================================
+  &--inflow {
+    .apron-datepicker__dropdown {
+      position: relative;
+      top: 0;
+      margin-top: 0;
+      border-top: none;
+      border-radius: 0 0 20px 20px;
+      box-shadow: none;
+    }
+
+    &.apron-datepicker--open {
+      .apron-datepicker__trigger {
+        border-radius: 20px 20px 0 0;
+        border-bottom-color: transparent;
+      }
+
+      .apron-datepicker__dropdown {
+        border-color: var(--apron-datepicker-active-border);
+        border-top: none;
+      }
+    }
+  }
+}
+
+// Loading animation
+@keyframes apron-datepicker-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Dropdown open animation
+@keyframes apron-datepicker-dropdown-open {
+  from {
+    opacity: 0;
+    transform: scaleY(0.9) translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1) translateY(0);
   }
 }
 </style>

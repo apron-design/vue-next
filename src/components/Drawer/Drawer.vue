@@ -3,10 +3,14 @@
     <div 
       v-if="visible" 
       class="apron-drawer-root"
-      :class="{ 'apron-drawer-root--mobile': isMobile }"
+      :class="[
+        { 'apron-drawer-root--mobile': isMobile },
+        props.open && !animating && 'apron-drawer-root--open',
+        animating && (props.open ? 'apron-drawer-root--entering' : 'apron-drawer-root--leaving')
+      ]"
     >
       <div 
-        class="apron-drawer-overlay"
+        class="apron-drawer__overlay"
         @click="handleOverlayClick"
       />
 
@@ -27,35 +31,45 @@
       >
         <template v-if="isMobile && (placement === 'bottom' || placement === 'top')">
           <!-- 移动端上下弹出 -->
-          <div class="apron-drawer__mobile-header">
-            <div class="apron-drawer__drag-handle" />
-            
-            <div class="apron-drawer__header-content">
-              <div id="drawer-title" class="apron-drawer__title">
-                {{ title }}
-              </div>
+          <div class="apron-drawer__header apron-drawer__header--mobile">
+            <!-- 左侧：取消按钮或占位 -->
+            <div class="apron-drawer__header-left">
+              <AdButton
+                v-if="showFooter && footer === null && showCancel"
+                variant="default"
+                size="sm"
+                v-bind="cancelButtonProps"
+                @click="onClose"
+              >
+                {{ cancelText }}
+              </AdButton>
+            </div>
 
-              <!-- 右侧：确认按钮或关闭按钮 -->
-              <div class="apron-drawer__header-right">
-                <AdButton
-                  v-if="hasFooter"
-                  variant="primary"
-                  size="sm"
-                  v-bind="okButtonProps"
-                  @click="handleOk"
-                >
-                  {{ okText }}
-                </AdButton>
-                <button
-                  v-else-if="closable"
-                  type="button"
-                  class="apron-drawer__close apron-drawer__close--inline"
-                  @click="handleClose"
-                  :aria-label="'关闭'"
-                >
-                  <CloseIcon />
-                </button>
-              </div>
+            <!-- 中间：标题 -->
+            <div id="drawer-title" class="apron-drawer__title">
+              {{ title }}
+            </div>
+
+            <!-- 右侧：确认按钮或关闭按钮 -->
+            <div class="apron-drawer__header-right">
+              <AdButton
+                v-if="showFooter && footer === null"
+                variant="primary"
+                size="sm"
+                v-bind="okButtonProps"
+                @click="handleOk"
+              >
+                {{ okText }}
+              </AdButton>
+              <button
+                v-else-if="closable"
+                type="button"
+                class="apron-drawer__close apron-drawer__close--inline"
+                @click="handleClose"
+                :aria-label="'关闭'"
+              >
+                <CloseIcon />
+              </button>
             </div>
           </div>
           
@@ -103,7 +117,7 @@
             :class="`apron-drawer__footer apron-drawer__footer--${placement}`"
           >
             <slot v-if="footer !== undefined" name="footer" />
-            <div v-else class="apron-drawer__footer-buttons">
+            <template v-else>
               <template v-if="placement === 'right'">
                 <AdButton
                   variant="primary"
@@ -138,7 +152,7 @@
                   {{ okText }}
                 </AdButton>
               </template>
-            </div>
+            </template>
           </div>
         </template>
       </div>
@@ -147,7 +161,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, onUnmounted, nextTick, h } from 'vue'
+import { ref, computed, watch, onUnmounted, nextTick, h } from 'vue'
 import { AdButton } from '../Button'
 
 export type DrawerPlacement = 'top' | 'right' | 'bottom' | 'left'
@@ -232,18 +246,17 @@ const CloseIcon = {
   name: 'CloseIcon',
   setup() {
     return () => h('svg', {
-      width: '24',
-      height: '24',
-      viewBox: '0 0 24 24',
+      width: '20',
+      height: '20',
+      viewBox: '0 0 20 20',
       fill: 'none',
       xmlns: 'http://www.w3.org/2000/svg'
     }, [
       h('path', {
-        d: 'M18 6L6 18M6 6L18 18',
+        d: 'M5 5L15 15M15 5L5 15',
         stroke: 'currentColor',
-        'stroke-width': '2',
-        'stroke-linecap': 'round',
-        'stroke-linejoin': 'round'
+        'stroke-width': '1.5',
+        'stroke-linecap': 'round'
       })
     ])
   }
@@ -253,7 +266,7 @@ const CloseIcon = {
 const drawerRef = ref<HTMLDivElement | null>(null)
 
 // 内部状态
-const visible = ref(props.open)
+const visible = ref(false)
 const animating = ref(false)
 
 // 计算样式
@@ -274,26 +287,69 @@ const updateVisibility = () => {
   if (props.open) {
     visible.value = true
     animating.value = true
+    // 禁用页面滚动
+    document.body.style.overflow = 'hidden'
     
     // 触发进入动画
-    requestAnimationFrame(() => {
+    nextTick(() => {
       requestAnimationFrame(() => {
-        animating.value = false
+        requestAnimationFrame(() => {
+          animating.value = false
+          emit('afterOpenChange', true)
+        })
       })
     })
   } else {
-    animating.value = true
-    
-    // 延迟隐藏以完成退出动画
-    setTimeout(() => {
-      visible.value = false
-      animating.value = false
-    }, 300)
+    if (visible.value) {
+      animating.value = true
+      
+      // 延迟隐藏以完成退出动画
+      setTimeout(() => {
+        visible.value = false
+        animating.value = false
+        // 恢复页面滚动
+        document.body.style.overflow = ''
+        emit('afterOpenChange', false)
+      }, 300)
+    }
   }
 }
 
 // 监听open属性变化
 watch(() => props.open, updateVisibility, { immediate: true })
+
+// 处理 ESC 键关闭
+let escapeHandler: ((e: KeyboardEvent) => void) | null = null
+
+watch(() => props.open, (newOpen) => {
+  // 清理之前的事件监听器
+  if (escapeHandler) {
+    document.removeEventListener('keydown', escapeHandler)
+    escapeHandler = null
+  }
+  
+  if (newOpen && props.closable) {
+    escapeHandler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        handleClose()
+      }
+    }
+    document.addEventListener('keydown', escapeHandler)
+  }
+})
+
+// 组件卸载时清理
+onUnmounted(() => {
+  if (escapeHandler) {
+    document.removeEventListener('keydown', escapeHandler)
+    escapeHandler = null
+  }
+})
+
+// 清理：组件卸载时恢复滚动
+onUnmounted(() => {
+  document.body.style.overflow = ''
+})
 
 // 监听可见性变化后触发事件
 watch([visible, animating], ([newVisible, newAnimating], [oldVisible]) => {
@@ -335,18 +391,19 @@ defineExpose({
 
 <style lang="less">
 @import '../../styles/variables.less';
+@import '../../styles/mixins.less';
 
 // ============================================
 // Drawer CSS Variables (Light Mode)
 // ============================================
 :root {
   --apron-drawer-bg: #ffffff;
-  --apron-drawer-overlay-bg: rgba(0, 0, 0, 0.45);
-  --apron-drawer-header-bg: #ffffff;
-  --apron-drawer-footer-bg: #ffffff;
   --apron-drawer-border-color: @color-neutral-200;
   --apron-drawer-title-color: @color-primary-900;
-  --apron-drawer-text-color: @color-primary-700;
+  --apron-drawer-text-color: @color-primary-500;
+  --apron-drawer-close-color: @color-neutral-400;
+  --apron-drawer-close-hover-color: @color-neutral-600;
+  --apron-drawer-overlay-bg: rgba(0, 0, 0, 0.45);
 }
 
 // ============================================
@@ -355,285 +412,288 @@ defineExpose({
 .dark,
 [data-prefers-color='dark'] {
   --apron-drawer-bg: @color-neutral-800;
-  --apron-drawer-overlay-bg: rgba(0, 0, 0, 0.65);
-  --apron-drawer-header-bg: @color-neutral-800;
-  --apron-drawer-footer-bg: @color-neutral-800;
   --apron-drawer-border-color: @color-neutral-700;
   --apron-drawer-title-color: @color-neutral-100;
-  --apron-drawer-text-color: @color-neutral-300;
+  --apron-drawer-text-color: @color-primary-200;
+  --apron-drawer-close-color: @color-neutral-500;
+  --apron-drawer-close-hover-color: @color-neutral-300;
+  --apron-drawer-overlay-bg: rgba(0, 0, 0, 0.65);
 }
 
 // ============================================
-// Drawer Root
+// Drawer Root (Portal container)
 // ============================================
 .apron-drawer-root {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 1000;
+  inset: 0;
+  z-index: @z-index-modal;
   pointer-events: none;
 
-  // Overlay
-  .apron-drawer__overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: var(--apron-drawer-overlay-bg);
-    opacity: 0;
-    transition: opacity @transition-slow;
-  }
-
-  // Drawer
-  .apron-drawer {
-    position: absolute;
-    background-color: var(--apron-drawer-bg);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-    display: flex;
-    flex-direction: column;
-    transition: transform @transition-slow;
-  }
-
-  // Entering state
+  // 进入状态
   &--entering {
-    pointer-events: auto;
-
-    .apron-drawer__overlay {
-      opacity: 1;
-    }
-  }
-
-  // Leaving state
-  &--leaving {
-    pointer-events: auto;
-
     .apron-drawer__overlay {
       opacity: 0;
     }
+
+    .apron-drawer--right {
+      transform: translateX(100%);
+    }
+
+    .apron-drawer--left {
+      transform: translateX(-100%);
+    }
+
+    .apron-drawer--top {
+      transform: translateY(-100%);
+    }
+
+    .apron-drawer--bottom {
+      transform: translateY(100%);
+    }
   }
 
-  // Open state
+  // 打开状态
   &--open {
     pointer-events: auto;
 
     .apron-drawer__overlay {
       opacity: 1;
     }
+
+    .apron-drawer {
+      transform: translate(0, 0);
+    }
   }
-}
 
-// ============================================
-// Drawer Positions
-// ============================================
-.apron-drawer {
-  // Right
-  &--right {
-    top: 0;
-    right: 0;
-    height: 100%;
-    transform: translateX(100%);
+  // 离开状态
+  &--leaving {
+    pointer-events: none;
 
-    .apron-drawer-root--open &,
-    .apron-drawer-root--entering & {
-      transform: translateX(0);
+    .apron-drawer__overlay {
+      opacity: 0;
     }
 
-    .apron-drawer-root--leaving & {
+    .apron-drawer--right {
       transform: translateX(100%);
     }
-  }
 
-  // Left
-  &--left {
-    top: 0;
-    left: 0;
-    height: 100%;
-    transform: translateX(-100%);
-
-    .apron-drawer-root--open &,
-    .apron-drawer-root--entering & {
-      transform: translateX(0);
-    }
-
-    .apron-drawer-root--leaving & {
+    .apron-drawer--left {
       transform: translateX(-100%);
     }
-  }
 
-  // Top
-  &--top {
-    top: 0;
-    left: 0;
-    right: 0;
-    transform: translateY(-100%);
-
-    .apron-drawer-root--open &,
-    .apron-drawer-root--entering & {
-      transform: translateY(0);
-    }
-
-    .apron-drawer-root--leaving & {
+    .apron-drawer--top {
       transform: translateY(-100%);
     }
-  }
 
-  // Bottom
-  &--bottom {
-    bottom: 0;
-    left: 0;
-    right: 0;
-    transform: translateY(100%);
-
-    .apron-drawer-root--open &,
-    .apron-drawer-root--entering & {
-      transform: translateY(0);
-    }
-
-    .apron-drawer-root--leaving & {
+    .apron-drawer--bottom {
       transform: translateY(100%);
     }
   }
 }
 
 // ============================================
-// Drawer Mobile Layout
+// Drawer Overlay (蒙层)
 // ============================================
-.apron-drawer--mobile {
-  .apron-drawer__header--mobile {
+.apron-drawer__overlay {
+  position: absolute;
+  inset: 0;
+  background-color: var(--apron-drawer-overlay-bg);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  transition: opacity 0.3s ease;
+  pointer-events: auto;
+}
+
+// ============================================
+// Drawer Content
+// ============================================
+.apron-drawer {
+  position: absolute;
+  background-color: var(--apron-drawer-bg);
+  display: flex;
+  flex-direction: column;
+  font-family: var(--apron-font-family);
+  box-shadow: @shadow-xl;
+  transition: transform 0.3s ease;
+  pointer-events: auto;
+
+  // ============================================
+  // Placement Variants
+  // ============================================
+  &--right {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    border-left: 1px solid var(--apron-drawer-border-color);
+    transform: translateX(100%);
+    // 移动端左右弹出不加圆角
+  }
+
+  &--left {
+    top: 0;
+    left: 0;
+    bottom: 0;
+    border-right: 1px solid var(--apron-drawer-border-color);
+    transform: translateX(-100%);
+    // 移动端左右弹出不加圆角
+  }
+
+  &--top {
+    top: 0;
+    left: 0;
+    right: 0;
+    border-bottom: 1px solid var(--apron-drawer-border-color);
+    transform: translateY(-100%);
+
+    &.apron-drawer--mobile {
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
+    }
+  }
+
+  &--bottom {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-top: 1px solid var(--apron-drawer-border-color);
+    transform: translateY(100%);
+
+    &.apron-drawer--mobile {
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+    }
+  }
+
+  // ============================================
+  // Drawer Header
+  // ============================================
+  &__header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: @spacing-4 @spacing-5;
-    background-color: var(--apron-drawer-header-bg);
+    padding: 10px 15px;
+    padding-right: 48px; // 为关闭按钮留出空间
     border-bottom: 1px solid var(--apron-drawer-border-color);
+    flex-shrink: 0;
 
-    .apron-drawer__header-left,
-    .apron-drawer__header-right {
-      display: flex;
-      align-items: center;
-      flex: 1;
+    // 移动端 header：三列布局
+    &--mobile {
+      padding-right: 15px;
+      justify-content: space-between;
+    }
+  }
+
+  &__header-left,
+  &__header-right {
+    min-width: 60px;
+    display: flex;
+    align-items: center;
+  }
+
+  &__header-left {
+    justify-content: flex-start;
+  }
+
+  &__header-right {
+    justify-content: flex-end;
+  }
+
+  &__title {
+    flex: 1;
+    font-size: @font-size-base;
+    font-weight: @font-weight-semibold;
+    color: var(--apron-drawer-title-color);
+    line-height: @line-height-normal;
+
+    // 移动端标题居中
+    .apron-drawer__header--mobile & {
+      text-align: center;
+    }
+  }
+
+  // ============================================
+  // Drawer Close Button
+  // ============================================
+  &__close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: var(--apron-drawer-close-color);
+    cursor: pointer;
+    border-radius: 50%;
+    transition: all @transition-fast;
+    z-index: 1;
+
+    &:hover {
+      color: var(--apron-drawer-close-hover-color);
+      background-color: rgba(0, 0, 0, 0.04);
     }
 
-    .apron-drawer__header-right {
+    &:focus-visible {
+      .focus-ring();
+    }
+
+    // Inline close button (mobile)
+    &--inline {
+      position: static;
+      width: 28px;
+      height: 28px;
+    }
+
+    svg {
+      width: 14px;
+      height: 14px;
+    }
+  }
+
+  // ============================================
+  // Drawer Body
+  // ============================================
+  &__body {
+    padding: 10px 15px;
+    color: var(--apron-drawer-text-color);
+    font-size: @font-size-base;
+    line-height: @line-height-normal;
+    overflow: auto;
+    flex: 1;
+  }
+
+  // ============================================
+  // Drawer Footer
+  // ============================================
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: @spacing-2;
+    padding: 10px 15px;
+    border-top: 1px solid var(--apron-drawer-border-color);
+    flex-shrink: 0;
+
+    // PC端：右侧弹出时，左对齐
+    &--right {
+      justify-content: flex-start;
+    }
+
+    // PC端：左、上、下弹出时，右对齐
+    &--left,
+    &--top,
+    &--bottom {
       justify-content: flex-end;
     }
 
-    .apron-drawer__title {
-      flex: 1;
-      text-align: center;
-      font-weight: @font-weight-medium;
-      color: var(--apron-drawer-title-color);
+    // 移动端自定义 footer
+    &--mobile {
+      justify-content: center;
     }
   }
-
-  .apron-drawer__footer--mobile {
-    padding: @spacing-4 @spacing-5;
-    background-color: var(--apron-drawer-footer-bg);
-    border-top: 1px solid var(--apron-drawer-border-color);
-  }
 }
 
-// ============================================
-// Drawer Header
-// ============================================
-.apron-drawer__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: @spacing-5;
-  background-color: var(--apron-drawer-header-bg);
-  border-bottom: 1px solid var(--apron-drawer-border-color);
-
-  .apron-drawer__title {
-    flex: 1;
-    font-size: @font-size-lg;
-    font-weight: @font-weight-medium;
-    color: var(--apron-drawer-title-color);
-  }
-}
-
-// ============================================
-// Drawer Close Button
-// ============================================
-.apron-drawer__close {
-  position: absolute;
-  top: @spacing-4;
-  right: @spacing-4;
-  width: 24px;
-  height: 24px;
-  padding: 0;
-  border: none;
-  background: transparent;
-  color: @color-neutral-500;
-  cursor: pointer;
-  transition: color @transition-fast;
-
-  &:hover {
-    color: @color-neutral-700;
-  }
-
-  // Inline close button (mobile)
-  &--inline {
-    position: static;
-  }
-
-  svg {
-    width: 20px;
-    height: 20px;
-  }
-}
-
-// ============================================
-// Drawer Body
-// ============================================
-.apron-drawer__body {
-  flex: 1;
-  padding: @spacing-5;
-  overflow: auto;
-  color: var(--apron-drawer-text-color);
-}
-
-// ============================================
-// Drawer Footer
-// ============================================
-.apron-drawer__footer {
-  display: flex;
-  align-items: center;
-  padding: @spacing-4 @spacing-5;
-  background-color: var(--apron-drawer-footer-bg);
-  border-top: 1px solid var(--apron-drawer-border-color);
-
-  // Right placement footer
-  &--right {
-    justify-content: flex-start;
-    gap: @spacing-3;
-  }
-
-  // Left placement footer
-  &--left {
-    justify-content: flex-end;
-    gap: @spacing-3;
-  }
-
-  // Top placement footer
-  &--top {
-    justify-content: flex-end;
-    gap: @spacing-3;
-  }
-
-  // Bottom placement footer
-  &--bottom {
-    justify-content: flex-end;
-    gap: @spacing-3;
-  }
-
-  // Footer buttons container
-  &-buttons {
-    display: flex;
-    gap: @spacing-3;
-  }
-}
 </style>

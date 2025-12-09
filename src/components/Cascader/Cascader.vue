@@ -1,17 +1,25 @@
 <template>
-  <div :class="classes" ref="containerRef" v-bind="$attrs">
-    <div 
-      class="apron-cascader__input"
-      :class="{ 
-        'apron-cascader__input--active': isActive,
-        'apron-cascader__input--disabled': disabled,
-        'apron-cascader__input--loading': loading
-      }"
-      @click="toggleDropdown"
-    >
-      <span v-if="displayValue" class="apron-cascader__value">{{ displayValue }}</span>
-      <span v-else class="apron-cascader__placeholder">{{ placeholder }}</span>
-      
+  <div
+    :class="classes"
+    ref="containerRef"
+    v-bind="$attrs"
+    :tabindex="disabled || loading ? -1 : 0"
+    role="combobox"
+    :aria-expanded="isOpen"
+    aria-haspopup="listbox"
+    :aria-disabled="disabled"
+    @keydown="handleKeyDown"
+  >
+    <!-- 选择器头部 -->
+    <div class="apron-cascader__trigger" @click="toggleDropdown">
+      <span
+        :class="[
+          'apron-cascader__value',
+          { 'apron-cascader__value--placeholder': !hasValue }
+        ]"
+      >
+        {{ displayValue || placeholder }}
+      </span>
       <span class="apron-cascader__suffix">
         <svg
           v-if="loading"
@@ -31,7 +39,6 @@
           <path d="M4.34 15.66L6.46 13.54" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.7" />
           <path d="M13.54 6.46L15.66 4.34" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.6" />
         </svg>
-        
         <svg
           v-else
           width="20"
@@ -51,26 +58,40 @@
         </svg>
       </span>
     </div>
-    
-    <!-- Dropdown (简化版) -->
-    <div 
-      v-if="isOpen" 
+
+    <!-- 下拉选项 -->
+    <div
+      v-if="isOpen && !loading"
       class="apron-cascader__dropdown"
-      :class="{ 'apron-cascader__dropdown--inflow': inflow }"
+      role="listbox"
     >
       <div class="apron-cascader__columns">
-        <div class="apron-cascader__column">
-          <div 
-            v-for="option in options" 
-            :key="option.value"
-            class="apron-cascader__option"
-            :class="{ 
-              'apron-cascader__option--selected': isSelected(option),
-              'apron-cascader__option--disabled': option.disabled
-            }"
-            @click="handleOptionClick(option)"
-          >
-            {{ option.label }}
+        <div
+          v-for="(columnOptions, columnIndex) in columnsOptions"
+          :key="columnIndex"
+          class="apron-cascader__column"
+        >
+          <div class="apron-cascader__options">
+            <div
+              v-for="option in columnOptions"
+              :key="option.value"
+              :class="[
+                'apron-cascader__option',
+                {
+                  'apron-cascader__option--expanded': expandedPath[columnIndex] === option.value,
+                  'apron-cascader__option--selected': isFinalSelected(option, columnIndex),
+                  'apron-cascader__option--disabled': option.disabled
+                }
+              ]"
+              role="option"
+              :aria-selected="expandedPath[columnIndex] === option.value"
+              :aria-disabled="option.disabled"
+              @click="handleSelect(option, columnIndex)"
+            >
+              <span class="apron-cascader__option-label">
+                {{ option.label }}
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -79,7 +100,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 
 export type CascaderValueType = (string | number)[]
 export interface CascaderOption {
@@ -104,21 +125,29 @@ export interface CascaderProps {
   loading?: boolean
   /** 是否使用 inflow 模式（撑开容器） */
   inflow?: boolean
+  /** 选中值改变时的回调 */
+  onChange?: (value: CascaderValueType, selectedOptions: CascaderOption[]) => void
+  /** 自定义类名 */
+  className?: string
+  /** 下拉框展开/收起回调 */
+  onOpenChange?: (open: boolean) => void
   /** 值分隔符，用于显示 */
   separator?: string
-  /** 自定义类名 */
-  class?: string
+  /** 是否在选择过程中触发 onChange（而非只在选择叶子节点时） */
+  changeOnSelect?: boolean
 }
 
 const props = withDefaults(defineProps<CascaderProps>(), {
   options: () => [],
-  placeholder: '请选择',
+  placeholder: 'Placeholder goes here',
   separator: ' / ',
+  changeOnSelect: false,
 })
 
 const emit = defineEmits<{
   (e: 'update:value', value: CascaderValueType): void
   (e: 'change', value: CascaderValueType, selectedOptions: CascaderOption[]): void
+  (e: 'openChange', open: boolean): void
 }>()
 
 const containerRef = ref<HTMLDivElement | null>(null)
@@ -130,17 +159,28 @@ const expandedPath = ref<CascaderValueType>([])
 const isControlled = computed(() => props.value !== undefined)
 const currentValue = computed(() => isControlled.value ? props.value! : internalValue.value)
 
+const hasValue = computed(() => currentValue.value.length > 0)
+const isActive = computed(() => isOpen.value || hasValue.value)
+
 const classes = computed(() => [
   'apron-cascader',
-  props.class,
+  isActive.value && 'apron-cascader--active',
+  isOpen.value && 'apron-cascader--open',
+  props.disabled && 'apron-cascader--disabled',
+  props.loading && 'apron-cascader--loading',
+  props.inflow && 'apron-cascader--inflow',
+  props.className,
 ].filter(Boolean).join(' '))
 
-// 获取选中的选项
-const selectedOptions = computed(() => {
+// 根据值路径获取选中的选项
+const getSelectedOptions = (
+  options: CascaderOption[],
+  valuePath: CascaderValueType
+): CascaderOption[] => {
   const result: CascaderOption[] = []
-  let currentOptions = props.options || []
-  
-  for (const val of currentValue.value) {
+  let currentOptions = options
+
+  for (const val of valuePath) {
     const found = currentOptions.find((opt) => opt.value === val)
     if (found) {
       result.push(found)
@@ -149,9 +189,35 @@ const selectedOptions = computed(() => {
       break
     }
   }
-  
+
   return result
-})
+}
+
+// 获取各层级的选项列表
+const getColumnsOptions = (
+  options: CascaderOption[],
+  expandedPath: CascaderValueType
+): CascaderOption[][] => {
+  const columns: CascaderOption[][] = [options]
+  let currentOptions = options
+
+  for (const val of expandedPath) {
+    const found = currentOptions.find((opt) => opt.value === val)
+    if (found?.children && found.children.length > 0) {
+      columns.push(found.children)
+      currentOptions = found.children
+    } else {
+      break
+    }
+  }
+
+  return columns
+}
+
+// 获取选中的选项
+const selectedOptions = computed(() => 
+  getSelectedOptions(props.options || [], currentValue.value)
+)
 
 // 获取显示的值
 const displayValue = computed(() => {
@@ -159,32 +225,88 @@ const displayValue = computed(() => {
   return selectedOptions.value.map((opt) => opt.label).join(props.separator)
 })
 
-const isActive = computed(() => isOpen.value || currentValue.value.length > 0)
+// 获取各列的选项
+const columnsOptions = computed(() => 
+  getColumnsOptions(props.options || [], expandedPath.value)
+)
 
+// 切换下拉框
 const toggleDropdown = () => {
   if (props.disabled || props.loading) return
-  isOpen.value = !isOpen.value
+  const newOpen = !isOpen.value
+  isOpen.value = newOpen
+  props.onOpenChange?.(newOpen)
+  emit('openChange', newOpen)
 }
 
-const isSelected = (option: CascaderOption) => {
-  return currentValue.value.includes(option.value)
-}
-
-const handleOptionClick = (option: CascaderOption) => {
+// 选择选项
+const handleSelect = (option: CascaderOption, columnIndex: number) => {
   if (option.disabled) return
-  
-  const newValue = [...currentValue.value, option.value]
-  
-  if (!isControlled.value) {
-    internalValue.value = newValue
+
+  // 构建新的值路径
+  const newPath = [...expandedPath.value.slice(0, columnIndex), option.value]
+  expandedPath.value = newPath
+
+  const newSelectedOptions = getSelectedOptions(props.options || [], newPath)
+  const hasChildren = option.children && option.children.length > 0
+
+  // 如果是叶子节点或 changeOnSelect 为 true，则触发 onChange
+  if (!hasChildren || props.changeOnSelect) {
+    if (!isControlled.value) {
+      internalValue.value = newPath
+    }
+    emit('update:value', newPath)
+    emit('change', newPath, newSelectedOptions)
+    props.onChange?.(newPath, newSelectedOptions)
+
+    // 如果是叶子节点，关闭下拉框
+    if (!hasChildren) {
+      isOpen.value = false
+      props.onOpenChange?.(false)
+      emit('openChange', false)
+    }
   }
-  
-  emit('update:value', newValue)
-  emit('change', newValue, [...selectedOptions.value, option])
-  
-  // 如果是叶子节点，则关闭下拉框
-  if (!option.children || option.children.length === 0) {
-    isOpen.value = false
+}
+
+// 判断是否为最终选中的选项
+const isFinalSelected = (option: CascaderOption, columnIndex: number) => {
+  return (
+    currentValue.value[columnIndex] === option.value &&
+    columnIndex === currentValue.value.length - 1
+  )
+}
+
+// 键盘导航
+const handleKeyDown = (e: KeyboardEvent) => {
+  if (props.disabled || props.loading) return
+
+  switch (e.key) {
+    case 'Enter':
+    case ' ':
+      e.preventDefault()
+      toggleDropdown()
+      break
+    case 'Escape':
+      isOpen.value = false
+      props.onOpenChange?.(false)
+      emit('openChange', false)
+      break
+    case 'ArrowDown':
+      e.preventDefault()
+      if (!isOpen.value) {
+        isOpen.value = true
+        props.onOpenChange?.(true)
+        emit('openChange', true)
+      }
+      break
+    case 'ArrowUp':
+      e.preventDefault()
+      if (isOpen.value) {
+        isOpen.value = false
+        props.onOpenChange?.(false)
+        emit('openChange', false)
+      }
+      break
   }
 }
 
@@ -192,45 +314,75 @@ const handleOptionClick = (option: CascaderOption) => {
 const handleClickOutside = (event: MouseEvent) => {
   if (containerRef.value && !containerRef.value.contains(event.target as Node)) {
     isOpen.value = false
+    props.onOpenChange?.(false)
+    emit('openChange', false)
   }
 }
 
+// 打开时初始化展开路径
 watch(isOpen, (newVal) => {
   if (newVal) {
-    document.addEventListener('click', handleClickOutside)
+    expandedPath.value = currentValue.value
+    document.addEventListener('mousedown', handleClickOutside)
   } else {
-    document.removeEventListener('click', handleClickOutside)
+    document.removeEventListener('mousedown', handleClickOutside)
   }
 })
 
 // 清理事件监听器
+onUnmounted(() => {
+  document.removeEventListener('mousedown', handleClickOutside)
+})
+
 defineExpose({
   close: () => {
     isOpen.value = false
+    props.onOpenChange?.(false)
+    emit('openChange', false)
   }
 })
 </script>
 
 <style lang="less">
 @import '../../styles/variables.less';
+@import '../../styles/mixins.less';
 
 // ============================================
 // Cascader CSS Variables (Light Mode)
 // ============================================
 :root {
-  --apron-cascader-bg: #ffffff;
-  --apron-cascader-border-color: @color-neutral-300;
-  --apron-cascader-border-color-hover: @color-neutral-400;
-  --apron-cascader-border-color-focus: @color-primary-500;
-  --apron-cascader-placeholder-color: @color-neutral-500;
-  --apron-cascader-text-color: @color-primary-900;
+  // Inactive state
+  --apron-cascader-bg: @color-primary-50;
+  --apron-cascader-border: @color-primary-50;
+  --apron-cascader-text: @color-primary-300;
+  --apron-cascader-placeholder: @color-primary-300;
+
+  // Active state
+  --apron-cascader-active-bg: #ffffff;
+  --apron-cascader-active-border: @color-primary-500;
+  --apron-cascader-active-text: @color-primary-500;
+
+  // Disabled state
   --apron-cascader-disabled-bg: @color-neutral-100;
-  --apron-cascader-disabled-color: @color-neutral-400;
+  --apron-cascader-disabled-border: @color-neutral-200;
+  --apron-cascader-disabled-text: @color-neutral-400;
+
+  // Dropdown
   --apron-cascader-dropdown-bg: #ffffff;
+  --apron-cascader-dropdown-border: @color-neutral-200;
+  --apron-cascader-dropdown-shadow: @shadow-lg;
+
+  // Option
+  --apron-cascader-option-text: @color-primary-500;
   --apron-cascader-option-hover-bg: @color-neutral-100;
-  --apron-cascader-option-selected-bg: @color-primary-50;
-  --apron-cascader-option-selected-color: @color-primary-500;
-  --apron-cascader-option-disabled-color: @color-neutral-400;
+  --apron-cascader-option-selected-text: @color-secondary-500;
+  --apron-cascader-option-disabled-text: @color-neutral-300;
+
+  // Column divider
+  --apron-cascader-column-divider: @color-neutral-200;
+
+  // Icon
+  --apron-cascader-icon-color: @color-primary-300;
 }
 
 // ============================================
@@ -238,19 +390,38 @@ defineExpose({
 // ============================================
 .dark,
 [data-prefers-color='dark'] {
+  // Inactive state
   --apron-cascader-bg: @color-neutral-800;
-  --apron-cascader-border-color: @color-neutral-600;
-  --apron-cascader-border-color-hover: @color-neutral-500;
-  --apron-cascader-border-color-focus: @color-primary-400;
-  --apron-cascader-placeholder-color: @color-neutral-400;
-  --apron-cascader-text-color: @color-neutral-100;
-  --apron-cascader-disabled-bg: @color-neutral-700;
-  --apron-cascader-disabled-color: @color-neutral-500;
+  --apron-cascader-border: @color-neutral-700;
+  --apron-cascader-text: @color-neutral-400;
+  --apron-cascader-placeholder: @color-neutral-500;
+
+  // Active state
+  --apron-cascader-active-bg: @color-neutral-900;
+  --apron-cascader-active-border: @color-primary-200;
+  --apron-cascader-active-text: @color-primary-200;
+
+  // Disabled state
+  --apron-cascader-disabled-bg: @color-neutral-800;
+  --apron-cascader-disabled-border: @color-neutral-700;
+  --apron-cascader-disabled-text: @color-neutral-600;
+
+  // Dropdown
   --apron-cascader-dropdown-bg: @color-neutral-800;
+  --apron-cascader-dropdown-border: @color-neutral-700;
+  --apron-cascader-dropdown-shadow: 0 10px 25px -5px rgb(0 0 0 / 0.3);
+
+  // Option
+  --apron-cascader-option-text: @color-primary-200;
   --apron-cascader-option-hover-bg: @color-neutral-700;
-  --apron-cascader-option-selected-bg: @color-primary-900;
-  --apron-cascader-option-selected-color: @color-primary-300;
-  --apron-cascader-option-disabled-color: @color-neutral-500;
+  --apron-cascader-option-selected-text: @color-secondary-400;
+  --apron-cascader-option-disabled-text: @color-neutral-600;
+
+  // Column divider
+  --apron-cascader-column-divider: @color-neutral-700;
+
+  // Icon
+  --apron-cascader-icon-color: @color-neutral-500;
 }
 
 // ============================================
@@ -261,176 +432,251 @@ defineExpose({
   display: inline-block;
   width: 100%;
   font-family: var(--apron-font-family);
-  transition: all @transition-slow;
+  font-size: @font-size-base;
+  outline: none;
+  box-sizing: border-box;
 
-  // ============================================
-  // Input
-  // ============================================
-  &__input {
-    position: relative;
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  // Trigger (选择器头部)
+  &__trigger {
     display: flex;
     align-items: center;
     width: 100%;
-    min-height: 40px;
+    height: 40px;
     padding: 0 @spacing-4;
     background-color: var(--apron-cascader-bg);
-    border: 1px solid var(--apron-cascader-border-color);
-    border-radius: @radius-md;
+    border: 1px solid var(--apron-cascader-border);
+    border-radius: 20px;
     cursor: pointer;
-    transition: all @transition-slow;
-
-    &:hover:not(&--disabled, &--loading) {
-      border-color: var(--apron-cascader-border-color-hover);
-    }
-
-    &--active:not(&--disabled, &--loading) {
-      border-color: var(--apron-cascader-border-color-focus);
-      box-shadow: 0 0 0 2px rgba(67, 90, 111, 0.15);
-    }
-
-    &--disabled {
-      background-color: var(--apron-cascader-disabled-bg);
-      color: var(--apron-cascader-disabled-color);
-      cursor: not-allowed;
-    }
-
-    &--loading {
-      cursor: wait;
-    }
+    transition: all @transition-fast;
   }
 
-  // ============================================
-  // Value
-  // ============================================
+  // Value / Placeholder
   &__value {
     flex: 1;
-    color: var(--apron-cascader-text-color);
-    font-size: @font-size-base;
-    line-height: @line-height-normal;
+    color: var(--apron-cascader-text);
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
+
+    &--placeholder {
+      color: var(--apron-cascader-placeholder);
+    }
   }
 
-  // ============================================
-  // Placeholder
-  // ============================================
-  &__placeholder {
-    flex: 1;
-    color: var(--apron-cascader-placeholder-color);
-    font-size: @font-size-base;
-    line-height: @line-height-normal;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  // ============================================
-  // Suffix
-  // ============================================
+  // Suffix (arrow / loading)
   &__suffix {
     display: flex;
     align-items: center;
     margin-left: @spacing-2;
-    color: var(--apron-cascader-placeholder-color);
-    transition: all @transition-slow;
+    color: var(--apron-cascader-icon-color);
+    flex-shrink: 0;
   }
 
-  // ============================================
-  // Arrow
-  // ============================================
+  // Arrow icon
   &__arrow {
-    transition: transform @transition-slow;
-    
+    transition: transform @transition-fast;
+
     &--open {
       transform: rotate(180deg);
     }
   }
 
-  // ============================================
-  // Loading Icon
-  // ============================================
+  // Loading icon
   &__loading-icon {
     animation: apron-cascader-spin 1s linear infinite;
   }
 
-  @keyframes apron-cascader-spin {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-
-  // ============================================
   // Dropdown
-  // ============================================
   &__dropdown {
     position: absolute;
-    top: 100%;
+    top: calc(100% + 8px);
     left: 0;
-    right: 0;
-    z-index: 1000;
-    margin-top: @spacing-1;
+    min-width: 100%;
     background-color: var(--apron-cascader-dropdown-bg);
-    border: 1px solid var(--apron-cascader-border-color);
-    border-radius: @radius-md;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transition: all @transition-slow;
+    border: 1px solid var(--apron-cascader-dropdown-border);
+    border-radius: 20px;
+    box-shadow: var(--apron-cascader-dropdown-shadow);
+    z-index: @z-index-dropdown;
+    overflow: hidden;
+    // Animation
+    animation: apron-cascader-dropdown-open @transition-fast forwards;
+    transform-origin: top center;
+  }
 
-    &--inflow {
-      position: static;
-      margin-top: 0;
+  // Columns container
+  &__columns {
+    display: flex;
+    border-top: 1px solid var(--apron-cascader-column-divider);
+  }
+
+  // Single column
+  &__column {
+    min-width: 150px;
+    flex-shrink: 0;
+
+    &:not(:last-child) {
+      border-right: 1px solid var(--apron-cascader-column-divider);
     }
   }
 
-  // ============================================
-  // Columns
-  // ============================================
-  &__columns {
-    display: flex;
-    max-height: 200px;
+  // Options container (scrollable)
+  &__options {
+    max-height: calc(40px * 5 + 1px); // 5 rows max + 1px for border
     overflow-y: auto;
   }
 
-  // ============================================
-  // Column
-  // ============================================
-  &__column {
-    min-width: 120px;
-    border-right: 1px solid var(--apron-cascader-border-color);
-    
-    &:last-child {
-      border-right: none;
-    }
-  }
-
-  // ============================================
-  // Option
-  // ============================================
+  // Single option
   &__option {
-    padding: @spacing-2 @spacing-4;
-    color: var(--apron-cascader-text-color);
-    font-size: @font-size-base;
-    line-height: @line-height-normal;
+    display: flex;
+    align-items: center;
+    height: 40px;
+    padding: 0 @spacing-4;
+    color: var(--apron-cascader-option-text);
     cursor: pointer;
-    transition: all @transition-slow;
+    transition: background-color @transition-fast;
 
-    &:hover:not(&--disabled) {
+    &:hover:not(.apron-cascader__option--disabled) {
+      background-color: var(--apron-cascader-option-hover-bg);
+    }
+
+    &--expanded {
       background-color: var(--apron-cascader-option-hover-bg);
     }
 
     &--selected {
-      background-color: var(--apron-cascader-option-selected-bg);
-      color: var(--apron-cascader-option-selected-color);
+      color: var(--apron-cascader-option-selected-text);
       font-weight: @font-weight-medium;
     }
 
     &--disabled {
-      color: var(--apron-cascader-option-disabled-color);
+      color: var(--apron-cascader-option-disabled-text);
       cursor: not-allowed;
     }
   }
+
+  &__option-label {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  // ============================================
+  // States
+  // ============================================
+
+  // Focus state
+  &:focus-visible {
+    .apron-cascader__trigger {
+      .focus-ring();
+    }
+  }
+
+  // Active state (有值或展开)
+  &--active {
+    .apron-cascader__trigger {
+      background-color: var(--apron-cascader-active-bg);
+      border-color: var(--apron-cascader-active-border);
+    }
+
+    .apron-cascader__value {
+      color: var(--apron-cascader-active-text);
+
+      &--placeholder {
+        color: var(--apron-cascader-placeholder);
+      }
+    }
+  }
+
+  // Open state
+  &--open {
+    .apron-cascader__trigger {
+      background-color: var(--apron-cascader-active-bg);
+      border-color: var(--apron-cascader-active-border);
+    }
+  }
+
+  // Disabled state
+  &--disabled {
+    .apron-cascader__trigger {
+      background-color: var(--apron-cascader-disabled-bg);
+      border-color: var(--apron-cascader-disabled-border);
+      cursor: not-allowed;
+    }
+
+    .apron-cascader__value {
+      color: var(--apron-cascader-disabled-text);
+    }
+
+    .apron-cascader__suffix {
+      color: var(--apron-cascader-disabled-text);
+    }
+  }
+
+  // Loading state
+  &--loading {
+    .apron-cascader__trigger {
+      cursor: wait;
+    }
+  }
+
+  // ============================================
+  // Inflow Mode (撑开容器)
+  // ============================================
+  &--inflow {
+    .apron-cascader__dropdown {
+      position: relative;
+      top: 0;
+      margin-top: 0;
+      border-top: none;
+      border-radius: 0 0 20px 20px;
+      box-shadow: none;
+    }
+
+    &.apron-cascader--open {
+      .apron-cascader__trigger {
+        border-radius: 20px 20px 0 0;
+        border-bottom-color: transparent;
+      }
+
+      .apron-cascader__dropdown {
+        border-color: var(--apron-cascader-active-border);
+        border-top: none;
+      }
+
+      .apron-cascader__columns {
+        border-top-color: var(--apron-cascader-column-divider);
+      }
+    }
+  }
+}
+
+// Loading animation
+@keyframes apron-cascader-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Dropdown open animation
+@keyframes apron-cascader-dropdown-open {
+  from {
+    opacity: 0;
+    transform: scaleY(0.9) translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1) translateY(0);
+  }
 }
 </style>
+

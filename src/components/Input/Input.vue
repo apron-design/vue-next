@@ -182,23 +182,31 @@ defineExpose({
 
 <style lang="less">
 @import '../../styles/variables.less';
+@import '../../styles/mixins.less';
 
 // ============================================
 // Input CSS Variables (Light Mode)
 // ============================================
 :root {
-  --apron-input-height: 40px;
-  --apron-input-bg: #ffffff;
-  --apron-input-border-color: @color-neutral-300;
-  --apron-input-border-color-hover: @color-neutral-400;
-  --apron-input-border-color-focus: @color-primary-500;
-  --apron-input-placeholder-color: @color-neutral-500;
-  --apron-input-text-color: @color-primary-900;
+  // Inactive state (空且无焦点)
+  --apron-input-bg: @color-primary-50;
+  --apron-input-border: @color-primary-50;
+  --apron-input-text: @color-primary-300;
+  --apron-input-placeholder: @color-primary-300;
+
+  // Active state (有内容或有焦点)
+  --apron-input-active-bg: #ffffff;
+  --apron-input-active-border: @color-primary-500;
+  --apron-input-active-text: @color-primary-500;
+
+  // Disabled state
   --apron-input-disabled-bg: @color-neutral-100;
-  --apron-input-disabled-color: @color-neutral-400;
-  --apron-input-prepend-append-bg: @color-neutral-100;
-  --apron-input-prepend-append-color: @color-neutral-600;
-  --apron-input-icon-color: @color-neutral-500;
+  --apron-input-disabled-border: @color-neutral-200;
+  --apron-input-disabled-text: @color-neutral-400;
+
+  // Icon
+  --apron-input-icon-color: @color-primary-300;
+  --apron-input-icon-hover-color: @color-primary-500;
 }
 
 // ============================================
@@ -206,190 +214,190 @@ defineExpose({
 // ============================================
 .dark,
 [data-prefers-color='dark'] {
+  // Inactive state
   --apron-input-bg: @color-neutral-800;
-  --apron-input-border-color: @color-neutral-600;
-  --apron-input-border-color-hover: @color-neutral-500;
-  --apron-input-border-color-focus: @color-primary-400;
-  --apron-input-placeholder-color: @color-neutral-400;
-  --apron-input-text-color: @color-neutral-100;
-  --apron-input-disabled-bg: @color-neutral-700;
-  --apron-input-disabled-color: @color-neutral-500;
-  --apron-input-prepend-append-bg: @color-neutral-700;
-  --apron-input-prepend-append-color: @color-neutral-300;
-  --apron-input-icon-color: @color-neutral-400;
+  --apron-input-border: @color-neutral-700;
+  --apron-input-text: @color-neutral-400;
+  --apron-input-placeholder: @color-neutral-500;
+
+  // Active state
+  --apron-input-active-bg: @color-neutral-900;
+  --apron-input-active-border: @color-primary-200;
+  --apron-input-active-text: @color-primary-200;
+
+  // Disabled state
+  --apron-input-disabled-bg: @color-neutral-800;
+  --apron-input-disabled-border: @color-neutral-700;
+  --apron-input-disabled-text: @color-neutral-600;
+
+  // Icon
+  --apron-input-icon-color: @color-neutral-500;
+  --apron-input-icon-hover-color: @color-primary-200;
 }
 
 // ============================================
 // Input Base Styles
 // ============================================
 .apron-input {
-  position: relative;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   width: 100%;
+  height: 40px;
+  background-color: var(--apron-input-bg);
+  border: 1px solid var(--apron-input-border);
+  border-radius: 20px;
   font-family: var(--apron-font-family);
-  transition: all @transition-slow;
+  font-size: @font-size-base;
+  transition: all @transition-fast;
+  position: relative;
+  overflow: hidden;
 
-  // ============================================
-  // Active State
-  // ============================================
-  &--active {
-    .apron-input__inner {
-      border-color: var(--apron-input-border-color-focus);
-      box-shadow: 0 0 0 2px rgba(67, 90, 111, 0.15);
-    }
-  }
-
-  // ============================================
-  // Disabled State
-  // ============================================
-  &--disabled {
-    .apron-input__inner {
-      background-color: var(--apron-input-disabled-bg);
-      color: var(--apron-input-disabled-color);
-      cursor: not-allowed;
-    }
-
-    .apron-input__prepend,
-    .apron-input__append {
-      background-color: var(--apron-input-disabled-bg);
-      color: var(--apron-input-disabled-color);
-    }
-  }
-
-  // ============================================
-  // Has Prepend
-  // ============================================
-  &--has-prepend {
-    .apron-input__inner {
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
-    }
-  }
-
-  // ============================================
-  // Has Append
-  // ============================================
-  &--has-append {
-    .apron-input__inner {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
-    }
-  }
-
-  // ============================================
-  // Inner Input
-  // ============================================
+  // Native input
   &__inner {
     flex: 1;
-    height: var(--apron-input-height);
+    width: 100%;
+    height: 100%;
     padding: 0 @spacing-4;
-    background-color: var(--apron-input-bg);
-    border: 1px solid var(--apron-input-border-color);
-    border-radius: @radius-md;
-    color: var(--apron-input-text-color);
-    font-size: @font-size-base;
-    line-height: @line-height-normal;
-    transition: all @transition-slow;
-
-    &:hover:not(:disabled) {
-      border-color: var(--apron-input-border-color-hover);
-    }
-
-    &:focus {
-      outline: none;
-      border-color: var(--apron-input-border-color-focus);
-      box-shadow: 0 0 0 2px rgba(67, 90, 111, 0.15);
-    }
+    border: none;
+    background: transparent;
+    color: var(--apron-input-text);
+    font-family: inherit;
+    font-size: inherit;
+    outline: none;
 
     &::placeholder {
-      color: var(--apron-input-placeholder-color);
+      color: var(--apron-input-placeholder);
+    }
+
+    // 隐藏浏览器默认的密码切换按钮
+    &::-ms-reveal,
+    &::-ms-clear {
+      display: none;
+    }
+
+    &::-webkit-credentials-auto-fill-button {
+      visibility: hidden;
     }
   }
 
-  // ============================================
   // Prepend
-  // ============================================
   &__prepend {
     display: flex;
     align-items: center;
-    height: var(--apron-input-height);
-    padding: 0 @spacing-3;
-    background-color: var(--apron-input-prepend-append-bg);
-    color: var(--apron-input-prepend-append-color);
-    border: 1px solid var(--apron-input-border-color);
-    border-right: none;
-    border-radius: @radius-md 0 0 @radius-md;
-    font-size: @font-size-base;
-    transition: all @transition-slow;
+    justify-content: center;
+    height: 100%;
+    padding-left: @spacing-4;
+    color: var(--apron-input-text);
+    flex-shrink: 0;
 
     &--string {
-      padding: 0 @spacing-2;
+      min-width: 65px;
+      padding: 0 @spacing-3;
+      text-align: center;
+      white-space: nowrap;
     }
   }
 
-  // ============================================
   // Append
-  // ============================================
   &__append {
     display: flex;
     align-items: center;
-    height: var(--apron-input-height);
-    padding: 0 @spacing-3;
-    background-color: var(--apron-input-prepend-append-bg);
-    color: var(--apron-input-prepend-append-color);
-    border: 1px solid var(--apron-input-border-color);
-    border-left: none;
-    border-radius: 0 @radius-md @radius-md 0;
-    font-size: @font-size-base;
-    transition: all @transition-slow;
+    justify-content: center;
+    height: 100%;
+    padding-right: @spacing-4;
+    color: var(--apron-input-text);
+    flex-shrink: 0;
 
     &--string {
-      padding: 0 @spacing-2;
+      min-width: 50px;
+      padding: 0 @spacing-3;
+      text-align: center;
+      white-space: nowrap;
     }
   }
 
-  // ============================================
-  // Suffix
-  // ============================================
+  // Suffix (icons container)
   &__suffix {
-    position: absolute;
-    right: @spacing-3;
     display: flex;
     align-items: center;
     gap: @spacing-1;
+    padding-right: @spacing-3;
+    flex-shrink: 0;
   }
 
-  // ============================================
-  // Icon Button
-  // ============================================
+  // Icon button
   &__icon-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     padding: 0;
-    background: transparent;
     border: none;
+    background: transparent;
     color: var(--apron-input-icon-color);
     cursor: pointer;
-    transition: all @transition-slow;
+    border-radius: @radius-full;
+    transition: all @transition-fast;
 
     &:hover {
-      color: var(--apron-input-text-color);
+      color: var(--apron-input-icon-hover-color);
     }
 
-    &:focus {
-      outline: none;
+    svg {
+      width: 20px;
+      height: 20px;
     }
   }
 
-  // ============================================
-  // Clear Button
-  // ============================================
-  &__clear-btn {
-    // 特殊样式可以在这里添加
+  // Has prepend - adjust inner padding
+  &--has-prepend {
+    .apron-input__inner {
+      padding-left: @spacing-2;
+    }
+  }
+
+  // Has append - adjust inner padding
+  &--has-append {
+    .apron-input__inner {
+      padding-right: @spacing-2;
+    }
+  }
+
+  // Active state
+  &--active {
+    background-color: var(--apron-input-active-bg);
+    border-color: var(--apron-input-active-border);
+
+    .apron-input__inner {
+      color: var(--apron-input-active-text);
+    }
+
+    .apron-input__prepend,
+    .apron-input__append {
+      color: var(--apron-input-active-text);
+    }
+  }
+
+  // Disabled state
+  &--disabled {
+    background-color: var(--apron-input-disabled-bg);
+    border-color: var(--apron-input-disabled-border);
+    cursor: not-allowed;
+
+    .apron-input__inner {
+      color: var(--apron-input-disabled-text);
+      cursor: not-allowed;
+
+      &::placeholder {
+        color: var(--apron-input-disabled-text);
+      }
+    }
+
+    .apron-input__prepend,
+    .apron-input__append {
+      color: var(--apron-input-disabled-text);
+    }
   }
 }
 </style>

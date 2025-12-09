@@ -162,23 +162,36 @@ defineExpose({
 
 <style lang="less">
 @import '../../styles/variables.less';
+@import '../../styles/mixins.less';
 
 // ============================================
 // Checkbox CSS Variables (Light Mode)
 // ============================================
 :root {
-  --apron-checkbox-size: 16px;
-  --apron-checkbox-border-color: @color-neutral-400;
-  --apron-checkbox-border-color-hover: @color-neutral-500;
-  --apron-checkbox-border-color-checked: @color-primary-500;
+  // Unchecked state
   --apron-checkbox-bg: #ffffff;
-  --apron-checkbox-bg-checked: @color-primary-500;
-  --apron-checkbox-icon-color: #ffffff;
-  --apron-checkbox-label-color: @color-primary-900;
-  --apron-checkbox-disabled-opacity: 0.5;
+  --apron-checkbox-border: @color-neutral-300;
+  --apron-checkbox-border-hover: @color-neutral-400;
+
+  // Checked state
+  --apron-checkbox-checked-bg: @color-success-500;
+  --apron-checkbox-checked-border: @color-success-500;
+  --apron-checkbox-checked-icon: #ffffff;
+
+  // Indeterminate state
+  --apron-checkbox-indeterminate-bg: @color-success-500;
+  --apron-checkbox-indeterminate-border: @color-success-500;
+  --apron-checkbox-indeterminate-icon: #ffffff;
+
+  // Disabled state
   --apron-checkbox-disabled-bg: @color-neutral-100;
-  --apron-checkbox-disabled-border: @color-neutral-300;
-  --apron-checkbox-disabled-label: @color-neutral-500;
+  --apron-checkbox-disabled-border: @color-neutral-200;
+  --apron-checkbox-disabled-checked-bg: @color-neutral-200;
+  --apron-checkbox-disabled-icon: @color-neutral-400;
+  --apron-checkbox-disabled-text: @color-neutral-400;
+
+  // Label
+  --apron-checkbox-label-color: @color-primary-500;
 }
 
 // ============================================
@@ -186,145 +199,185 @@ defineExpose({
 // ============================================
 .dark,
 [data-prefers-color='dark'] {
-  --apron-checkbox-border-color: @color-neutral-500;
-  --apron-checkbox-border-color-hover: @color-neutral-400;
-  --apron-checkbox-border-color-checked: @color-primary-400;
+  // Unchecked state
   --apron-checkbox-bg: @color-neutral-800;
-  --apron-checkbox-bg-checked: @color-primary-400;
-  --apron-checkbox-label-color: @color-neutral-100;
-  --apron-checkbox-disabled-bg: @color-neutral-700;
-  --apron-checkbox-disabled-border: @color-neutral-600;
-  --apron-checkbox-disabled-label: @color-neutral-500;
+  --apron-checkbox-border: @color-neutral-600;
+  --apron-checkbox-border-hover: @color-neutral-500;
+
+  // Checked state
+  --apron-checkbox-checked-bg: @color-success-500;
+  --apron-checkbox-checked-border: @color-success-500;
+  --apron-checkbox-checked-icon: #ffffff;
+
+  // Indeterminate state
+  --apron-checkbox-indeterminate-bg: @color-success-500;
+  --apron-checkbox-indeterminate-border: @color-success-500;
+  --apron-checkbox-indeterminate-icon: #ffffff;
+
+  // Disabled state
+  --apron-checkbox-disabled-bg: @color-neutral-800;
+  --apron-checkbox-disabled-border: @color-neutral-700;
+  --apron-checkbox-disabled-checked-bg: @color-neutral-700;
+  --apron-checkbox-disabled-icon: @color-neutral-600;
+  --apron-checkbox-disabled-text: @color-neutral-600;
+
+  // Label
+  --apron-checkbox-label-color: @color-primary-200;
 }
 
 // ============================================
 // Checkbox Base Styles
 // ============================================
 .apron-checkbox {
-  position: relative;
   display: inline-flex;
   align-items: flex-start;
-  font-family: var(--apron-font-family);
   cursor: pointer;
-  transition: all @transition-slow;
+  user-select: none;
+  font-family: var(--apron-font-family);
+  font-size: @font-size-base;
+
+  // Input wrapper
+  &__input-wrapper {
+    position: relative;
+    flex-shrink: 0;
+    width: 25px;
+    height: 25px;
+  }
+
+  // Hidden native input
+  &__input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    margin: 0;
+    padding: 0;
+    cursor: inherit;
+    z-index: 1;
+  }
+
+  // Custom checkbox box
+  &__box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    height: 25px;
+    background-color: var(--apron-checkbox-bg);
+    border: 1.5px solid var(--apron-checkbox-border);
+    border-radius: @radius-md;
+    transition: all @transition-fast;
+  }
+
+  // Checkmark / Indeterminate icon
+  &__icon {
+    width: 20px;
+    height: 20px;
+    color: var(--apron-checkbox-checked-icon);
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all @transition-fast;
+
+    &--check,
+    &--indeterminate {
+      position: absolute;
+    }
+  }
+
+  // Label text
+  &__label {
+    margin-left: 10px;
+    line-height: 25px;
+    color: var(--apron-checkbox-label-color);
+  }
+
+  // Label not clickable
+  &--label-not-clickable {
+    .apron-checkbox__label {
+      cursor: default;
+    }
+  }
+
+  // Hover state (only for unchecked state)
+  &:hover:not(.apron-checkbox--disabled):not(.apron-checkbox--checked):not(.apron-checkbox--indeterminate) {
+    .apron-checkbox__box {
+      border-color: var(--apron-checkbox-border-hover);
+    }
+  }
+
+  // Focus state
+  &__input:focus-visible + .apron-checkbox__box {
+    .focus-ring();
+  }
+
+  // ============================================
+  // Checked State
+  // ============================================
+  &--checked:not(.apron-checkbox--indeterminate) {
+    .apron-checkbox__box {
+      background-color: var(--apron-checkbox-checked-bg);
+      border-color: var(--apron-checkbox-checked-border);
+    }
+
+    .apron-checkbox__icon--check {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  // ============================================
+  // Indeterminate State
+  // ============================================
+  &--indeterminate {
+    .apron-checkbox__box {
+      background-color: var(--apron-checkbox-indeterminate-bg);
+      border-color: var(--apron-checkbox-indeterminate-border);
+    }
+
+    .apron-checkbox__icon--indeterminate {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
 
   // ============================================
   // Disabled State
   // ============================================
   &--disabled {
     cursor: not-allowed;
-    opacity: var(--apron-checkbox-disabled-opacity);
 
-    .apron-checkbox__input-wrapper {
-      cursor: not-allowed;
+    .apron-checkbox__box {
+      background-color: var(--apron-checkbox-disabled-bg);
+      border-color: var(--apron-checkbox-disabled-border);
     }
 
     .apron-checkbox__label {
-      color: var(--apron-checkbox-disabled-label);
-      cursor: not-allowed;
-    }
-  }
-
-  // ============================================
-  // Label Not Clickable
-  // ============================================
-  &--label-not-clickable {
-    .apron-checkbox__label {
-      pointer-events: none;
-    }
-  }
-
-  // ============================================
-  // Input Wrapper
-  // ============================================
-  &__input-wrapper {
-    position: relative;
-    display: inline-block;
-    width: var(--apron-checkbox-size);
-    height: var(--apron-checkbox-size);
-    flex-shrink: 0;
-    margin-top: 2px;
-    cursor: pointer;
-  }
-
-  // ============================================
-  // Input (Hidden)
-  // ============================================
-  &__input {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    opacity: 0;
-    cursor: inherit;
-  }
-
-  // ============================================
-  // Box
-  // ============================================
-  &__box {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: var(--apron-checkbox-bg);
-    border: 1px solid var(--apron-checkbox-border-color);
-    border-radius: @radius-sm;
-    transition: all @transition-slow;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    .apron-checkbox:hover:not(.apron-checkbox--disabled) & {
-      border-color: var(--apron-checkbox-border-color-hover);
+      color: var(--apron-checkbox-disabled-text);
     }
 
-    .apron-checkbox--checked &,
-    .apron-checkbox--indeterminate & {
-      background-color: var(--apron-checkbox-bg-checked);
-      border-color: var(--apron-checkbox-border-color-checked);
-    }
-  }
+    // Disabled + Checked
+    &.apron-checkbox--checked:not(.apron-checkbox--indeterminate) {
+      .apron-checkbox__box {
+        background-color: var(--apron-checkbox-disabled-checked-bg);
+        border-color: var(--apron-checkbox-disabled-border);
+      }
 
-  // ============================================
-  // Icons
-  // ============================================
-  &__icon {
-    width: 12px;
-    height: 12px;
-    color: var(--apron-checkbox-icon-color);
-    opacity: 0;
-    transform: scale(0.5);
-    transition: all @transition-slow;
-
-    .apron-checkbox--checked &,
-    .apron-checkbox--indeterminate & {
-      opacity: 1;
-      transform: scale(1);
+      .apron-checkbox__icon {
+        color: var(--apron-checkbox-disabled-icon);
+      }
     }
 
-    &--check {
-      stroke-width: 3;
-    }
+    // Disabled + Indeterminate
+    &.apron-checkbox--indeterminate {
+      .apron-checkbox__box {
+        background-color: var(--apron-checkbox-disabled-checked-bg);
+        border-color: var(--apron-checkbox-disabled-border);
+      }
 
-    &--indeterminate {
-      stroke-width: 3;
+      .apron-checkbox__icon {
+        color: var(--apron-checkbox-disabled-icon);
+      }
     }
-  }
-
-  // ============================================
-  // Label
-  // ============================================
-  &__label {
-    margin-left: @spacing-2;
-    color: var(--apron-checkbox-label-color);
-    font-size: @font-size-base;
-    line-height: @line-height-normal;
-    cursor: pointer;
-    transition: all @transition-slow;
   }
 }
 </style>

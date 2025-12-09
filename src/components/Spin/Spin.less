@@ -1,4 +1,5 @@
 @import '../../styles/variables.less';
+@import '../../styles/mixins.less';
 
 // ============================================
 // Spin CSS Variables (Light Mode)
@@ -12,6 +13,7 @@
 // ============================================
 // Spin CSS Variables (Dark Mode)
 // ============================================
+.dark,
 [data-prefers-color='dark'] {
   --apron-spin-color: @color-primary-400;
   --apron-spin-text-color: @color-primary-300;
@@ -188,9 +190,8 @@
   // Icon
   // ============================================
   &__icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    .flex-center();
+
     color: var(--apron-spin-color);
 
     // 非居中时图标缩小

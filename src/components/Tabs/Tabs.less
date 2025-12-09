@@ -1,4 +1,5 @@
 @import '../../styles/variables.less';
+@import '../../styles/mixins.less';
 
 // ============================================
 // Tabs CSS Variables (Light Mode)
@@ -15,6 +16,7 @@
 // ============================================
 // Tabs CSS Variables (Dark Mode)
 // ============================================
+.dark,
 [data-prefers-color='dark'] {
   --apron-tabs-text-color: @color-primary-300;
   --apron-tabs-text-active-color: @color-primary-100;
@@ -59,6 +61,8 @@
   // Tab (默认模式)
   // ============================================
   &__tab {
+    .button-reset();
+
     display: flex;
     align-items: center;
     justify-content: center;
@@ -68,7 +72,6 @@
     font-weight: @font-weight-normal;
     color: var(--apron-tabs-text-color);
     background: transparent;
-    border: none;
     cursor: pointer;
     transition: all @transition-slow;
     white-space: nowrap;
@@ -78,7 +81,7 @@
     }
 
     &:focus-visible {
-      outline: 2px solid var(--apron-color-focus);
+      .focus-ring();
       outline-offset: -2px;
     }
 

@@ -1,13 +1,17 @@
 <template>
   <div :class="classes" v-bind="$attrs">
-    <div v-if="title" class="apron-card__header-title">{{ title }}</div>
+    <div v-if="title || $slots.title" class="apron-card__header-title">
+      <slot name="title">{{ title }}</slot>
+    </div>
     <slot />
-    <div v-if="extra" class="apron-card__header-extra">{{ extra }}</div>
+    <div v-if="extra || $slots.extra" class="apron-card__header-extra">
+      <slot name="extra">{{ extra }}</slot>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, useSlots } from 'vue'
 
 export interface CardHeaderProps {
   /** 标题 */
@@ -17,6 +21,8 @@ export interface CardHeaderProps {
   /** 自定义类名 */
   class?: string
 }
+
+const slots = useSlots()
 
 const props = withDefaults(defineProps<CardHeaderProps>(), {})
 
@@ -28,10 +34,12 @@ const classes = computed(() => [
 
 <style lang="less">
 @import '../../styles/variables.less';
+@import '../../styles/mixins.less';
 
 .apron-card__header {
+  .flex-center();
+
   display: flex;
-  align-items: center;
   justify-content: space-between;
   padding: 10px 15px;
   border-bottom: 1px solid var(--apron-card-border-color);

@@ -50,6 +50,7 @@ const classes = computed(() => [
 
 <style lang="less">
 @import '../../styles/variables.less';
+@import '../../styles/mixins.less';
 
 // ============================================
 // Avatar CSS Variables (Light Mode)
@@ -74,10 +75,10 @@ const classes = computed(() => [
 // Avatar Base Styles
 // ============================================
 .apron-avatar {
+  .flex-center();
+
   position: relative;
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
   overflow: hidden;
   background-color: var(--apron-avatar-bg);
   color: var(--apron-avatar-color);
@@ -135,9 +136,8 @@ const classes = computed(() => [
   // Content (文字/图标)
   // ============================================
   &__content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    .flex-center();
+
     width: 100%;
     height: 100%;
     overflow: hidden;

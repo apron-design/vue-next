@@ -1,163 +1,183 @@
-# Collapse
+---
+title: Collapse 折叠面板
+group: 导航组件
+order: 4
+---
 
-折叠面板用于将内容分组并可折叠展示。
+# Collapse 折叠面板
 
-## 基本用法
+可以折叠/展开的内容区域。
 
-基础的折叠面板使用方式。
+## 何时使用
 
-:::demo
-```vue
-<template>
-  <Collapse>
-    <CollapseItem item-key="1" title="折叠面板标题 1">
-      <p>这是折叠面板 1 的内容。</p>
-      <p>可以放置任何内容。</p>
-    </CollapseItem>
-    <CollapseItem item-key="2" title="折叠面板标题 2">
-      <p>这是折叠面板 2 的内容。</p>
-    </CollapseItem>
-    <CollapseItem item-key="3" title="折叠面板标题 3">
-      <p>这是折叠面板 3 的内容。</p>
-    </CollapseItem>
-  </Collapse>
-</template>
+- 对复杂区域进行分组和隐藏
+- 手风琴是一种特殊的折叠面板，只允许单个内容区域展开
 
-<script setup lang="ts">
-import { Collapse, CollapseItem } from '@apron-design/vue-next'
-</script>
-```
-:::
+## 代码演示
 
-## 手风琴模式
+### 基本用法
 
-通过 `accordion` 属性开启手风琴模式，每次只能展开一个面板。
+可以同时展开多个面板，可以分别展开或折叠。
 
 :::demo
 ```vue
 <template>
-  <Collapse accordion>
-    <CollapseItem item-key="1" title="手风琴面板 1">
-      <p>这是手风琴面板 1 的内容。</p>
-    </CollapseItem>
-    <CollapseItem item-key="2" title="手风琴面板 2">
-      <p>这是手风琴面板 2 的内容。</p>
-    </CollapseItem>
-    <CollapseItem item-key="3" title="手风琴面板 3">
-      <p>这是手风琴面板 3 的内容。</p>
-    </CollapseItem>
-  </Collapse>
+  <ad-collapse>
+    <ad-collapse-item item-key="1" title="折叠面板标题 1">
+      这是折叠面板的内容区域。可以放置任何内容，
+      包括文字、图片、表格等各种元素。
+    </ad-collapse-item>
+    <ad-collapse-item item-key="2" title="折叠面板标题 2">
+      第二个折叠面板的内容。折叠面板可以用于展示 FAQ、
+      设置选项、详细信息等场景。
+    </ad-collapse-item>
+    <ad-collapse-item item-key="3" title="折叠面板标题 3">
+      第三个折叠面板的内容。每个面板都可以独立展开或折叠。
+    </ad-collapse-item>
+  </ad-collapse>
 </template>
 
 <script setup lang="ts">
-import { Collapse, CollapseItem } from '@apron-design/vue-next'
+import { AdCollapse, AdCollapseItem } from '@apron-design/vue-next'
 </script>
 ```
 :::
 
-## 默认展开
+### 默认展开
 
-通过 `default-active-keys` 属性设置默认展开的面板。
+通过 `defaultActiveKeys` 属性设置默认展开的面板。
 
 :::demo
 ```vue
 <template>
-  <Collapse :default-active-keys="['1', '3']">
-    <CollapseItem item-key="1" title="默认展开面板 1">
-      <p>这是默认展开的面板 1。</p>
-    </CollapseItem>
-    <CollapseItem item-key="2" title="默认收起面板 2">
-      <p>这是默认收起的面板 2。</p>
-    </CollapseItem>
-    <CollapseItem item-key="3" title="默认展开面板 3">
-      <p>这是默认展开的面板 3。</p>
-    </CollapseItem>
-  </Collapse>
+  <ad-collapse :default-active-keys="['1']">
+    <ad-collapse-item item-key="1" title="默认展开的面板">
+      这个面板默认是展开状态。通过 defaultActiveKeys 属性
+      可以指定哪些面板默认展开。
+    </ad-collapse-item>
+    <ad-collapse-item item-key="2" title="折叠面板标题 2">
+      第二个面板默认是折叠状态。
+    </ad-collapse-item>
+    <ad-collapse-item item-key="3" title="折叠面板标题 3">
+      第三个面板默认也是折叠状态。
+    </ad-collapse-item>
+  </ad-collapse>
 </template>
 
 <script setup lang="ts">
-import { Collapse, CollapseItem } from '@apron-design/vue-next'
+import { AdCollapse, AdCollapseItem } from '@apron-design/vue-next'
 </script>
 ```
 :::
 
-## 禁用状态
+### 手风琴模式
+
+通过 `accordion` 属性设置手风琴模式，每次只能展开一个面板。
+
+:::demo
+```vue
+<template>
+  <ad-collapse accordion :default-active-keys="['1']">
+    <ad-collapse-item item-key="1" title="手风琴面板 1">
+      手风琴模式下，每次只能展开一个面板。
+      展开新面板时，其他面板会自动折叠。
+    </ad-collapse-item>
+    <ad-collapse-item item-key="2" title="手风琴面板 2">
+      点击这个面板，上面的面板会自动折叠。
+    </ad-collapse-item>
+    <ad-collapse-item item-key="3" title="手风琴面板 3">
+      这种模式适合在有限空间内展示大量内容。
+    </ad-collapse-item>
+  </ad-collapse>
+</template>
+
+<script setup lang="ts">
+import { AdCollapse, AdCollapseItem } from '@apron-design/vue-next'
+</script>
+```
+:::
+
+### 禁用状态
 
 通过 `disabled` 属性禁用某个面板。
 
 :::demo
 ```vue
 <template>
-  <Collapse>
-    <CollapseItem item-key="1" title="正常面板">
-      <p>这是一个正常的面板。</p>
-    </CollapseItem>
-    <CollapseItem item-key="2" title="禁用面板" disabled>
-      <p>这是一个被禁用的面板。</p>
-    </CollapseItem>
-    <CollapseItem item-key="3" title="正常面板">
-      <p>这也是一个正常的面板。</p>
-    </CollapseItem>
-  </Collapse>
+  <ad-collapse :default-active-keys="['1']">
+    <ad-collapse-item item-key="1" title="正常面板">
+      这是一个正常可以操作的面板。
+    </ad-collapse-item>
+    <ad-collapse-item item-key="2" title="禁用的面板" disabled>
+      这个面板被禁用了，无法展开或折叠。
+    </ad-collapse-item>
+    <ad-collapse-item item-key="3" title="另一个正常面板">
+      这也是一个正常的面板。
+    </ad-collapse-item>
+  </ad-collapse>
 </template>
 
 <script setup lang="ts">
-import { Collapse, CollapseItem } from '@apron-design/vue-next'
+import { AdCollapse, AdCollapseItem } from '@apron-design/vue-next'
 </script>
 ```
 :::
 
-## 自定义标题
+### FAQ 场景
 
-通过 `title` 插槽自定义面板标题。
+使用折叠面板展示常见问题解答。
 
 :::demo
 ```vue
 <template>
-  <Collapse>
-    <CollapseItem item-key="1">
-      <template #title>
-        <strong>自定义标题</strong>
-        <span style="margin-left: 10px; font-size: 12px; color: #999;">副标题</span>
-      </template>
-      <p>这是带有自定义标题的面板。</p>
-    </CollapseItem>
-    <CollapseItem item-key="2" title="普通标题">
-      <p>这是普通标题的面板。</p>
-    </CollapseItem>
-  </Collapse>
+  <ad-collapse>
+    <ad-collapse-item item-key="1" title="如何创建账号？">
+      点击页面右上角的「注册」按钮，填写您的邮箱和密码，
+      然后点击「创建账号」即可完成注册。我们会向您的邮箱
+      发送一封验证邮件，请点击邮件中的链接完成验证。
+    </ad-collapse-item>
+    <ad-collapse-item item-key="2" title="忘记密码怎么办？">
+      点击登录页面的「忘记密码」链接，输入您注册时使用的
+      邮箱地址，我们会向您发送密码重置链接。请在 24 小时内
+      完成密码重置操作。
+    </ad-collapse-item>
+    <ad-collapse-item item-key="3" title="如何联系客服？">
+      您可以通过以下方式联系我们的客服团队：
+      <ul style="margin: 8px 0; padding-left: 20px;">
+        <li>在线客服：工作日 9:00-18:00</li>
+        <li>邮箱：support@example.com</li>
+        <li>电话：400-XXX-XXXX</li>
+      </ul>
+    </ad-collapse-item>
+  </ad-collapse>
 </template>
 
 <script setup lang="ts">
-import { Collapse, CollapseItem } from '@apron-design/vue-next'
+import { AdCollapse, AdCollapseItem } from '@apron-design/vue-next'
 </script>
 ```
 :::
 
 ## API
 
-### Collapse Props
+### Collapse
 
-| 属性 | 说明 | 类型 | 默认值 |
+| 参数 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| accordion | 是否为手风琴模式（每次只能展开一个） | boolean | false |
-| defaultActiveKeys | 默认展开的项目 key 数组 | string[] | [] |
-| class | 自定义类名 | string | - |
+| accordion | 是否为手风琴模式（每次只能展开一个） | `boolean` | `false` |
+| defaultActiveKeys | 默认展开的项目 key 数组 | `string[]` | `[]` |
+| children | 子元素 | `VNode` | - |
+| class | 自定义类名 | `string` | - |
 
-### CollapseItem Props
+### CollapseItem
 
-| 属性 | 说明 | 类型 | 默认值 |
+| 参数 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| itemKey | 唯一标识 | string | - |
-| title | 标题 | string | - |
-| disabled | 是否禁用 | boolean | false |
-| class | 自定义类名 | string | - |
-
-### Collapse Slots
-
-| 名称 | 说明 |
-| --- | --- |
-| default | 默认插槽，用于放置 CollapseItem |
+| itemKey | 唯一标识 | `string` | - |
+| title | 标题 | `string \| VNode` | - |
+| disabled | 是否禁用 | `boolean` | `false` |
+| children | 子元素（正文内容） | `VNode` | - |
+| class | 自定义类名 | `string` | - |
 
 ### CollapseItem Slots
 

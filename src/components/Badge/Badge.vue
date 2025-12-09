@@ -65,6 +65,7 @@ const renderBadgeContent = computed(() => {
 
 <style lang="less">
 @import '../../styles/variables.less';
+@import '../../styles/mixins.less';
 
 // ============================================
 // Badge CSS Variables
@@ -112,9 +113,8 @@ const renderBadgeContent = computed(() => {
   // Count 数字样式
   // ============================================
   &__count {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    .flex-center();
+
     position: absolute;
     top: 0;
     right: 0;
@@ -144,9 +144,8 @@ const renderBadgeContent = computed(() => {
   // Content 自定义内容样式
   // ============================================
   &__content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    .flex-center();
+
     position: absolute;
     top: 0;
     right: 0;

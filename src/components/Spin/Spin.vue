@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, h, defineComponent, type PropType, type VNode } from 'vue'
+import { ref, onMounted, onUnmounted, watch, h, defineComponent, type PropType, type VNode } from 'vue'
 import type { SpinPlacement } from './types'
 
 // 定义组件属性

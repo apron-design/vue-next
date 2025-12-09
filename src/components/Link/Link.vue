@@ -48,6 +48,7 @@ const classes = computed(() => {
 
 <style lang="less">
 @import '../../styles/variables.less';
+@import '../../styles/mixins.less';
 
 // ============================================
 // Link CSS Variables (Light Mode)
@@ -102,7 +103,7 @@ const classes = computed(() => {
   transition: all @transition-slow;
 
   &:focus-visible {
-    outline: 2px solid var(--apron-focus-ring-color);
+    .focus-ring();
     outline-offset: 2px;
     border-radius: @radius-sm;
   }

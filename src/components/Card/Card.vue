@@ -22,6 +22,7 @@ const classes = computed(() => [
 
 <style lang="less">
 @import '../../styles/variables.less';
+@import '../../styles/mixins.less';
 
 // ============================================
 // Card CSS Variables (Light Mode)

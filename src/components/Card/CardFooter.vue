@@ -22,6 +22,7 @@ const classes = computed(() => [
 
 <style lang="less">
 @import '../../styles/variables.less';
+@import '../../styles/mixins.less';
 
 .apron-card__footer {
   padding: 10px 15px;

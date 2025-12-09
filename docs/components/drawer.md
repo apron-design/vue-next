@@ -1,171 +1,318 @@
+---
+title: Drawer 抽屉
+group: 反馈组件
+order: 3
+---
+
 # Drawer 抽屉
 
-屏幕边缘滑出的浮层面板。
+屏幕边缘滑出的浮层面板，用于承载临时内容或操作。
 
-## 基础用法
+## 何时使用
 
-从右侧滑出的抽屉。
+- 需要从屏幕边缘滑出一个面板来承载内容
+- 用于移动端或空间受限的场景
+- 替代 Modal 对话框，提供更自然的过渡效果
 
-:::demo 基础抽屉用法。
+## 示例
+
+### 基础用法
+
+最简单的用法，从右侧滑出抽屉。
+
+:::demo
 ```vue
 <template>
   <div>
-    <Button @click="open = true">打开抽屉</Button>
-    <Drawer v-model:open="open" title="基础抽屉">
-      <p>这是抽屉的内容区域。</p>
-      <p>你可以在这里放置任何内容。</p>
-    </Drawer>
+    <ad-button @click="open = true">打开抽屉</ad-button>
+    <ad-drawer
+      v-model:open="open"
+      title="基础抽屉"
+      @close="handleClose"
+      @ok="handleOk"
+    >
+      <p>这是抽屉的内容。</p>
+      <p>默认从右侧展开。</p>
+    </ad-drawer>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
+import { Drawer, Button } from '@apron-design/vue-next'
+
+const open = ref(false)
+
+const handleClose = () => {
+  open.value = false
+}
+
+const handleOk = () => {
+  console.log('确认')
+  open.value = false
+}
+</script>
+```
+:::
+
+### 不同方向
+
+支持从上、右、下、左四个方向滑出。
+
+:::demo
+```vue
+<template>
+  <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+    <ad-button @click="openTop = true">上</ad-button>
+    <ad-button @click="openRight = true">右</ad-button>
+    <ad-button @click="openBottom = true">下</ad-button>
+    <ad-button @click="openLeft = true">左</ad-button>
+
+    <ad-drawer
+      v-model:open="openRight"
+      title="右侧抽屉"
+      placement="right"
+      @close="openRight = false"
+      @ok="openRight = false"
+    >
+      <p>从右侧展开</p>
+    </ad-drawer>
+
+    <ad-drawer
+      v-model:open="openLeft"
+      title="左侧抽屉"
+      placement="left"
+      @close="openLeft = false"
+      @ok="openLeft = false"
+    >
+      <p>从左侧展开</p>
+    </ad-drawer>
+
+    <ad-drawer
+      v-model:open="openTop"
+      title="顶部抽屉"
+      placement="top"
+      :height="250"
+      @close="openTop = false"
+      @ok="openTop = false"
+    >
+      <p>从顶部展开</p>
+    </ad-drawer>
+
+    <ad-drawer
+      v-model:open="openBottom"
+      title="底部抽屉"
+      placement="bottom"
+      :height="250"
+      @close="openBottom = false"
+      @ok="openBottom = false"
+    >
+      <p>从底部展开</p>
+    </ad-drawer>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { Drawer, Button } from '@apron-design/vue-next'
+
+const openRight = ref(false)
+const openLeft = ref(false)
+const openTop = ref(false)
+const openBottom = ref(false)
+</script>
+```
+:::
+
+### 自定义尺寸
+
+可以自定义抽屉的宽度（左右方向）或高度（上下方向）。
+
+:::demo
+```vue
+<template>
+  <div>
+    <ad-button @click="open = true">宽抽屉（600px）</ad-button>
+    <ad-drawer
+      v-model:open="open"
+      title="自定义宽度"
+      :width="600"
+      @close="open = false"
+      @ok="open = false"
+    >
+      <p>这是一个宽度为 600px 的抽屉。</p>
+    </ad-drawer>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { Drawer, Button } from '@apron-design/vue-next'
+
 const open = ref(false)
 </script>
 ```
 :::
 
-## 不同方向
+### 移动端模式
 
-支持从上、右、下、左四个方向滑出。
+为移动端优化的抽屉样式，提供更好的用户体验。
 
-:::demo 设置 placement 属性可以改变抽屉出现的方向。
+:::demo
 ```vue
 <template>
-  <div style="display: flex; gap: 16px;">
-    <Button @click="openTop = true">上侧滑出</Button>
-    <Button @click="openRight = true">右侧滑出</Button>
-    <Button @click="openBottom = true">下侧滑出</Button>
-    <Button @click="openLeft = true">左侧滑出</Button>
-    
-    <Drawer v-model:open="openTop" title="上侧滑出" placement="top">
-      <p>从顶部滑出的抽屉内容</p>
-    </Drawer>
-    
-    <Drawer v-model:open="openRight" title="右侧滑出" placement="right">
-      <p>从右侧滑出的抽屉内容</p>
-    </Drawer>
-    
-    <Drawer v-model:open="openBottom" title="下侧滑出" placement="bottom">
-      <p>从底部滑出的抽屉内容</p>
-    </Drawer>
-    
-    <Drawer v-model:open="openLeft" title="左侧滑出" placement="left">
-      <p>从左侧滑出的抽屉内容</p>
-    </Drawer>
+  <div style="display: flex; gap: 8px;">
+    <ad-button @click="openRight = true">移动端右侧抽屉</ad-button>
+    <ad-button @click="openBottom = true">移动端底部抽屉</ad-button>
+
+    <ad-drawer
+      v-model:open="openRight"
+      title="移动端抽屉"
+      placement="right"
+      :is-mobile="true"
+      @close="openRight = false"
+      @ok="openRight = false"
+    >
+      <p>移动端模式会给非靠边的角落加上 20px 的圆角。</p>
+    </ad-drawer>
+
+    <ad-drawer
+      v-model:open="openBottom"
+      title="移动端底部抽屉"
+      placement="bottom"
+      :height="300"
+      :is-mobile="true"
+      @close="openBottom = false"
+      @ok="openBottom = false"
+    >
+      <p>这是移动端底部抽屉，常用于操作菜单。</p>
+    </ad-drawer>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
-const openTop = ref(false)
+import { Drawer, Button } from '@apron-design/vue-next'
+
 const openRight = ref(false)
 const openBottom = ref(false)
-const openLeft = ref(false)
 </script>
 ```
 :::
 
-## 自定义尺寸
+### 无底部抽屉
 
-可以设置抽屉的宽度和高度。
+通过 `showFooter` 属性隐藏底部操作栏。
 
-:::demo 通过 width 和 height 属性设置抽屉尺寸。
-```vue
-<template>
-  <div style="display: flex; gap: 16px;">
-    <Button @click="openNarrow = true">窄抽屉</Button>
-    <Button @click="openWide = true">宽抽屉</Button>
-    <Button @click="openShort = true">矮抽屉</Button>
-    <Button @click="openTall = true">高抽屉</Button>
-    
-    <Drawer v-model:open="openNarrow" title="窄抽屉" :width="300">
-      <p>这是一个较窄的抽屉。</p>
-    </Drawer>
-    
-    <Drawer v-model:open="openWide" title="宽抽屉" :width="600">
-      <p>这是一个较宽的抽屉。</p>
-    </Drawer>
-    
-    <Drawer v-model:open="openShort" title="矮抽屉" placement="top" :height="200">
-      <p>这是一个较矮的抽屉。</p>
-    </Drawer>
-    
-    <Drawer v-model:open="openTall" title="高抽屉" placement="top" :height="500">
-      <p>这是一个较高的抽屉。</p>
-    </Drawer>
-  </div>
-</template>
-
-<script setup>
-import { ref } from 'vue'
-const openNarrow = ref(false)
-const openWide = ref(false)
-const openShort = ref(false)
-const openTall = ref(false)
-</script>
-```
-:::
-
-## 自定义页脚
-
-可以通过 footer 插槽自定义页脚内容。
-
-:::demo 使用 footer 插槽自定义页脚。
+:::demo
 ```vue
 <template>
   <div>
-    <Button @click="openCustom = true">自定义页脚</Button>
-    <Drawer 
-      v-model:open="openCustom" 
-      title="自定义页脚"
-      :showFooter="true"
+    <ad-button @click="open = true">无底部抽屉</ad-button>
+    <ad-drawer
+      v-model:open="open"
+      title="无底部抽屉"
+      :show-footer="false"
+      @close="open = false"
     >
-      <p>这是抽屉的内容区域。</p>
-      
-      <template #footer>
-        <div style="display: flex; justify-content: space-between; width: 100%;">
-          <Button variant="default">次要操作</Button>
-          <div>
-            <Button variant="default" @click="openCustom = false">取消</Button>
-            <Button variant="primary" style="margin-left: 12px;">确认</Button>
-          </div>
+      <p>这是一个没有底部的抽屉。</p>
+      <p>你可以通过关闭按钮或点击蒙层来关闭它。</p>
+    </ad-drawer>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { Drawer, Button } from '@apron-design/vue-next'
+
+const open = ref(false)
+</script>
+```
+:::
+
+### 表单抽屉
+
+在抽屉中放置表单，常用于新建或编辑操作。
+
+:::demo
+```vue
+<template>
+  <div>
+    <ad-button @click="open = true">新建用户</ad-button>
+    <ad-drawer
+      v-model:open="open"
+      title="新建用户"
+      :width="450"
+      @close="open = false"
+      @ok="handleSubmit"
+      ok-text="创建"
+    >
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        <div>
+          <label style="display: block; margin-bottom: 8px; font-weight: 500;">
+            用户名
+          </label>
+          <input
+            type="text"
+            style="
+              width: 100%;
+              padding: 8px 12px;
+              border: 1px solid #e0e0e0;
+              border-radius: 8px;
+              box-sizing: border-box;
+            "
+            placeholder="请输入用户名"
+          />
         </div>
-      </template>
-    </Drawer>
+        <div>
+          <label style="display: block; margin-bottom: 8px; font-weight: 500;">
+            邮箱
+          </label>
+          <input
+            type="email"
+            style="
+              width: 100%;
+              padding: 8px 12px;
+              border: 1px solid #e0e0e0;
+              border-radius: 8px;
+              box-sizing: border-box;
+            "
+            placeholder="请输入邮箱"
+          />
+        </div>
+        <div>
+          <label style="display: block; margin-bottom: 8px; font-weight: 500;">
+            角色
+          </label>
+          <select
+            style="
+              width: 100%;
+              padding: 8px 12px;
+              border: 1px solid #e0e0e0;
+              border-radius: 8px;
+              box-sizing: border-box;
+            "
+          >
+            <option>管理员</option>
+            <option>编辑</option>
+            <option>访客</option>
+          </select>
+        </div>
+      </div>
+    </ad-drawer>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
-const openCustom = ref(false)
-</script>
-```
-:::
+import { Drawer, Button } from '@apron-design/vue-next'
 
-## 无页脚
+const open = ref(false)
 
-可以通过 showFooter 属性隐藏页脚。
-
-:::demo 设置 showFooter 为 false 隐藏页脚。
-```vue
-<template>
-  <div>
-    <Button @click="openNoFooter = true">无页脚抽屉</Button>
-    <Drawer 
-      v-model:open="openNoFooter" 
-      title="无页脚抽屉"
-      :showFooter="false"
-    >
-      <p>这个抽屉没有页脚。</p>
-      <p>内容可以延伸到整个抽屉高度。</p>
-    </Drawer>
-  </div>
-</template>
-
-<script setup>
-import { ref } from 'vue'
-const openNoFooter = ref(false)
+const handleSubmit = () => {
+  console.log('提交表单')
+  open.value = false
+}
 </script>
 ```
 :::
@@ -174,37 +321,40 @@ const openNoFooter = ref(false)
 
 ### Drawer Props
 
-| 参数名 | 描述 | 类型 | 默认值 |
+| 参数 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
 | open (v-model) | 是否显示抽屉 | `boolean` | `false` |
-| title | 标题 | `string` | `-` |
+| title | 标题 | `string` | - |
 | placement | 抽屉方向 | `'top' \| 'right' \| 'bottom' \| 'left'` | `'right'` |
 | closable | 是否显示关闭按钮 | `boolean` | `true` |
 | closeByOverlay | 点击蒙层是否可以关闭 | `boolean` | `true` |
+| onClose | 关闭时的回调 | `() => void` | - |
+| onOk | 点击确认按钮的回调 | `() => void` | - |
 | width | 抽屉宽度（左右方向时有效） | `number \| string` | `378` |
 | height | 抽屉高度（上下方向时有效） | `number \| string` | `378` |
-| footer | 自定义 footer，设置为 null 则不显示 | `unknown \| null` | `-` |
+| footer | 自定义 footer，设置为 null 则不显示 | `unknown \| null` | - |
 | showFooter | 是否显示 footer | `boolean` | `true` |
 | okText | 确认按钮文字 | `string` | `'确定'` |
 | cancelText | 取消按钮文字 | `string` | `'取消'` |
-| okButtonProps | 确认按钮属性 | `Partial<ButtonProps>` | `-` |
-| cancelButtonProps | 取消按钮属性 | `Partial<ButtonProps>` | `-` |
+| okButtonProps | 确认按钮属性 | `Partial<ButtonProps>` | - |
+| cancelButtonProps | 取消按钮属性 | `Partial<ButtonProps>` | - |
 | showCancel | 是否显示取消按钮 | `boolean` | `true` |
 | isMobile | 是否为移动端模式 | `boolean` | `false` |
-| class | 自定义类名 | `string` | `-` |
+| class | 自定义类名 | `string` | - |
+| afterOpenChange | 打开/关闭动画完成后的回调 | `(open: boolean) => void` | - |
 
 ### Drawer Events
 
-| 事件名 | 描述 | 参数 |
+| 事件名 | 说明 | 回调参数 |
 | --- | --- | --- |
 | update:open | 抽屉打开状态改变时触发 | `(open: boolean)` |
-| close | 关闭抽屉时触发 | `-` |
-| ok | 点击确认按钮时触发 | `-` |
+| close | 关闭抽屉时触发 | - |
+| ok | 点击确认按钮时触发 | - |
 | afterOpenChange | 打开/关闭动画完成后的回调 | `(open: boolean)` |
 
 ### Drawer Slots
 
-| 名称 | 描述 |
+| 名称 | 说明 |
 | --- | --- |
-| default | 抽屉内容 |
-| footer | 自定义页脚内容 |
+| default | 子元素（正文内容） |
+| footer | 自定义 footer 内容 |

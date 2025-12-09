@@ -24,10 +24,7 @@
         <slot name="title">{{ title }}</slot>
       </span>
     </div>
-    <div 
-      class="apron-collapse-item__content"
-      :style="{ height: contentHeight }"
-    >
+    <div class="apron-collapse-item__content">
       <div class="apron-collapse-item__body">
         <slot />
       </div>
@@ -36,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, inject, onMounted, onUnmounted, watch } from 'vue'
+import { computed, inject } from 'vue'
 
 export interface CollapseItemProps {
   /** 唯一标识 */
@@ -73,9 +70,6 @@ const classes = computed(() => [
   props.class,
 ].filter(Boolean).join(' '))
 
-const contentRef = ref<HTMLDivElement | null>(null)
-const contentHeight = ref<string>('0px')
-
 const handleClick = () => {
   if (!props.disabled) {
     toggleItem(props.itemKey)
@@ -89,26 +83,6 @@ const handleKeydown = (e: KeyboardEvent) => {
   }
 }
 
-// 更新内容高度
-const updateContentHeight = () => {
-  if (contentRef.value) {
-    contentHeight.value = isActive.value 
-      ? `${contentRef.value.scrollHeight}px` 
-      : '0px'
-  }
-}
-
-// 监听活动状态变化
-watch(isActive, updateContentHeight)
-
-// 组件挂载后更新高度
-onMounted(() => {
-  updateContentHeight()
-})
-
-// 监听内容变化
-watch(() => props.title, updateContentHeight)
-
 defineExpose({
   itemKey: props.itemKey,
   isActive,
@@ -117,35 +91,44 @@ defineExpose({
 
 <style lang="less">
 @import '../../styles/variables.less';
+@import '../../styles/mixins.less';
 
 .apron-collapse-item {
-  border-bottom: 1px solid var(--apron-collapse-border-color);
-  
-  &:last-child {
-    border-bottom: none;
+  background-color: var(--apron-collapse-bg);
+  transition: all @transition-slow;
+
+  // 非第一个项目有上边框
+  &:not(:first-child) {
+    border-top: 1px solid var(--apron-collapse-border-color);
   }
 
   // ============================================
   // Header
   // ============================================
   &__header {
-    position: relative;
     display: flex;
     align-items: center;
-    padding: @spacing-3 @spacing-4;
-    background-color: var(--apron-collapse-header-bg);
-    color: var(--apron-collapse-header-color);
+    gap: 10px;
+    padding: 10px 15px;
     cursor: pointer;
+    user-select: none;
     transition: all @transition-slow;
-    outline: none;
 
     &:hover:not(.apron-collapse-item--disabled &) {
-      background-color: var(--apron-collapse-header-bg-hover);
+      background-color: rgba(0, 0, 0, 0.02);
+    }
+
+    &:focus-visible {
+      .focus-ring();
+      outline-offset: -2px;
     }
 
     .apron-collapse-item--disabled & {
-      color: var(--apron-collapse-header-disabled-color);
       cursor: not-allowed;
+
+      &:hover {
+        background-color: transparent;
+      }
     }
   }
 
@@ -158,7 +141,7 @@ defineExpose({
     justify-content: center;
     width: 20px;
     height: 20px;
-    margin-right: @spacing-2;
+    flex-shrink: 0;
     color: var(--apron-collapse-arrow-color);
     transition: transform @transition-slow;
     
@@ -166,40 +149,70 @@ defineExpose({
       width: 16px;
       height: 16px;
     }
-    
-    .apron-collapse-item--active & {
-      transform: rotate(90deg);
-    }
   }
 
   // ============================================
   // Title
   // ============================================
   &__title {
-    flex: 1;
+    font-family: var(--apron-font-family);
     font-size: @font-size-base;
-    font-weight: @font-weight-medium;
+    font-weight: @font-weight-semibold;
+    color: var(--apron-collapse-title-color);
     line-height: @line-height-normal;
   }
 
   // ============================================
-  // Content
+  // Content (展开区域容器)
   // ============================================
   &__content {
-    height: 0;
-    overflow: hidden;
-    transition: height @transition-slow ease-in-out;
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows @transition-slow;
   }
 
   // ============================================
-  // Body
+  // Body (正文)
   // ============================================
   &__body {
-    padding: 0 @spacing-4 @spacing-3;
-    background-color: var(--apron-collapse-content-bg);
-    font-size: @font-size-base;
-    line-height: @line-height-normal;
-    color: var(--apron-collapse-header-color);
+    overflow: hidden;
+    font-family: var(--apron-font-family);
+    color: var(--apron-collapse-content-color);
+    // 左边和标题对齐：箭头容器 20px + gap 10px + padding-left 15px = 45px
+    padding: 0 15px 0 45px;
+    transition: all @transition-slow;
+  }
+
+  // ============================================
+  // Active State (展开状态)
+  // ============================================
+  &--active {
+    .apron-collapse-item__arrow {
+      transform: rotate(90deg);
+    }
+
+    .apron-collapse-item__content {
+      grid-template-rows: 1fr;
+    }
+
+    .apron-collapse-item__body {
+      padding: 15px 15px 15px 45px;
+    }
+  }
+
+  // ============================================
+  // Disabled State
+  // ============================================
+  &--disabled {
+    background-color: var(--apron-collapse-disabled-bg);
+
+    .apron-collapse-item__arrow {
+      color: var(--apron-collapse-disabled-color);
+    }
+
+    .apron-collapse-item__title {
+      color: var(--apron-collapse-disabled-color);
+    }
   }
 }
 </style>

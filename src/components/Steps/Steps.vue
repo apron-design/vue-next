@@ -17,6 +17,7 @@
 import { computed } from 'vue'
 import type { StepsProps, StepItem, StepStatus, StepLabelPlacement } from './types'
 import Step from './Step.vue'
+import './Steps.less'
 
 // 默认属性
 const props = withDefaults(defineProps<StepsProps>(), {

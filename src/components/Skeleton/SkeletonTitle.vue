@@ -37,4 +37,19 @@ const classes = computed(() => [
   background-color: var(--apron-skeleton-bg);
   border-radius: @radius-sm;
 }
+
+.apron-skeleton__element--animated {
+  background: var(--apron-skeleton-gradient);
+  background-size: 400% 100%;
+  animation: apron-skeleton-loading 1.5s ease infinite;
+}
+
+@keyframes apron-skeleton-loading {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
 </style>

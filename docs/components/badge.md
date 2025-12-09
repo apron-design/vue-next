@@ -1,109 +1,127 @@
 ---
-title: Badge 徽章
+title: Badge 徽标数
 group: 数据展示
-order: 4
+order: 2
 ---
 
-# Badge 徽章
+# Badge 徽标数
 
-图标右上角的圆形徽标数字，用于展示重要信息。
+图标右上角的圆形徽标数字。
+
+## 何时使用
+
+- 当需要在图标或文字右上角展示数字或状态时
+- 用于展示消息数量、状态提示等
 
 ## 代码演示
 
-### 红点徽章
+### 基本用法
 
-使用 `dot` 属性显示红点徽章。
+最简单的用法，在右上角展示数字。
 
 :::demo
 ```vue
 <template>
-  <div style="display: flex; gap: 24px; align-items: center;">
-    <AdBadge dot>
-      <span style="padding: 8px 12px; background: #f5f5f5; border-radius: 4px;">消息</span>
-    </AdBadge>
-    <AdBadge dot>
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
-        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-      </svg>
-    </AdBadge>
-  </div>
+  <ad-badge :count="5">
+    <div style="width: 50px; height: 50px; border-radius: 8px; background-color: #f0f0f0;" />
+  </ad-badge>
 </template>
 
 <script setup lang="ts">
-import { AdBadge } from '@apron-design/vue-next'
+import { Badge } from '@apron-design/vue-next'
 </script>
 ```
 :::
 
-## 数字徽章
+### 红点
 
-使用 `count` 属性显示数字徽章。
+不显示数字，只显示一个小红点。
 
 :::demo
 ```vue
 <template>
-  <div style="display: flex; gap: 24px; align-items: center;">
-    <AdBadge :count="5">
-      <span style="padding: 8px 12px; background: #f5f5f5; border-radius: 4px;">商品</span>
-    </AdBadge>
-    <AdBadge :count="99">
-      <span style="padding: 8px 12px; background: #f5f5f5; border-radius: 4px;">消息</span>
-    </AdBadge>
-    <AdBadge :count="100">
-      <span style="padding: 8px 12px; background: #f5f5f5; border-radius: 4px;">超出</span>
-    </AdBadge>
-  </div>
+  <ad-badge dot>
+    <div style="width: 50px; height: 50px; border-radius: 8px; background-color: #f0f0f0;" />
+  </ad-badge>
 </template>
 
 <script setup lang="ts">
-import { AdBadge } from '@apron-design/vue-next'
+import { Badge } from '@apron-design/vue-next'
 </script>
 ```
 :::
 
-## 自定义溢出值
+### 数字徽标
 
-通过 `overflowCount` 属性自定义数字溢出值。
+展示具体的数字，当数字大于 overflowCount 时会显示为 `{overflowCount}+`。
 
 :::demo
 ```vue
 <template>
-  <div style="display: flex; gap: 24px; align-items: center;">
-    <AdBadge :count="99" :overflowCount="99">
-      <span style="padding: 8px 12px; background: #f5f5f5; border-radius: 4px;">99</span>
-    </AdBadge>
-    <AdBadge :count="999" :overflowCount="99">
-      <span style="padding: 8px 12px; background: #f5f5f5; border-radius: 4px;">999</span>
-    </AdBadge>
+  <div style="display: flex; gap: 16px; align-items: center;">
+    <ad-badge :count="5">
+      <div style="width: 50px; height: 50px; border-radius: 8px; background-color: #f0f0f0;" />
+    </ad-badge>
+    <ad-badge :count="99">
+      <div style="width: 50px; height: 50px; border-radius: 8px; background-color: #f0f0f0;" />
+    </ad-badge>
+    <ad-badge :count="100">
+      <div style="width: 50px; height: 50px; border-radius: 8px; background-color: #f0f0f0;" />
+    </ad-badge>
+    <ad-badge :count="100" :overflow-count="10">
+      <div style="width: 50px; height: 50px; border-radius: 8px; background-color: #f0f0f0;" />
+    </ad-badge>
   </div>
 </template>
 
 <script setup lang="ts">
-import { AdBadge } from '@apron-design/vue-next'
+import { Badge } from '@apron-design/vue-next'
 </script>
 ```
 :::
 
-## 自定义内容
+### 自定义内容
 
-使用 `content` 属性显示自定义内容。
+可以自定义徽标内容，比如 "New"、"Hot" 等。
 
 :::demo
 ```vue
 <template>
-  <div style="display: flex; gap: 24px; align-items: center;">
-    <AdBadge content="NEW">
-      <span style="padding: 8px 12px; background: #f5f5f5; border-radius: 4px;">产品</span>
-    </AdBadge>
-    <AdBadge content="HOT">
-      <span style="padding: 8px 12px; background: #f5f5f5; border-radius: 4px;">热卖</span>
-    </AdBadge>
+  <div style="display: flex; gap: 16px; align-items: center;">
+    <ad-badge content="New">
+      <div style="width: 50px; height: 50px; border-radius: 8px; background-color: #f0f0f0;" />
+    </ad-badge>
+    <ad-badge content="Hot">
+      <div style="width: 50px; height: 50px; border-radius: 8px; background-color: #f0f0f0;" />
+    </ad-badge>
   </div>
 </template>
 
 <script setup lang="ts">
-import { AdBadge } from '@apron-design/vue-next'
+import { Badge } from '@apron-design/vue-next'
+</script>
+```
+:::
+
+### 配合其他组件
+
+徽标可以配合头像、按钮等其他组件一起使用。
+
+:::demo
+```vue
+<template>
+  <div style="display: flex; gap: 16px; align-items: center;">
+    <ad-badge dot>
+      <div style="width: 40px; height: 40px; border-radius: 50%; background-color: #e0e0e0; display: flex; align-items: center; justify-content: center;">U</div>
+    </ad-badge>
+    <ad-badge :count="5">
+      <ad-button>消息</ad-button>
+    </ad-badge>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { Badge, Button } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -112,22 +130,19 @@ import { AdBadge } from '@apron-design/vue-next'
 
 ### Badge Props
 
-| 属性 | 说明 | 类型 | 默认值 |
+| 参数 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| dot | 显示红点 | boolean | false |
-| count | 显示数字 | number | - |
-| overflowCount | 数字溢出值，超过则显示 {overflowCount}+ | number | 99 |
-| content | 自定义内容 | string | - |
-
-### Badge Events
-
-Badge 组件继承所有标准 HTML 元素事件。
+| dot | 不展示数字，只有一个小红点 | `boolean` | `false` |
+| count | 展示的数字 | `number` | - |
+| overflowCount | 展示封顶的数字值，超过会显示为 `{overflowCount}+` | `number` | `99` |
+| content | 自定义内容 | `string` | - |
+| class | 自定义类名 | `string` | - |
 
 ### Badge Slots
 
 | 名称 | 说明 |
 | --- | --- |
-| default | 默认插槽，用于包裹需要显示徽章的元素 |
+| default | 徽标包裹的子元素 |
 
 ## 优先级说明
 

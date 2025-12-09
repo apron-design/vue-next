@@ -22,7 +22,7 @@ order: 2
 :::demo
 ```vue
 <template>
-  <AdAlert>Information goes here</AdAlert>
+  <ad-alert>Information goes here</ad-alert>
 </template>
 
 <script setup lang="ts">
@@ -39,10 +39,10 @@ import { AdAlert } from '@apron-design/vue-next'
 ```vue
 <template>
   <div style="display: flex; flex-direction: column; gap: 12px;">
-    <AdAlert type="info">Information goes here</AdAlert>
-    <AdAlert type="success">Success information goes here</AdAlert>
-    <AdAlert type="warning">Warning information goes here</AdAlert>
-    <AdAlert type="error">Error information goes here</AdAlert>
+    <ad-alert type="info">Information goes here</ad-alert>
+    <ad-alert type="success">Success information goes here</ad-alert>
+    <ad-alert type="warning">Warning information goes here</ad-alert>
+    <ad-alert type="error">Error information goes here</ad-alert>
   </div>
 </template>
 
@@ -59,11 +59,11 @@ import { AdAlert } from '@apron-design/vue-next'
 :::demo
 ```vue
 <template>
-  <AdAlert type="success">
+  <ad-alert type="success">
     <span>
       Your file <strong>report.pdf</strong> has been uploaded successfully!
     </span>
-  </AdAlert>
+  </ad-alert>
 </template>
 
 <script setup lang="ts">
@@ -76,7 +76,15 @@ import { AdAlert } from '@apron-design/vue-next'
 
 通过设置 Alert 的属性来产生不同的警告提示样式。
 
+### Alert Props
+
 | 参数 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| type | 指定警告提示的样式 | `info` \| `success` \| `warning` \| `error` | `info` |
-| class | 自定义类名 | string | - |
+| type | 指定警告提示的样式 | `'info' \| 'success' \| 'warning' \| 'error'` | `'info'` |
+| class | 自定义类名 | `string` | - |
+
+### Alert Slots
+
+| 名称 | 说明 |
+| --- | --- |
+| default | 警告提示内容 |

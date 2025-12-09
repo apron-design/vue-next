@@ -1,103 +1,148 @@
 ---
 title: Card 卡片
-group: 数据展示
-order: 5
+group: 通用组件
+order: 0
 ---
 
 # Card 卡片
 
-卡片组件用于组织和展示相关内容。
+通用卡片容器，用于展示结构化内容。
+
+## 何时使用
+
+- 需要展示结构化的信息块
+- 需要分组展示相关内容
+- 需要在页面中组织内容布局
 
 ## 代码演示
 
-### 基本用法
+### 基础用法
 
-基础的卡片展示。
+最简单的卡片用法，只包含内容区域。
 
 :::demo
 ```vue
 <template>
-  <AdCard style="width: 300px;">
-    <AdCardHeader title="卡片标题" />
-    <AdCardBody>
-      <p>这是卡片的内容区域。</p>
-      <p>可以放置任意内容。</p>
-    </AdCardBody>
-    <AdCardFooter>
-      <AdButton variant="primary">操作按钮</AdButton>
-    </AdCardFooter>
-  </AdCard>
+  <ad-card>
+    <ad-card-body>
+      这是一个只有 CardBody 的简单卡片。
+    </ad-card-body>
+  </ad-card>
 </template>
 
 <script setup lang="ts">
-import { AdCard, AdCardHeader, AdCardBody, AdCardFooter } from '@apron-design/vue-next'
-import { AdButton } from '@apron-design/vue-next'
+import { Card, CardBody } from '@apron-design/vue-next'
 </script>
 ```
 :::
 
-## 无边框卡片
+### 带标题的卡片
 
-通过自定义样式实现无边框卡片。
+使用 CardHeader 组件添加标题。
 
 :::demo
 ```vue
 <template>
-  <AdCard style="width: 300px; border: none; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-    <AdCardHeader title="无边框卡片" />
-    <AdCardBody>
-      <p>这是一个无边框的卡片示例。</p>
-    </AdCardBody>
-  </AdCard>
+  <ad-card>
+    <ad-card-header title="卡片标题" />
+    <ad-card-body>
+      带有头部的卡片，头部显示标题。
+    </ad-card-body>
+  </ad-card>
 </template>
 
 <script setup lang="ts">
-import { AdCard, AdCardHeader, AdCardBody } from '@apron-design/vue-next'
+import { Card, CardHeader, CardBody } from '@apron-design/vue-next'
 </script>
 ```
 :::
 
-## 自定义头部
+### 带额外操作的卡片
 
-通过 `extra` 属性在头部添加额外内容。
+在 CardHeader 中使用 extra 属性或插槽添加额外操作。
 
 :::demo
 ```vue
 <template>
-  <AdCard style="width: 300px;">
-    <AdCardHeader 
-      title="自定义头部" 
-      extra="额外内容"
-    />
-    <AdCardBody>
-      <p>头部右侧可以放置额外的操作按钮或状态信息。</p>
-    </AdCardBody>
-  </AdCard>
+  <ad-card>
+    <ad-card-header title="卡片标题">
+      <template #extra>
+        <ad-button variant="link" size="sm">更多</ad-button>
+      </template>
+    </ad-card-header>
+    <ad-card-body>
+      头部右侧可以放置额外的操作按钮或链接。
+    </ad-card-body>
+  </ad-card>
 </template>
 
 <script setup lang="ts">
-import { AdCard, AdCardHeader, AdCardBody } from '@apron-design/vue-next'
+import { Card, CardHeader, CardBody, Button } from '@apron-design/vue-next'
 </script>
 ```
 :::
 
-## 仅内容区域
+### 带底部的卡片
 
-只使用内容区域的卡片。
+使用 CardFooter 组件添加底部操作区域。
 
 :::demo
 ```vue
 <template>
-  <AdCard style="width: 300px;">
-    <AdCardBody>
-      <p>只使用内容区域的卡片。</p>
-      <p>适合展示简单的信息。</p>
-    </AdCardBody>
-  </AdCard>
+  <ad-card>
+    <ad-card-header title="卡片标题" />
+    <ad-card-body>
+      带有底部的卡片，底部通常用于放置操作按钮。
+    </ad-card-body>
+    <ad-card-footer>
+      <ad-space>
+        <ad-button variant="primary" size="sm">确认</ad-button>
+        <ad-button variant="secondary" size="sm">取消</ad-button>
+      </ad-space>
+    </ad-card-footer>
+  </ad-card>
 </template>
 
 <script setup lang="ts">
-import { AdCard, AdCardBody } from '@apron-design/vue-next'
+import { Card, CardHeader, CardBody, CardFooter, Button, Space } from '@apron-design/vue-next'
+</script>
+```
+:::
+
+### 完整卡片
+
+包含头部、正文和底部的完整卡片结构。
+
+:::demo
+```vue
+<template>
+  <ad-card>
+    <ad-card-header title="完整卡片">
+      <template #extra>
+        <ad-button variant="text" size="sm">编辑</ad-button>
+      </template>
+    </ad-card-header>
+    <ad-card-body>
+      <p style="margin: 0 0 12px 0;">
+        这是一个完整的卡片示例，包含头部、正文和底部三个部分。
+      </p>
+      <p style="margin: 0; color: #71717a; font-size: 14px;">
+        卡片可以用于展示结构化的内容，如用户资料、文章预览、设置面板等。
+      </p>
+    </ad-card-body>
+    <ad-card-footer>
+      <div style="display: flex; justify-content: flex-end;">
+        <ad-space>
+          <ad-button variant="secondary" size="sm">取消</ad-button>
+          <ad-button variant="primary" size="sm">保存</ad-button>
+        </ad-space>
+      </div>
+    </ad-card-footer>
+  </ad-card>
+</template>
+
+<script setup lang="ts">
+import { Card, CardHeader, CardBody, CardFooter, Button, Space } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -106,50 +151,52 @@ import { AdCard, AdCardBody } from '@apron-design/vue-next'
 
 ### Card Props
 
-| 属性 | 说明 | 类型 | 默认值 |
+| 参数 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| class | 自定义类名 | string | - |
-
-### CardHeader Props
-
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| title | 标题 | string | - |
-| extra | 右侧额外内容 | string | - |
-| class | 自定义类名 | string | - |
-
-### CardBody Props
-
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| class | 自定义类名 | string | - |
-
-### CardFooter Props
-
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| class | 自定义类名 | string | - |
+| class | 自定义类名 | `string` | - |
 
 ### Card Slots
 
 | 名称 | 说明 |
 | --- | --- |
-| default | 默认插槽，用于放置 CardHeader、CardBody、CardFooter |
+| default | 子元素 |
+
+### CardHeader Props
+
+| 参数 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| title | 标题 | `string` | - |
+| extra | 右侧额外内容 | `string` | - |
+| class | 自定义类名 | `string` | - |
 
 ### CardHeader Slots
 
 | 名称 | 说明 |
 | --- | --- |
-| default | 默认插槽，用于自定义标题内容 |
+| default | 子元素 |
+| title | 标题内容（优先级高于 title prop） |
+| extra | 右侧额外内容（优先级高于 extra prop） |
+
+### CardBody Props
+
+| 参数 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| class | 自定义类名 | `string` | - |
 
 ### CardBody Slots
 
 | 名称 | 说明 |
 | --- | --- |
-| default | 默认插槽，卡片内容 |
+| default | 子元素 |
+
+### CardFooter Props
+
+| 参数 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| class | 自定义类名 | `string` | - |
 
 ### CardFooter Slots
 
 | 名称 | 说明 |
 | --- | --- |
-| default | 默认插槽，卡片底部内容 |
+| default | 子元素 |

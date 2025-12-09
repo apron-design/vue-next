@@ -34,8 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from 'vue'
-import type { ImgHTMLAttributes } from 'vue'
+import { ref, computed, watch, h } from 'vue'
 
 export type ImageObjectFit = 'contain' | 'cover' | 'fill' | 'none' | 'scale-down'
 
@@ -149,6 +148,7 @@ const ErrorIcon = {
 
 <style lang="less">
 @import '../../styles/variables.less';
+@import '../../styles/mixins.less';
 
 // ============================================
 // Image CSS Variables (Light Mode)
@@ -209,9 +209,8 @@ const ErrorIcon = {
   // Icon
   // ============================================
   &__icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    .flex-center();
+
     color: var(--apron-image-icon-color);
     transition: all @transition-slow;
 

@@ -127,22 +127,31 @@ defineExpose({
 
 <style lang="less">
 @import '../../styles/variables.less';
+@import '../../styles/mixins.less';
 
 // ============================================
 // Radio CSS Variables (Light Mode)
 // ============================================
 :root {
-  --apron-radio-size: 16px;
-  --apron-radio-border-color: @color-neutral-400;
-  --apron-radio-border-color-hover: @color-neutral-500;
-  --apron-radio-border-color-checked: @color-primary-500;
+  // Unchecked state
   --apron-radio-bg: #ffffff;
-  --apron-radio-dot-bg: @color-primary-500;
-  --apron-radio-label-color: @color-primary-900;
-  --apron-radio-disabled-opacity: 0.5;
+  --apron-radio-border: @color-neutral-300;
+  --apron-radio-border-hover: @color-neutral-400;
+
+  // Checked state
+  --apron-radio-checked-bg: #ffffff;
+  --apron-radio-checked-border: @color-success-500;
+  --apron-radio-checked-dot: @color-success-500;
+
+  // Disabled state
   --apron-radio-disabled-bg: @color-neutral-100;
-  --apron-radio-disabled-border: @color-neutral-300;
-  --apron-radio-disabled-label: @color-neutral-500;
+  --apron-radio-disabled-border: @color-neutral-200;
+  --apron-radio-disabled-checked-bg: @color-neutral-100;
+  --apron-radio-disabled-dot: @color-neutral-400;
+  --apron-radio-disabled-text: @color-neutral-400;
+
+  // Label
+  --apron-radio-label-color: @color-primary-500;
 }
 
 // ============================================
@@ -150,135 +159,149 @@ defineExpose({
 // ============================================
 .dark,
 [data-prefers-color='dark'] {
-  --apron-radio-border-color: @color-neutral-500;
-  --apron-radio-border-color-hover: @color-neutral-400;
-  --apron-radio-border-color-checked: @color-primary-400;
+  // Unchecked state
   --apron-radio-bg: @color-neutral-800;
-  --apron-radio-dot-bg: @color-primary-400;
-  --apron-radio-label-color: @color-neutral-100;
-  --apron-radio-disabled-bg: @color-neutral-700;
-  --apron-radio-disabled-border: @color-neutral-600;
-  --apron-radio-disabled-label: @color-neutral-500;
+  --apron-radio-border: @color-neutral-600;
+  --apron-radio-border-hover: @color-neutral-500;
+
+  // Checked state
+  --apron-radio-checked-bg: @color-neutral-800;
+  --apron-radio-checked-border: @color-success-500;
+  --apron-radio-checked-dot: @color-success-500;
+
+  // Disabled state
+  --apron-radio-disabled-bg: @color-neutral-800;
+  --apron-radio-disabled-border: @color-neutral-700;
+  --apron-radio-disabled-checked-bg: @color-neutral-800;
+  --apron-radio-disabled-dot: @color-neutral-600;
+  --apron-radio-disabled-text: @color-neutral-600;
+
+  // Label
+  --apron-radio-label-color: @color-primary-200;
 }
 
 // ============================================
 // Radio Base Styles
 // ============================================
 .apron-radio {
-  position: relative;
   display: inline-flex;
   align-items: flex-start;
-  font-family: var(--apron-font-family);
   cursor: pointer;
-  transition: all @transition-slow;
+  user-select: none;
+  font-family: var(--apron-font-family);
+  font-size: @font-size-base;
 
-  // ============================================
-  // Disabled State
-  // ============================================
-  &--disabled {
-    cursor: not-allowed;
-    opacity: var(--apron-radio-disabled-opacity);
-
-    .apron-radio__input-wrapper {
-      cursor: not-allowed;
-    }
-
-    .apron-radio__label {
-      color: var(--apron-radio-disabled-label);
-      cursor: not-allowed;
-    }
-  }
-
-  // ============================================
-  // Label Not Clickable
-  // ============================================
-  &--label-not-clickable {
-    .apron-radio__label {
-      pointer-events: none;
-    }
-  }
-
-  // ============================================
-  // Input Wrapper
-  // ============================================
+  // Input wrapper
   &__input-wrapper {
     position: relative;
-    display: inline-block;
-    width: var(--apron-radio-size);
-    height: var(--apron-radio-size);
     flex-shrink: 0;
-    margin-top: 2px;
-    cursor: pointer;
+    width: 25px;
+    height: 25px;
   }
 
-  // ============================================
-  // Input (Hidden)
-  // ============================================
+  // Hidden native input
   &__input {
     position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
-    margin: 0;
     opacity: 0;
+    margin: 0;
+    padding: 0;
     cursor: inherit;
+    z-index: 1;
   }
 
-  // ============================================
-  // Circle
-  // ============================================
+  // Custom radio circle
   &__circle {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: var(--apron-radio-bg);
-    border: 1px solid var(--apron-radio-border-color);
-    border-radius: 50%;
-    transition: all @transition-slow;
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 25px;
+    height: 25px;
+    background-color: var(--apron-radio-bg);
+    border: 1.5px solid var(--apron-radio-border);
+    border-radius: 50%;
+    transition: all @transition-fast;
+  }
 
-    .apron-radio:hover:not(.apron-radio--disabled) & {
-      border-color: var(--apron-radio-border-color-hover);
-    }
+  // Inner dot
+  &__dot {
+    width: 13px;
+    height: 13px;
+    background-color: var(--apron-radio-checked-dot);
+    border-radius: 50%;
+    opacity: 0;
+    transform: scale(0);
+    transition: all @transition-fast;
+  }
 
-    .apron-radio--checked & {
-      border-color: var(--apron-radio-border-color-checked);
+  // Label text
+  &__label {
+    margin-left: 10px;
+    line-height: 25px;
+    color: var(--apron-radio-label-color);
+  }
+
+  // Label not clickable
+  &--label-not-clickable {
+    .apron-radio__label {
+      cursor: default;
     }
   }
 
-  // ============================================
-  // Dot
-  // ============================================
-  &__dot {
-    width: 8px;
-    height: 8px;
-    background-color: var(--apron-radio-dot-bg);
-    border-radius: 50%;
-    opacity: 0;
-    transform: scale(0.5);
-    transition: all @transition-slow;
+  // Hover state (only for unchecked state)
+  &:hover:not(.apron-radio--disabled):not(.apron-radio--checked) {
+    .apron-radio__circle {
+      border-color: var(--apron-radio-border-hover);
+    }
+  }
 
-    .apron-radio--checked & {
+  // Focus state
+  &__input:focus-visible + .apron-radio__circle {
+    .focus-ring();
+  }
+
+  // ============================================
+  // Checked State
+  // ============================================
+  &--checked {
+    .apron-radio__circle {
+      background-color: var(--apron-radio-checked-bg);
+      border-color: var(--apron-radio-checked-border);
+    }
+
+    .apron-radio__dot {
       opacity: 1;
       transform: scale(1);
     }
   }
 
   // ============================================
-  // Label
+  // Disabled State
   // ============================================
-  &__label {
-    margin-left: @spacing-2;
-    color: var(--apron-radio-label-color);
-    font-size: @font-size-base;
-    line-height: @line-height-normal;
-    cursor: pointer;
-    transition: all @transition-slow;
+  &--disabled {
+    cursor: not-allowed;
+
+    .apron-radio__circle {
+      background-color: var(--apron-radio-disabled-bg);
+      border-color: var(--apron-radio-disabled-border);
+    }
+
+    .apron-radio__label {
+      color: var(--apron-radio-disabled-text);
+    }
+
+    // Disabled + Checked
+    &.apron-radio--checked {
+      .apron-radio__circle {
+        background-color: var(--apron-radio-disabled-checked-bg);
+        border-color: var(--apron-radio-disabled-border);
+      }
+
+      .apron-radio__dot {
+        background-color: var(--apron-radio-disabled-dot);
+      }
+    }
   }
 }
 </style>
