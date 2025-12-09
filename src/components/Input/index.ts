@@ -1,6 +1,6 @@
-import Input from './Input.vue'
+import AdInput from './Input.vue'
 
 export type { InputProps } from './Input.vue'
 
-export { Input }
-export default Input
+export { AdInput }
+export default AdInput

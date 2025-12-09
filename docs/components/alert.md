@@ -22,11 +22,11 @@ order: 2
 :::demo
 ```vue
 <template>
-  <Alert>Information goes here</Alert>
+  <AdAlert>Information goes here</AdAlert>
 </template>
 
 <script setup lang="ts">
-import { Alert } from '@apron-design/vue-next'
+import { AdAlert } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -39,15 +39,15 @@ import { Alert } from '@apron-design/vue-next'
 ```vue
 <template>
   <div style="display: flex; flex-direction: column; gap: 12px;">
-    <Alert type="info">Information goes here</Alert>
-    <Alert type="success">Success information goes here</Alert>
-    <Alert type="warning">Warning information goes here</Alert>
-    <Alert type="error">Error information goes here</Alert>
+    <AdAlert type="info">Information goes here</AdAlert>
+    <AdAlert type="success">Success information goes here</AdAlert>
+    <AdAlert type="warning">Warning information goes here</AdAlert>
+    <AdAlert type="error">Error information goes here</AdAlert>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Alert } from '@apron-design/vue-next'
+import { AdAlert } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -59,15 +59,15 @@ import { Alert } from '@apron-design/vue-next'
 :::demo
 ```vue
 <template>
-  <Alert type="success">
+  <AdAlert type="success">
     <span>
       Your file <strong>report.pdf</strong> has been uploaded successfully!
     </span>
-  </Alert>
+  </AdAlert>
 </template>
 
 <script setup lang="ts">
-import { Alert } from '@apron-design/vue-next'
+import { AdAlert } from '@apron-design/vue-next'
 </script>
 ```
 :::

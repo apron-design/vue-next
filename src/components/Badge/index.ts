@@ -1,2 +1,5 @@
-export { default as Badge } from './Badge.vue'
+import AdBadge from './Badge.vue'
+
 export type { BadgeProps } from './Badge.vue'
+export { AdBadge }
+export default AdBadge

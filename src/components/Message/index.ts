@@ -54,7 +54,7 @@ const clearAllMessages = () => {
 }
 
 // 导出的 message 对象
-export const message = {
+export const AdMessage = {
   show: (type: AlertType, message: string, duration?: number) =>
     showMessage(type, message, duration),
   info: (message: string, duration?: number) =>
@@ -70,3 +70,4 @@ export const message = {
 }
 
 export type { MessageProps } from './Message.vue'
+export default AdMessage

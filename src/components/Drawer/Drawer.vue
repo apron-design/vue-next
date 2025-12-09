@@ -1,56 +1,61 @@
 <template>
   <teleport to="body">
-    <div v-if="isVisible" :class="rootClasses">
-      <div class="apron-drawer__overlay" @click="handleOverlayClick" />
-      <div
+    <div 
+      v-if="visible" 
+      class="apron-drawer-root"
+      :class="{ 'apron-drawer-root--mobile': isMobile }"
+    >
+      <div 
+        class="apron-drawer-overlay"
+        @click="handleOverlayClick"
+      />
+
+      <div 
         ref="drawerRef"
-        :class="drawerClasses"
+        class="apron-drawer"
+        :class="[
+          `apron-drawer--${placement}`,
+          visible && 'apron-drawer--visible',
+          animating && 'apron-drawer--animating',
+          isMobile && 'apron-drawer--mobile'
+        ]"
         :style="drawerStyle"
         role="dialog"
         aria-modal="true"
         :aria-labelledby="title ? 'drawer-title' : undefined"
+        :aria-describedby="title ? 'drawer-description' : undefined"
       >
-        <template v-if="useMobileLayout">
-          <!-- 移动端上下弹出布局：header 和 footer 合并 -->
-          <div class="apron-drawer__header apron-drawer__header--mobile">
-            <!-- 左侧：取消按钮或占位 -->
-            <div class="apron-drawer__header-left">
-              <Button
-                v-if="hasFooter && showCancel"
-                variant="default"
-                size="sm"
-                v-bind="cancelButtonProps"
-                @click="onClose"
-              >
-                {{ cancelText }}
-              </Button>
-            </div>
+        <template v-if="isMobile && (placement === 'bottom' || placement === 'top')">
+          <!-- 移动端上下弹出 -->
+          <div class="apron-drawer__mobile-header">
+            <div class="apron-drawer__drag-handle" />
+            
+            <div class="apron-drawer__header-content">
+              <div id="drawer-title" class="apron-drawer__title">
+                {{ title }}
+              </div>
 
-            <!-- 中间：标题 -->
-            <div id="drawer-title" class="apron-drawer__title">
-              {{ title }}
-            </div>
-
-            <!-- 右侧：确认按钮或关闭按钮 -->
-            <div class="apron-drawer__header-right">
-              <Button
-                v-if="hasFooter"
-                variant="primary"
-                size="sm"
-                v-bind="okButtonProps"
-                @click="handleOk"
-              >
-                {{ okText }}
-              </Button>
-              <button
-                v-else-if="closable"
-                type="button"
-                class="apron-drawer__close apron-drawer__close--inline"
-                @click="handleClose"
-                :aria-label="'关闭'"
-              >
-                <CloseIcon />
-              </button>
+              <!-- 右侧：确认按钮或关闭按钮 -->
+              <div class="apron-drawer__header-right">
+                <AdButton
+                  v-if="hasFooter"
+                  variant="primary"
+                  size="sm"
+                  v-bind="okButtonProps"
+                  @click="handleOk"
+                >
+                  {{ okText }}
+                </AdButton>
+                <button
+                  v-else-if="closable"
+                  type="button"
+                  class="apron-drawer__close apron-drawer__close--inline"
+                  @click="handleClose"
+                  :aria-label="'关闭'"
+                >
+                  <CloseIcon />
+                </button>
+              </div>
             </div>
           </div>
           
@@ -100,38 +105,38 @@
             <slot v-if="footer !== undefined" name="footer" />
             <div v-else class="apron-drawer__footer-buttons">
               <template v-if="placement === 'right'">
-                <Button
+                <AdButton
                   variant="primary"
                   v-bind="okButtonProps"
                   @click="handleOk"
                 >
                   {{ okText }}
-                </Button>
-                <Button
+                </AdButton>
+                <AdButton
                   v-if="showCancel"
                   variant="default"
                   v-bind="cancelButtonProps"
                   @click="onClose"
                 >
                   {{ cancelText }}
-                </Button>
+                </AdButton>
               </template>
               <template v-else>
-                <Button
+                <AdButton
                   v-if="showCancel"
                   variant="default"
                   v-bind="cancelButtonProps"
                   @click="onClose"
                 >
                   {{ cancelText }}
-                </Button>
-                <Button
+                </AdButton>
+                <AdButton
                   variant="primary"
                   v-bind="okButtonProps"
                   @click="handleOk"
                 >
                   {{ okText }}
-                </Button>
+                </AdButton>
               </template>
             </div>
           </div>
@@ -143,7 +148,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onUnmounted, nextTick, h } from 'vue'
-import { Button } from '../Button'
+import { AdButton } from '../Button'
 
 export type DrawerPlacement = 'top' | 'right' | 'bottom' | 'left'
 
@@ -227,119 +232,105 @@ const CloseIcon = {
   name: 'CloseIcon',
   setup() {
     return () => h('svg', {
-      width: '20',
-      height: '20',
-      viewBox: '0 0 20 20',
+      width: '24',
+      height: '24',
+      viewBox: '0 0 24 24',
       fill: 'none',
       xmlns: 'http://www.w3.org/2000/svg'
     }, [
       h('path', {
-        d: 'M5 5L15 15M15 5L5 15',
+        d: 'M18 6L6 18M6 6L18 18',
         stroke: 'currentColor',
-        'stroke-width': '1.5',
-        'stroke-linecap': 'round'
+        'stroke-width': '2',
+        'stroke-linecap': 'round',
+        'stroke-linejoin': 'round'
       })
     ])
   }
-}
+} as any
 
+// 引用
 const drawerRef = ref<HTMLDivElement | null>(null)
-const isVisible = ref(false)
-const isAnimating = ref(false)
 
-// 计算属性
-const isHorizontal = computed(() => props.placement === 'left' || props.placement === 'right')
-const hasFooter = computed(() => props.showFooter && props.footer !== null)
-const useMobileLayout = computed(() => props.isMobile && (props.placement === 'top' || props.placement === 'bottom'))
+// 内部状态
+const visible = ref(props.open)
+const animating = ref(false)
 
+// 计算样式
 const drawerStyle = computed(() => {
-  if (isHorizontal.value) {
-    return { width: typeof props.width === 'number' ? `${props.width}px` : props.width }
+  const style: Record<string, string> = {}
+  
+  if (props.placement === 'left' || props.placement === 'right') {
+    style.width = typeof props.width === 'number' ? `${props.width}px` : props.width
   } else {
-    return { height: typeof props.height === 'number' ? `${props.height}px` : props.height }
+    style.height = typeof props.height === 'number' ? `${props.height}px` : props.height
   }
+  
+  return style
 })
 
-const rootClasses = computed(() => [
-  'apron-drawer-root',
-  props.open && !isAnimating.value && 'apron-drawer-root--open',
-  isAnimating.value && (props.open ? 'apron-drawer-root--entering' : 'apron-drawer-root--leaving'),
-  props.class,
-].filter(Boolean).join(' '))
-
-const drawerClasses = computed(() => [
-  'apron-drawer',
-  `apron-drawer--${props.placement}`,
-  useMobileLayout.value && 'apron-drawer--mobile',
-].filter(Boolean).join(' '))
-
-// 处理打开/关闭
-watch(() => props.open, (newOpen) => {
-  if (newOpen) {
-    isVisible.value = true
-    isAnimating.value = true
-    // 要用页面滚动
-    document.body.style.overflow = 'hidden'
-    // 等待 DOM 更新后触发动画
-    nextTick(() => {
+// 处理可见性变化
+const updateVisibility = () => {
+  if (props.open) {
+    visible.value = true
+    animating.value = true
+    
+    // 触发进入动画
+    requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        isAnimating.value = false
+        animating.value = false
       })
     })
   } else {
-    isAnimating.value = true
-    // 等待动画完成后隐藏
+    animating.value = true
+    
+    // 延迟隐藏以完成退出动画
     setTimeout(() => {
-      isVisible.value = false
-      isAnimating.value = false
-      // 恢复页面滚动
-      document.body.style.overflow = ''
-      emit('afterOpenChange', false)
+      visible.value = false
+      animating.value = false
     }, 300)
   }
-}, { immediate: true })
-
-// 通知打开完成
-watch([() => props.open, isAnimating, isVisible], ([open, animating, visible]) => {
-  if (open && !animating && visible) {
-    emit('afterOpenChange', true)
-  }
-})
-
-// 处理 ESC 键关闭
-const handleEscape = (e: KeyboardEvent) => {
-  if (e.key === 'Escape' && props.open && props.closable) {
-    handleClose()
-  }
 }
 
-onMounted(() => {
-  document.addEventListener('keydown', handleEscape)
-})
+// 监听open属性变化
+watch(() => props.open, updateVisibility, { immediate: true })
 
-onUnmounted(() => {
-  document.removeEventListener('keydown', handleEscape)
-  // 清理：组件卸载时恢复滚动
-  document.body.style.overflow = ''
-})
-
-// 点击蒙层
-const handleOverlayClick = (e: MouseEvent) => {
-  if (e.target === e.currentTarget && props.closeByOverlay && props.closable) {
-    handleClose()
+// 监听可见性变化后触发事件
+watch([visible, animating], ([newVisible, newAnimating], [oldVisible]) => {
+  if (newVisible !== oldVisible) {
+    nextTick(() => {
+      emit('afterOpenChange', newVisible)
+    })
   }
-}
+})
 
-// 点击关闭按钮
+// 处理关闭
 const handleClose = () => {
   emit('update:open', false)
   emit('close')
 }
 
-// 点击确认按钮
+// 处理确认
 const handleOk = () => {
   emit('ok')
 }
+
+// 处理取消
+const onClose = () => {
+  handleClose()
+}
+
+// 处理蒙层点击
+const handleOverlayClick = () => {
+  if (props.closeByOverlay) {
+    handleClose()
+  }
+}
+
+// 暴露方法
+defineExpose({
+  drawerRef
+})
 </script>
 
 <style lang="less">

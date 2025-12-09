@@ -1,5 +1,5 @@
 import { createApp, h, ref, watch } from 'vue'
-import type { ToastType, ToastOptions } from './types.ts'
+import type { ToastType, ToastOptions } from './types'
 
 // 成功图标
 const SuccessIcon = () => h('svg', {
@@ -251,7 +251,7 @@ const parseArgs = (
 }
 
 // 导出的 Toast 对象
-export const Toast = {
+export const AdToast = {
   show: (options: ToastOptions) => showToast(options),
   close: closeToast,
   success: (textOrOptions?: string | Omit<ToastOptions, 'type'>) =>

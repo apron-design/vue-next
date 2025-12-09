@@ -1,8 +1,16 @@
-# Cascader
+---
+title: Cascader 级联选择器
+group: 数据录入
+order: 6
+---
+
+# Cascader 级联选择器
 
 级联选择器用于从一组相关联的数据集合中进行选择。
 
-## 基本用法
+## 代码演示
+
+### 基本用法
 
 基础的级联选择器。
 
@@ -10,7 +18,7 @@
 ```vue
 <template>
   <div style="width: 300px;">
-    <Cascader 
+    <AdCascader 
       v-model:value="value" 
       :options="options" 
       placeholder="请选择"
@@ -21,7 +29,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Cascader } from '@apron-design/vue-next'
+import { AdCascader } from '@apron-design/vue-next'
 
 const value = ref([])
 
@@ -68,7 +76,7 @@ const handleChange = (value, selectedOptions) => {
 ```
 :::
 
-## 禁用状态
+## 要用状态
 
 通过 `disabled` 属性禁用级联选择器。
 
@@ -76,7 +84,7 @@ const handleChange = (value, selectedOptions) => {
 ```vue
 <template>
   <div style="width: 300px;">
-    <Cascader 
+    <AdCascader 
       :options="options" 
       placeholder="禁用状态"
       disabled
@@ -85,7 +93,7 @@ const handleChange = (value, selectedOptions) => {
 </template>
 
 <script setup lang="ts">
-import { Cascader } from '@apron-design/vue-next'
+import { AdCascader } from '@apron-design/vue-next'
 
 const options = [
   {
@@ -111,7 +119,7 @@ const options = [
 ```vue
 <template>
   <div style="width: 300px;">
-    <Cascader 
+    <AdCascader 
       :options="options" 
       placeholder="加载中..."
       loading
@@ -120,7 +128,7 @@ const options = [
 </template>
 
 <script setup lang="ts">
-import { Cascader } from '@apron-design/vue-next'
+import { AdCascader } from '@apron-design/vue-next'
 
 const options = []
 </script>
@@ -135,7 +143,7 @@ const options = []
 ```vue
 <template>
   <div style="width: 300px;">
-    <Cascader 
+    <AdCascader 
       v-model:value="value" 
       :options="options" 
       separator=" > "
@@ -146,7 +154,7 @@ const options = []
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Cascader } from '@apron-design/vue-next'
+import { AdCascader } from '@apron-design/vue-next'
 
 const value = ref([])
 
@@ -198,12 +206,14 @@ const options = [
 ### Cascader Types
 
 ```ts
+// 值类型
 type CascaderValueType = (string | number)[]
 
+// 选项类型
 interface CascaderOption {
-  label: string
   value: string | number
-  disabled?: boolean
+  label: string
   children?: CascaderOption[]
+  disabled?: boolean
 }
 ```

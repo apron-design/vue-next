@@ -1,6 +1,6 @@
-import Tooltip from './Tooltip.vue'
+import AdTooltip from './Tooltip.vue'
 import type { TooltipProps } from './types'
 
 export type { TooltipProps }
-export { Tooltip }
-export default Tooltip
+export { AdTooltip }
+export default AdTooltip

@@ -1,2 +1,5 @@
-export { default as Alert } from './Alert.vue'
-export type { AlertType } from './Alert.vue'
+import AdAlert from './Alert.vue'
+
+export type { AlertType } from './icons'
+export { AdAlert }
+export default AdAlert

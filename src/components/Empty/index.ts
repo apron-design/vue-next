@@ -1,2 +1,5 @@
-export { default as Empty } from './Empty.vue'
+import AdEmpty from './Empty.vue'
+
 export type { EmptyProps } from './Empty.vue'
+export { AdEmpty }
+export default AdEmpty

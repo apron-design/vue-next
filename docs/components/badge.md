@@ -1,23 +1,37 @@
-# Badge
+---
+title: Badge 徽章
+group: 数据展示
+order: 4
+---
 
-徽章组件用于在其他元素上显示通知、数字或状态标记。
+# Badge 徽章
 
-## 基本用法
+图标右上角的圆形徽标数字，用于展示重要信息。
 
-基础的徽章展示，显示红点。
+## 代码演示
+
+### 红点徽章
+
+使用 `dot` 属性显示红点徽章。
 
 :::demo
 ```vue
 <template>
   <div style="display: flex; gap: 24px; align-items: center;">
-    <Badge dot>
+    <AdBadge dot>
       <span style="padding: 8px 12px; background: #f5f5f5; border-radius: 4px;">消息</span>
-    </Badge>
+    </AdBadge>
+    <AdBadge dot>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+      </svg>
+    </AdBadge>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Badge } from '@apron-design/vue-next'
+import { AdBadge } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -30,20 +44,20 @@ import { Badge } from '@apron-design/vue-next'
 ```vue
 <template>
   <div style="display: flex; gap: 24px; align-items: center;">
-    <Badge :count="5">
+    <AdBadge :count="5">
       <span style="padding: 8px 12px; background: #f5f5f5; border-radius: 4px;">商品</span>
-    </Badge>
-    <Badge :count="99">
+    </AdBadge>
+    <AdBadge :count="99">
       <span style="padding: 8px 12px; background: #f5f5f5; border-radius: 4px;">消息</span>
-    </Badge>
-    <Badge :count="100">
+    </AdBadge>
+    <AdBadge :count="100">
       <span style="padding: 8px 12px; background: #f5f5f5; border-radius: 4px;">超出</span>
-    </Badge>
+    </AdBadge>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Badge } from '@apron-design/vue-next'
+import { AdBadge } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -56,17 +70,17 @@ import { Badge } from '@apron-design/vue-next'
 ```vue
 <template>
   <div style="display: flex; gap: 24px; align-items: center;">
-    <Badge :count="99" :overflowCount="99">
+    <AdBadge :count="99" :overflowCount="99">
       <span style="padding: 8px 12px; background: #f5f5f5; border-radius: 4px;">99</span>
-    </Badge>
-    <Badge :count="999" :overflowCount="99">
+    </AdBadge>
+    <AdBadge :count="999" :overflowCount="99">
       <span style="padding: 8px 12px; background: #f5f5f5; border-radius: 4px;">999</span>
-    </Badge>
+    </AdBadge>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Badge } from '@apron-design/vue-next'
+import { AdBadge } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -79,17 +93,17 @@ import { Badge } from '@apron-design/vue-next'
 ```vue
 <template>
   <div style="display: flex; gap: 24px; align-items: center;">
-    <Badge content="NEW">
+    <AdBadge content="NEW">
       <span style="padding: 8px 12px; background: #f5f5f5; border-radius: 4px;">产品</span>
-    </Badge>
-    <Badge content="HOT">
+    </AdBadge>
+    <AdBadge content="HOT">
       <span style="padding: 8px 12px; background: #f5f5f5; border-radius: 4px;">热卖</span>
-    </Badge>
+    </AdBadge>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Badge } from '@apron-design/vue-next'
+import { AdBadge } from '@apron-design/vue-next'
 </script>
 ```
 :::

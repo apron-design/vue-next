@@ -1,24 +1,32 @@
-# Checkbox
+---
+title: Checkbox 复选框
+group: 数据录入
+order: 7
+---
 
-复选框用于在多个选项中进行多项选择。
+# Checkbox 复选框
 
-## 基本用法
+复选框用于在一组选项中进行多项选择。
 
-基础的复选框使用方式。
+## 代码演示
+
+### 基本用法
+
+基础的复选框使用方法。
 
 :::demo
 ```vue
 <template>
   <div>
-    <Checkbox v-model:checked="checked1">选项1</Checkbox>
+    <AdCheckbox v-model:checked="checked1">选项一</AdCheckbox>
     <br /><br />
-    <Checkbox v-model:checked="checked2">选项2</Checkbox>
+    <AdCheckbox v-model:checked="checked2">选项二（默认选中）</AdCheckbox>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Checkbox } from '@apron-design/vue-next'
+import { AdCheckbox } from '@apron-design/vue-next'
 
 const checked1 = ref(false)
 const checked2 = ref(true)
@@ -26,7 +34,7 @@ const checked2 = ref(true)
 ```
 :::
 
-## 禁用状态
+## 要用状态
 
 通过 `disabled` 属性禁用复选框。
 
@@ -34,14 +42,14 @@ const checked2 = ref(true)
 ```vue
 <template>
   <div>
-    <Checkbox disabled>禁用选项</Checkbox>
+    <AdCheckbox disabled>禁用选项</AdCheckbox>
     <br /><br />
-    <Checkbox checked disabled>选中且禁用</Checkbox>
+    <AdCheckbox checked disabled>选中且禁用</AdCheckbox>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Checkbox } from '@apron-design/vue-next'
+import { AdCheckbox } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -54,14 +62,14 @@ import { Checkbox } from '@apron-design/vue-next'
 ```vue
 <template>
   <div>
-    <Checkbox indeterminate>半选状态</Checkbox>
+    <AdCheckbox indeterminate>半选状态</AdCheckbox>
     <br /><br />
-    <Checkbox indeterminate disabled>半选且禁用</Checkbox>
+    <AdCheckbox indeterminate disabled>半选且禁用</AdCheckbox>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Checkbox } from '@apron-design/vue-next'
+import { AdCheckbox } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -74,16 +82,16 @@ import { Checkbox } from '@apron-design/vue-next'
 ```vue
 <template>
   <div>
-    <Checkbox label-clickable>标签可点击（默认不可点击）</Checkbox>
+    <AdCheckbox label-clickable>标签可点击（默认不可点击）</AdCheckbox>
     <br /><br />
-    <Checkbox label-clickable>
+    <AdCheckbox label-clickable>
       标签中有链接：<a href="https://example.com" target="_blank">点击这里</a>
-    </Checkbox>
+    </AdCheckbox>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Checkbox } from '@apron-design/vue-next'
+import { AdCheckbox } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -97,23 +105,23 @@ import { Checkbox } from '@apron-design/vue-next'
 <template>
   <div>
     <p>受控模式：</p>
-    <Checkbox :checked="controlledChecked" @change="handleControlledChange">
+    <AdCheckbox :checked="controlledChecked" @change="handleControlledChange">
       受控选项
-    </Checkbox>
+    </AdCheckbox>
     <p>当前状态：{{ controlledChecked ? '选中' : '未选中' }}</p>
     
     <br />
     
     <p>非受控模式：</p>
-    <Checkbox default-checked @change="handleUncontrolledChange">
+    <AdCheckbox default-checked @change="handleUncontrolledChange">
       非受控选项
-    </Checkbox>
+    </AdCheckbox>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Checkbox } from '@apron-design/vue-next'
+import { AdCheckbox } from '@apron-design/vue-next'
 
 const controlledChecked = ref(true)
 

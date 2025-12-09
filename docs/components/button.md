@@ -22,11 +22,11 @@ order: 0
 :::demo
 ```vue
 <template>
-  <Button>Button</Button>
+  <AdButton>Button</AdButton>
 </template>
 
 <script setup lang="ts">
-import { Button } from '@apron-design/vue-next'
+import { AdButton } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -39,16 +39,16 @@ import { Button } from '@apron-design/vue-next'
 ```vue
 <template>
   <div style="display: flex; gap: 12px; align-items: center;">
-    <Button variant="primary">Primary</Button>
-    <Button variant="secondary">Secondary</Button>
-    <Button variant="default">Default</Button>
-    <Button variant="text">Text</Button>
-    <Button variant="link">Link</Button>
+    <AdButton variant="primary">Primary</AdButton>
+    <AdButton variant="secondary">Secondary</AdButton>
+    <AdButton variant="default">Default</AdButton>
+    <AdButton variant="text">Text</AdButton>
+    <AdButton variant="link">Link</AdButton>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Button } from '@apron-design/vue-next'
+import { AdButton } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -61,13 +61,13 @@ import { Button } from '@apron-design/vue-next'
 ```vue
 <template>
   <div style="display: flex; gap: 12px; align-items: center;">
-    <Button size="md" variant="primary">Medium (40px)</Button>
-    <Button size="sm" variant="primary">Small (30px)</Button>
+    <AdButton size="md" variant="primary">Medium (40px)</AdButton>
+    <AdButton size="sm" variant="primary">Small (30px)</AdButton>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Button } from '@apron-design/vue-next'
+import { AdButton } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -80,14 +80,14 @@ import { Button } from '@apron-design/vue-next'
 ```vue
 <template>
   <div style="display: flex; gap: 12px; align-items: center;">
-    <Button variant="primary" dashed>Primary Dashed</Button>
-    <Button variant="secondary" dashed>Secondary Dashed</Button>
-    <Button variant="default" dashed>Default Dashed</Button>
+    <AdButton variant="primary" dashed>Primary Dashed</AdButton>
+    <AdButton variant="secondary" dashed>Secondary Dashed</AdButton>
+    <AdButton variant="default" dashed>Default Dashed</AdButton>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Button } from '@apron-design/vue-next'
+import { AdButton } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -100,16 +100,16 @@ import { Button } from '@apron-design/vue-next'
 ```vue
 <template>
   <div style="display: flex; gap: 12px; align-items: center;">
-    <Button variant="primary" danger>Primary Danger</Button>
-    <Button variant="secondary" danger>Secondary Danger</Button>
-    <Button variant="default" danger>Default Danger</Button>
-    <Button variant="text" danger>Text Danger</Button>
-    <Button variant="link" danger>Link Danger</Button>
+    <AdButton variant="primary" danger>Primary Danger</AdButton>
+    <AdButton variant="secondary" danger>Secondary Danger</AdButton>
+    <AdButton variant="default" danger>Default Danger</AdButton>
+    <AdButton variant="text" danger>Text Danger</AdButton>
+    <AdButton variant="link" danger>Link Danger</AdButton>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Button } from '@apron-design/vue-next'
+import { AdButton } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -122,14 +122,14 @@ import { Button } from '@apron-design/vue-next'
 ```vue
 <template>
   <div style="display: flex; gap: 12px; align-items: center;">
-    <Button variant="primary" danger dashed>Primary</Button>
-    <Button variant="secondary" danger dashed>Secondary</Button>
-    <Button variant="default" danger dashed>Default</Button>
+    <AdButton variant="primary" danger dashed>Primary</AdButton>
+    <AdButton variant="secondary" danger dashed>Secondary</AdButton>
+    <AdButton variant="default" danger dashed>Default</AdButton>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Button } from '@apron-design/vue-next'
+import { AdButton } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -141,11 +141,11 @@ import { Button } from '@apron-design/vue-next'
 :::demo
 ```vue
 <template>
-  <Button loading>Loading...</Button>
+  <AdButton loading>Loading...</AdButton>
 </template>
 
 <script setup lang="ts">
-import { Button } from '@apron-design/vue-next'
+import { AdButton } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -158,12 +158,12 @@ import { Button } from '@apron-design/vue-next'
 ```vue
 <template>
   <div style="width: 300px;">
-    <Button block>Block Button</Button>
+    <AdButton block>Block Button</AdButton>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Button } from '@apron-design/vue-next'
+import { AdButton } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -176,16 +176,16 @@ import { Button } from '@apron-design/vue-next'
 ```vue
 <template>
   <div style="display: flex; gap: 12px; align-items: center;">
-    <Button variant="primary" disabled>Primary</Button>
-    <Button variant="secondary" disabled>Secondary</Button>
-    <Button variant="default" disabled>Default</Button>
-    <Button variant="text" disabled>Text</Button>
-    <Button variant="link" disabled>Link</Button>
+    <AdButton variant="primary" disabled>Primary</AdButton>
+    <AdButton variant="secondary" disabled>Secondary</AdButton>
+    <AdButton variant="default" disabled>Default</AdButton>
+    <AdButton variant="text" disabled>Text</AdButton>
+    <AdButton variant="link" disabled>Link</AdButton>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Button } from '@apron-design/vue-next'
+import { AdButton } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -198,7 +198,7 @@ import { Button } from '@apron-design/vue-next'
 ```vue
 <template>
   <div style="display: flex; gap: 12px; align-items: center;">
-    <Button>
+    <AdButton>
       <template #iconLeft>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="11" cy="11" r="8" />
@@ -206,16 +206,16 @@ import { Button } from '@apron-design/vue-next'
         </svg>
       </template>
       Search
-    </Button>
-    <Button>
+    </AdButton>
+    <AdButton>
       <template #iconRight>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M5 12h14M12 5l7 7-7 7" />
         </svg>
       </template>
       Next
-    </Button>
-    <Button>
+    </AdButton>
+    <AdButton>
       <template #iconLeft>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="11" cy="11" r="8" />
@@ -228,12 +228,12 @@ import { Button } from '@apron-design/vue-next'
         </svg>
       </template>
       Both Icons
-    </Button>
+    </AdButton>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Button } from '@apron-design/vue-next'
+import { AdButton } from '@apron-design/vue-next'
 </script>
 ```
 :::

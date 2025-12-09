@@ -1,23 +1,36 @@
-# Avatar
+---
+title: Avatar 头像
+group: 数据展示
+order: 3
+---
 
-头像组件用于展示用户的个人资料图片或初始字符。
+# Avatar 头像
 
-## 基本用法
+用来代表用户或事物，支持图片、图标或字符展示。
 
-基础的头像展示。
+## 代码演示
+
+### 基本用法
+
+使用 Avatar 展示字符或图标。
 
 :::demo
 ```vue
 <template>
   <div style="display: flex; gap: 16px; align-items: center;">
-    <Avatar src="https://avatars.githubusercontent.com/u/1234567?s=40&v=4" />
-    <Avatar>U</Avatar>
-    <Avatar>用户</Avatar>
+    <AdAvatar>M</AdAvatar>
+    <AdAvatar>User</AdAvatar>
+    <AdAvatar>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+        <circle cx="12" cy="7" r="4"></circle>
+      </svg>
+    </AdAvatar>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Avatar } from '@apron-design/vue-next'
+import { AdAvatar } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -30,15 +43,15 @@ Avatar 组件支持四种尺寸：mini、small、middle、large。
 ```vue
 <template>
   <div style="display: flex; gap: 16px; align-items: center;">
-    <Avatar size="mini">M</Avatar>
-    <Avatar size="small">S</Avatar>
-    <Avatar size="middle">L</Avatar>
-    <Avatar size="large">XL</Avatar>
+    <AdAvatar size="mini">M</AdAvatar>
+    <AdAvatar size="small">S</AdAvatar>
+    <AdAvatar size="middle">L</AdAvatar>
+    <AdAvatar size="large">XL</AdAvatar>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Avatar } from '@apron-design/vue-next'
+import { AdAvatar } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -51,14 +64,14 @@ import { Avatar } from '@apron-design/vue-next'
 ```vue
 <template>
   <div style="display: flex; gap: 16px; align-items: center;">
-    <Avatar square size="small">方</Avatar>
-    <Avatar square size="middle">形</Avatar>
-    <Avatar square size="large">头</Avatar>
+    <AdAvatar square size="small">方</AdAvatar>
+    <AdAvatar square size="middle">形</AdAvatar>
+    <AdAvatar square size="large">头</AdAvatar>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Avatar } from '@apron-design/vue-next'
+import { AdAvatar } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -71,11 +84,11 @@ import { Avatar } from '@apron-design/vue-next'
 ```vue
 <template>
   <div style="display: flex; gap: 16px; align-items: center;">
-    <Avatar 
+    <AdAvatar 
       src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" 
       alt="User 1"
     />
-    <Avatar 
+    <AdAvatar 
       src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka"
       alt="User 2"
     />
@@ -83,7 +96,7 @@ import { Avatar } from '@apron-design/vue-next'
 </template>
 
 <script setup lang="ts">
-import { Avatar } from '@apron-design/vue-next'
+import { AdAvatar } from '@apron-design/vue-next'
 </script>
 ```
 :::

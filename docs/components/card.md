@@ -1,29 +1,37 @@
-# Card
+---
+title: Card 卡片
+group: 数据展示
+order: 5
+---
+
+# Card 卡片
 
 卡片组件用于组织和展示相关内容。
 
-## 基本用法
+## 代码演示
+
+### 基本用法
 
 基础的卡片展示。
 
 :::demo
 ```vue
 <template>
-  <Card style="width: 300px;">
-    <CardHeader title="卡片标题" />
-    <CardBody>
+  <AdCard style="width: 300px;">
+    <AdCardHeader title="卡片标题" />
+    <AdCardBody>
       <p>这是卡片的内容区域。</p>
       <p>可以放置任意内容。</p>
-    </CardBody>
-    <CardFooter>
-      <Button variant="primary">操作按钮</Button>
-    </CardFooter>
-  </Card>
+    </AdCardBody>
+    <AdCardFooter>
+      <AdButton variant="primary">操作按钮</AdButton>
+    </AdCardFooter>
+  </AdCard>
 </template>
 
 <script setup lang="ts">
-import { Card, CardHeader, CardBody, CardFooter } from '@apron-design/vue-next'
-import { Button } from '@apron-design/vue-next'
+import { AdCard, AdCardHeader, AdCardBody, AdCardFooter } from '@apron-design/vue-next'
+import { AdButton } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -35,16 +43,16 @@ import { Button } from '@apron-design/vue-next'
 :::demo
 ```vue
 <template>
-  <Card style="width: 300px; border: none; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-    <CardHeader title="无边框卡片" />
-    <CardBody>
+  <AdCard style="width: 300px; border: none; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+    <AdCardHeader title="无边框卡片" />
+    <AdCardBody>
       <p>这是一个无边框的卡片示例。</p>
-    </CardBody>
-  </Card>
+    </AdCardBody>
+  </AdCard>
 </template>
 
 <script setup lang="ts">
-import { Card, CardHeader, CardBody } from '@apron-design/vue-next'
+import { AdCard, AdCardHeader, AdCardBody } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -56,19 +64,19 @@ import { Card, CardHeader, CardBody } from '@apron-design/vue-next'
 :::demo
 ```vue
 <template>
-  <Card style="width: 300px;">
-    <CardHeader 
+  <AdCard style="width: 300px;">
+    <AdCardHeader 
       title="自定义头部" 
       extra="额外内容"
     />
-    <CardBody>
+    <AdCardBody>
       <p>头部右侧可以放置额外的操作按钮或状态信息。</p>
-    </CardBody>
-  </Card>
+    </AdCardBody>
+  </AdCard>
 </template>
 
 <script setup lang="ts">
-import { Card, CardHeader, CardBody } from '@apron-design/vue-next'
+import { AdCard, AdCardHeader, AdCardBody } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -80,16 +88,16 @@ import { Card, CardHeader, CardBody } from '@apron-design/vue-next'
 :::demo
 ```vue
 <template>
-  <Card style="width: 300px;">
-    <CardBody>
+  <AdCard style="width: 300px;">
+    <AdCardBody>
       <p>只使用内容区域的卡片。</p>
       <p>适合展示简单的信息。</p>
-    </CardBody>
-  </Card>
+    </AdCardBody>
+  </AdCard>
 </template>
 
 <script setup lang="ts">
-import { Card, CardBody } from '@apron-design/vue-next'
+import { AdCard, AdCardBody } from '@apron-design/vue-next'
 </script>
 ```
 :::

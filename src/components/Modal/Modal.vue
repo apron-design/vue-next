@@ -39,21 +39,21 @@
           <div v-if="showFooter && footer !== null" class="apron-modal__footer">
             <slot v-if="footer !== undefined" name="footer" />
             <template v-else>
-              <Button
+              <AdButton
                 v-if="showCancel"
                 variant="default"
                 v-bind="cancelButtonProps"
                 @click="onClose"
               >
                 {{ cancelText }}
-              </Button>
-              <Button
+              </AdButton>
+              <AdButton
                 variant="primary"
                 v-bind="okButtonProps"
                 @click="handleOk"
               >
                 {{ okText }}
-              </Button>
+              </AdButton>
             </template>
           </div>
         </div>
@@ -65,7 +65,7 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onUnmounted, nextTick, h } from 'vue'
 import type { CSSProperties, Ref } from 'vue'
-import { Button } from '../Button'
+import { AdButton } from '../Button'
 
 // 关闭图标组件
 const CloseIcon = {

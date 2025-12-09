@@ -1,2 +1,5 @@
+import { AdToast } from './Toast'
+
 export type { ToastType, ToastOptions } from './types'
-export { Toast } from './Toast'
+export { AdToast }
+export default AdToast

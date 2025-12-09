@@ -1,1 +1,4 @@
-export { default as Button } from './Button.vue'
+import AdButton from './Button.vue'
+
+export { AdButton }
+export default AdButton

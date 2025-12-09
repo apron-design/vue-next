@@ -1,2 +1,5 @@
-export { default as Checkbox } from './Checkbox.vue'
+import AdCheckbox from './Checkbox.vue'
+
 export type { CheckboxProps } from './Checkbox.vue'
+export { AdCheckbox }
+export default AdCheckbox

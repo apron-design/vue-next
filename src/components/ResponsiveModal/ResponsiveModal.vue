@@ -1,12 +1,12 @@
 <template>
-  <Drawer
+  <AdDrawer
     v-if="isMobile"
     v-bind="sharedProps"
     :placement="drawerPlacement"
     :height="height"
     :is-mobile="true"
   />
-  <Modal
+  <AdModal
     v-else
     v-bind="sharedProps"
     :width="width"
@@ -15,8 +15,8 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { Modal } from '../Modal'
-import { Drawer } from '../Drawer'
+import { AdModal } from '../Modal'
+import { AdDrawer } from '../Drawer'
 
 export interface ResponsiveModalProps {
   /** 是否显示 */

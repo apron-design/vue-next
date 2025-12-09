@@ -1,2 +1,5 @@
-export { default as Tag } from './Tag.vue'
+import AdTag from './Tag.vue'
+
 export type { TagVariant, TagProps } from './Tag.vue'
+export { AdTag }
+export default AdTag

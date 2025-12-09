@@ -1,6 +1,5 @@
-import ResponsiveModal from './ResponsiveModal.vue'
+import AdResponsiveModal from './ResponsiveModal.vue'
 
-export { default as ResponsiveModal } from './ResponsiveModal.vue'
 export type { ResponsiveModalProps } from './ResponsiveModal.vue'
-
-export default ResponsiveModal
+export { AdResponsiveModal }
+export default AdResponsiveModal
