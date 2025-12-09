@@ -192,6 +192,7 @@ const handleClick = (event: MouseEvent) => {
 // ============================================
 // Button CSS Variables (Dark Mode)
 // ============================================
+.dark,
 [data-prefers-color='dark'] {
   // Primary type (hover-active 颜色逐渐变亮，暗色模式下"强调"体现为更亮)
   --apron-button-primary-bg: @color-primary-200;

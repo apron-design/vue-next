@@ -70,6 +70,7 @@ const classes = computed(() => [
 // ============================================
 // Divider CSS Variables (Dark Mode)
 // ============================================
+.dark,
 [data-prefers-color='dark'] {
   --apron-divider-color: @color-neutral-600;
   --apron-divider-text-color: @color-neutral-400;
