@@ -1,0 +1,147 @@
+# Card
+
+卡片组件用于组织和展示相关内容。
+
+## 基本用法
+
+基础的卡片展示。
+
+:::demo
+```vue
+<template>
+  <Card style="width: 300px;">
+    <CardHeader title="卡片标题" />
+    <CardBody>
+      <p>这是卡片的内容区域。</p>
+      <p>可以放置任意内容。</p>
+    </CardBody>
+    <CardFooter>
+      <Button variant="primary">操作按钮</Button>
+    </CardFooter>
+  </Card>
+</template>
+
+<script setup lang="ts">
+import { Card, CardHeader, CardBody, CardFooter } from '@apron-design/vue-next'
+import { Button } from '@apron-design/vue-next'
+</script>
+```
+:::
+
+## 无边框卡片
+
+通过自定义样式实现无边框卡片。
+
+:::demo
+```vue
+<template>
+  <Card style="width: 300px; border: none; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+    <CardHeader title="无边框卡片" />
+    <CardBody>
+      <p>这是一个无边框的卡片示例。</p>
+    </CardBody>
+  </Card>
+</template>
+
+<script setup lang="ts">
+import { Card, CardHeader, CardBody } from '@apron-design/vue-next'
+</script>
+```
+:::
+
+## 自定义头部
+
+通过 `extra` 属性在头部添加额外内容。
+
+:::demo
+```vue
+<template>
+  <Card style="width: 300px;">
+    <CardHeader 
+      title="自定义头部" 
+      extra="额外内容"
+    />
+    <CardBody>
+      <p>头部右侧可以放置额外的操作按钮或状态信息。</p>
+    </CardBody>
+  </Card>
+</template>
+
+<script setup lang="ts">
+import { Card, CardHeader, CardBody } from '@apron-design/vue-next'
+</script>
+```
+:::
+
+## 仅内容区域
+
+只使用内容区域的卡片。
+
+:::demo
+```vue
+<template>
+  <Card style="width: 300px;">
+    <CardBody>
+      <p>只使用内容区域的卡片。</p>
+      <p>适合展示简单的信息。</p>
+    </CardBody>
+  </Card>
+</template>
+
+<script setup lang="ts">
+import { Card, CardBody } from '@apron-design/vue-next'
+</script>
+```
+:::
+
+## API
+
+### Card Props
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| class | 自定义类名 | string | - |
+
+### CardHeader Props
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| title | 标题 | string | - |
+| extra | 右侧额外内容 | string | - |
+| class | 自定义类名 | string | - |
+
+### CardBody Props
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| class | 自定义类名 | string | - |
+
+### CardFooter Props
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| class | 自定义类名 | string | - |
+
+### Card Slots
+
+| 名称 | 说明 |
+| --- | --- |
+| default | 默认插槽，用于放置 CardHeader、CardBody、CardFooter |
+
+### CardHeader Slots
+
+| 名称 | 说明 |
+| --- | --- |
+| default | 默认插槽，用于自定义标题内容 |
+
+### CardBody Slots
+
+| 名称 | 说明 |
+| --- | --- |
+| default | 默认插槽，卡片内容 |
+
+### CardFooter Slots
+
+| 名称 | 说明 |
+| --- | --- |
+| default | 默认插槽，卡片底部内容 |
