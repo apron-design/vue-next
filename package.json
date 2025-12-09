@@ -33,16 +33,15 @@
     "dev": "vite",
     "build": "vite build",
     "build:lib": "vue-tsc --noEmit && vite build -c vite.lib.config.ts",
-    "docs:dev": "yarn run register:components && vitepress dev docs",
-    "docs:build": "yarn run register:components && vitepress build docs",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
     "lint": "eslint src --ext .ts,.vue",
     "lint:fix": "eslint src --ext .ts,.vue --fix",
     "format": "prettier --write \"src/**/*.{ts,vue,less}\"",
     "test": "vitest",
     "test:coverage": "vitest --coverage",
-    "prepublishOnly": "npm run build:lib",
-    "register:components": "vitepress-rc"
+    "prepublishOnly": "npm run build:lib"
   },
   "peerDependencies": {
     "vue": ">=3.0.0"
@@ -98,8 +97,5 @@
   "engines": {
     "node": ">=18.0.0"
   },
-  "dependencies": {
-    "@vitepress-demo-preview/component": "^2.6.1",
-    "@vitepress-demo-preview/plugin": "^1.4.1"
-  }
+  "dependencies": {}
 }

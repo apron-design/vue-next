@@ -191,7 +191,7 @@ const classes = computed(() => [
   display: flex;
   align-items: flex-start;
   padding: @spacing-3;
-  border-radius: @border-radius-md;
+  border-radius: @radius-md; /* 修复：使用正确的变量名 @radius-md */
   font-family: var(--apron-font-family);
   transition: all @transition-slow;
 

@@ -1,17 +1,20 @@
 import { defineConfig } from 'vitepress'
-import { demoblockPlugin, demoblockVitePlugin } from 'vitepress-theme-demoblock'
-
+import { demoblockPlugin } from 'vitepress-theme-demoblock'
+import { demoblockVitePlugin } from 'vitepress-theme-demoblock'
 import { resolve } from 'path'
 
 export default defineConfig({
   base: '/vue-next/',
   vite: {
+    // @ts-ignore - demoblockVitePlugin type compatibility
+    plugins: [demoblockVitePlugin()],
     server: {
       port: 8001
     },
     resolve: {
       alias: {
-        '@apron-design/vue-next': resolve(__dirname, '../../src')
+        '@apron-design/vue-next': resolve(__dirname, '../../src/index.ts'),
+        '@apron-design/vue-next/': resolve(__dirname, '../../src/')
       }
     }
   },
