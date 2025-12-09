@@ -251,6 +251,18 @@ import { AdButton } from '@apron-design/vue-next'
 | loading | 设置按钮载入状态 | boolean | false |
 | block | 将按钮宽度调整为其父宽度的选项 | boolean | false |
 | disabled | 按钮失效状态 | boolean | false |
-| iconLeft | 左侧图标 | slot | - |
-| iconRight | 右侧图标 | slot | - |
-| onClick | 点击按钮时的回调 | (event) => void | - |
+| class | 自定义类名 | `string` | - |
+
+### Button Slots
+
+| 名称 | 说明 |
+| --- | --- |
+| default | 按钮内容 |
+| iconLeft | 左侧图标 |
+| iconRight | 右侧图标 |
+
+### Button Events
+
+| 事件名 | 说明 | 回调参数 |
+| --- | --- | --- |
+| click | 点击按钮时的回调 | `(event: MouseEvent) => void` |

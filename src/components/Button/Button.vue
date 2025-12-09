@@ -18,13 +18,13 @@
         />
       </svg>
     </span>
-    <span v-if="!loading && iconLeft" class="apron-button__icon apron-button__icon--left">
+    <span v-if="!loading && slots.iconLeft" class="apron-button__icon apron-button__icon--left">
       <slot name="iconLeft" />
     </span>
     <span v-if="slots.default" class="apron-button__content">
       <slot />
     </span>
-    <span v-if="!loading && iconRight" class="apron-button__icon apron-button__icon--right">
+    <span v-if="!loading && slots.iconRight" class="apron-button__icon apron-button__icon--right">
       <slot name="iconRight" />
     </span>
   </button>
@@ -70,16 +70,6 @@ const props = defineProps({
   },
   /** 是否禁用 */
   disabled: {
-    type: Boolean,
-    default: false
-  },
-  /** 左侧图标 */
-  iconLeft: {
-    type: Boolean,
-    default: false
-  },
-  /** 右侧图标 */
-  iconRight: {
     type: Boolean,
     default: false
   },
@@ -145,6 +135,7 @@ const handleClick = (event: MouseEvent) => {
 
 <style lang="less">
 @import '../../styles/variables.less';
+@import '../../styles/mixins.less';
 
 // ============================================
 // Button CSS Variables (Light Mode)
@@ -237,10 +228,10 @@ const handleClick = (event: MouseEvent) => {
 // Button Base Styles
 // ============================================
 .apron-button {
+  .flex-center();
+  .button-reset();
+
   position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   gap: @spacing-2;
   font-family: var(--apron-font-family);
   font-weight: @font-weight-medium;
@@ -250,15 +241,9 @@ const handleClick = (event: MouseEvent) => {
   border-style: solid;
   border-width: 1px;
   overflow: hidden;
-  outline: none;
-  cursor: pointer;
-  background: transparent;
-  padding: 0;
-  margin: 0;
-  border: 1px solid transparent;
 
   &:focus-visible {
-    box-shadow: 0 0 0 2px rgba(67, 90, 111, 0.3);
+    .focus-ring();
   }
 
   // ============================================
@@ -491,7 +476,6 @@ const handleClick = (event: MouseEvent) => {
     padding: 0;
     height: auto;
     overflow: visible;
-    text-decoration: none;
 
     .apron-button__ripple {
       display: none;
@@ -499,7 +483,6 @@ const handleClick = (event: MouseEvent) => {
 
     &:hover:not(:disabled) {
       color: var(--apron-button-secondary-text-hover);
-      text-decoration: underline;
     }
 
     &:active:not(:disabled) {
@@ -509,7 +492,6 @@ const handleClick = (event: MouseEvent) => {
     &:disabled {
       color: var(--apron-button-disabled-text);
       cursor: not-allowed;
-      text-decoration: none;
     }
 
     // Link + Danger (hover-active 颜色逐渐变深)
