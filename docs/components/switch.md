@@ -1,3 +1,9 @@
+---
+title: Switch 开关
+group: 数据录入
+order: 1
+---
+
 # Switch 开关
 
 Switch 组件用于在两个状态之间进行切换，常用于设置选项的开启或关闭。
@@ -12,13 +18,20 @@ Switch 组件用于在两个状态之间进行切换，常用于设置选项的�
 
 ### 基础用法
 
-最简单的 Switch 组件使用方式。
+最简单的 Switch 组件使用方式。使用 `v-model` 进行双向绑定。
 
 :::demo
 ```vue
 <template>
-  <a-switch />
+  <ad-switch v-model="checked" />
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { AdSwitch } from '@apron-design/vue-next'
+
+const checked = ref(false)
+</script>
 ```
 :::
 
@@ -29,30 +42,42 @@ Switch 组件支持三种尺寸。
 :::demo
 ```vue
 <template>
-  <div style="display: flex; flex-direction: column; gap: 24px; align-items: flex-start">
+  <div style="display: flex; flex-direction: column; gap: 24px; align-items: flex-start;">
     <div>
-      <h4 style="margin: 0 0 12px 0; color: #393939">Default (84 × 40)</h4>
-      <div style="display: flex; gap: 24px">
-        <a-switch size="default" />
-        <a-switch size="default" default-checked />
+      <h4 style="margin: 0 0 12px 0; color: #393939;">Default (84 × 40)</h4>
+      <div style="display: flex; gap: 24px;">
+        <ad-switch size="default" v-model="checked1" />
+        <ad-switch size="default" v-model="checked2" />
       </div>
     </div>
     <div>
-      <h4 style="margin: 0 0 12px 0; color: #393939">Small (62 × 30)</h4>
-      <div style="display: flex; gap: 24px">
-        <a-switch size="small" />
-        <a-switch size="small" default-checked />
+      <h4 style="margin: 0 0 12px 0; color: #393939;">Small (62 × 30)</h4>
+      <div style="display: flex; gap: 24px;">
+        <ad-switch size="small" v-model="checked3" />
+        <ad-switch size="small" v-model="checked4" />
       </div>
     </div>
     <div>
-      <h4 style="margin: 0 0 12px 0; color: #393939">Mini (42 × 20)</h4>
-      <div style="display: flex; gap: 24px">
-        <a-switch size="mini" />
-        <a-switch size="mini" default-checked />
+      <h4 style="margin: 0 0 12px 0; color: #393939;">Mini (42 × 20)</h4>
+      <div style="display: flex; gap: 24px;">
+        <ad-switch size="mini" v-model="checked5" />
+        <ad-switch size="mini" v-model="checked6" />
       </div>
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { AdSwitch } from '@apron-design/vue-next'
+
+const checked1 = ref(false)
+const checked2 = ref(true)
+const checked3 = ref(false)
+const checked4 = ref(true)
+const checked5 = ref(false)
+const checked6 = ref(true)
+</script>
 ```
 :::
 
@@ -63,24 +88,35 @@ Switch 组件支持多种变种样式。
 :::demo
 ```vue
 <template>
-  <div style="display: flex; flex-direction: column; gap: 24px; align-items: flex-start">
+  <div style="display: flex; flex-direction: column; gap: 24px; align-items: flex-start;">
     <div>
-      <h4 style="margin: 0 0 12px 0; color: #393939">Default / Primary</h4>
-      <div style="display: flex; gap: 24px">
-        <a-switch variant="default" />
-        <a-switch variant="default" default-checked />
-        <a-switch variant="primary" default-checked />
+      <h4 style="margin: 0 0 12px 0; color: #393939;">Default / Primary</h4>
+      <div style="display: flex; gap: 24px;">
+        <ad-switch variant="default" v-model="checked1" />
+        <ad-switch variant="default" v-model="checked2" />
+        <ad-switch variant="primary" v-model="checked3" />
       </div>
     </div>
     <div>
-      <h4 style="margin: 0 0 12px 0; color: #393939">Secondary</h4>
-      <div style="display: flex; gap: 24px">
-        <a-switch variant="secondary" />
-        <a-switch variant="secondary" default-checked />
+      <h4 style="margin: 0 0 12px 0; color: #393939;">Secondary</h4>
+      <div style="display: flex; gap: 24px;">
+        <ad-switch variant="secondary" v-model="checked4" />
+        <ad-switch variant="secondary" v-model="checked5" />
       </div>
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { AdSwitch } from '@apron-design/vue-next'
+
+const checked1 = ref(false)
+const checked2 = ref(true)
+const checked3 = ref(true)
+const checked4 = ref(false)
+const checked5 = ref(true)
+</script>
 ```
 :::
 
@@ -91,25 +127,35 @@ Switch 组件支持多种状态。
 :::demo
 ```vue
 <template>
-  <div style="display: flex; flex-direction: column; gap: 24px; align-items: flex-start">
+  <div style="display: flex; flex-direction: column; gap: 24px; align-items: flex-start;">
     <div>
-      <h4 style="margin: 0 0 12px 0; color: #393939">Off</h4>
-      <a-switch />
+      <h4 style="margin: 0 0 12px 0; color: #393939;">Off</h4>
+      <ad-switch v-model="checked1" />
     </div>
     <div>
-      <h4 style="margin: 0 0 12px 0; color: #393939">On</h4>
-      <a-switch default-checked />
+      <h4 style="margin: 0 0 12px 0; color: #393939;">On</h4>
+      <ad-switch v-model="checked2" />
     </div>
     <div>
-      <h4 style="margin: 0 0 12px 0; color: #393939">Disabled Off</h4>
-      <a-switch disabled />
+      <h4 style="margin: 0 0 12px 0; color: #393939;">Disabled Off</h4>
+      <ad-switch disabled v-model="checked3" />
     </div>
     <div>
-      <h4 style="margin: 0 0 12px 0; color: #393939">Disabled On</h4>
-      <a-switch disabled default-checked />
+      <h4 style="margin: 0 0 12px 0; color: #393939;">Disabled On</h4>
+      <ad-switch disabled v-model="checked4" />
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { AdSwitch } from '@apron-design/vue-next'
+
+const checked1 = ref(false)
+const checked2 = ref(true)
+const checked3 = ref(false)
+const checked4 = ref(true)
+</script>
 ```
 :::
 
@@ -120,48 +166,57 @@ Switch 组件支持多种状态。
 :::demo
 ```vue
 <template>
-  <div style="display: flex; flex-direction: column; gap: 24px; align-items: flex-start">
+  <div style="display: flex; flex-direction: column; gap: 24px; align-items: flex-start;">
     <div>
-      <h4 style="margin: 0 0 12px 0; color: #393939">Custom Checked Color (Green)</h4>
-      <a-switch default-checked checked-color="#22c55e" />
+      <h4 style="margin: 0 0 12px 0; color: #393939;">Custom Checked Color (Green)</h4>
+      <ad-switch v-model="checked1" checked-color="#22c55e" />
     </div>
     <div>
-      <h4 style="margin: 0 0 12px 0; color: #393939">Custom Unchecked Color (Pink)</h4>
-      <a-switch unchecked-color="#fce7f3" />
+      <h4 style="margin: 0 0 12px 0; color: #393939;">Custom Unchecked Color (Pink)</h4>
+      <ad-switch v-model="checked2" unchecked-color="#fce7f3" />
     </div>
     <div>
-      <h4 style="margin: 0 0 12px 0; color: #393939">Both Custom Colors</h4>
-      <div style="display: flex; gap: 24px">
-        <a-switch unchecked-color="#fce7f3" checked-color="#ec4899" />
-        <a-switch unchecked-color="#fce7f3" checked-color="#ec4899" default-checked />
+      <h4 style="margin: 0 0 12px 0; color: #393939;">Both Custom Colors</h4>
+      <div style="display: flex; gap: 24px;">
+        <ad-switch v-model="checked3" unchecked-color="#fce7f3" checked-color="#ec4899" />
+        <ad-switch v-model="checked4" unchecked-color="#fce7f3" checked-color="#ec4899" />
       </div>
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { AdSwitch } from '@apron-design/vue-next'
+
+const checked1 = ref(true)
+const checked2 = ref(false)
+const checked3 = ref(false)
+const checked4 = ref(true)
+</script>
 ```
 :::
 
-### 交互式示例
+### 受控模式
 
-Switch 组件支持受控模式。
+Switch 组件支持受控模式，使用 `v-model` 进行双向绑定。
 
 :::demo
 ```vue
 <template>
-  <div style="display: flex; flex-direction: column; gap: 16px; align-items: flex-start">
-    <a-switch :checked="checked" @update:checked="setChecked" />
-    <p style="margin: 0; color: #666">
+  <div style="display: flex; flex-direction: column; gap: 16px; align-items: flex-start;">
+    <ad-switch v-model="checked" />
+    <p style="margin: 0; color: #666;">
       Status: {{ checked ? 'ON' : 'OFF' }}
     </p>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
+import { AdSwitch } from '@apron-design/vue-next'
+
 const checked = ref(false)
-const setChecked = (val) => {
-  checked.value = val
-}
 </script>
 ```
 :::
@@ -173,24 +228,48 @@ const setChecked = (val) => {
 :::demo
 ```vue
 <template>
-  <div style="display: flex; flex-direction: column; gap: 32px">
+  <div style="display: flex; flex-direction: column; gap: 32px;">
     <div v-for="variant in variants" :key="variant">
-      <h4 style="margin: 0 0 16px 0; color: #393939; text-transform: capitalize">
+      <h4 style="margin: 0 0 16px 0; color: #393939; text-transform: capitalize;">
         {{ variant }}
       </h4>
-      <div style="display: flex; gap: 48px; align-items: center">
-        <div v-for="size in sizes" :key="size" style="display: flex; gap: 16px; align-items: center">
-          <a-switch :size="size" :variant="variant" />
-          <a-switch :size="size" :variant="variant" default-checked />
+      <div style="display: flex; gap: 48px; align-items: center;">
+        <div v-for="size in sizes" :key="size" style="display: flex; gap: 16px; align-items: center;">
+          <ad-switch :size="size" :variant="variant" v-model="switchStates[`${variant}-${size}-off`]" />
+          <ad-switch :size="size" :variant="variant" v-model="switchStates[`${variant}-${size}-on`]" />
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { ref } from 'vue'
+import { AdSwitch } from '@apron-design/vue-next'
+
 const variants = ['default', 'primary', 'secondary']
 const sizes = ['default', 'small', 'mini']
+
+const switchStates = ref<Record<string, boolean>>({
+  'default-default-off': false,
+  'default-default-on': true,
+  'default-small-off': false,
+  'default-small-on': true,
+  'default-mini-off': false,
+  'default-mini-on': true,
+  'primary-default-off': false,
+  'primary-default-on': true,
+  'primary-small-off': false,
+  'primary-small-on': true,
+  'primary-mini-off': false,
+  'primary-mini-on': true,
+  'secondary-default-off': false,
+  'secondary-default-on': true,
+  'secondary-small-off': false,
+  'secondary-small-on': true,
+  'secondary-mini-off': false,
+  'secondary-mini-on': true,
+})
 </script>
 ```
 :::
@@ -202,121 +281,67 @@ const sizes = ['default', 'small', 'mini']
 :::demo
 ```vue
 <template>
-  <div style="display: flex; flex-direction: column; gap: 16px; align-items: flex-start">
-    <h4 style="margin: 0; color: #393939">非受控模式（使用 default-checked）</h4>
-    <a-switch
-      default-checked
-      @change="handleChange"
+  <div style="display: flex; flex-direction: column; gap: 16px; align-items: flex-start;">
+    <h4 style="margin: 0; color: #393939;">非受控模式（使用 defaultChecked）</h4>
+    <ad-switch
+      :default-checked="true"
+      @change="(checked) => console.log('Switch changed:', checked)"
     />
   </div>
 </template>
 
-<script setup>
-const handleChange = (checked) => {
-  console.log('Switch changed:', checked)
-}
+<script setup lang="ts">
+import { AdSwitch } from '@apron-design/vue-next'
 </script>
 ```
 :::
 
-### 暗色模式
+## API
 
-Switch 组件在暗色模式下会自动适配主题颜色。
+### Switch Props
 
-:::demo
-```vue
-<template>
-  <div
-    data-theme="dark"
-    style="
-      padding: 32px;
-      background-color: #18181b;
-      border-radius: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    "
-  >
-    <div>
-      <h4 style="margin: 0 0 12px 0; color: #a1a1aa">Default / Primary</h4>
-      <div style="display: flex; gap: 24px">
-        <a-switch />
-        <a-switch default-checked />
-      </div>
-    </div>
+| 参数 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| modelValue | 是否开启（受控模式，v-model） | `boolean` | - |
+| checked | 是否开启（受控模式，v-model:checked） | `boolean` | - |
+| defaultChecked | 默认是否开启（非受控模式） | `boolean` | - |
+| disabled | 是否禁用 | `boolean` | `false` |
+| size | 尺寸 | `'default' \| 'small' \| 'mini'` | `'default'` |
+| variant | 变种 | `'default' \| 'primary' \| 'secondary'` | `'default'` |
+| checkedColor | 自定义开启时的颜色 | `string` | - |
+| uncheckedColor | 自定义关闭时的颜色 | `string` | - |
+| class | 自定义类名 | `string` | - |
+| id | 自定义 ID | `string` | - |
 
-    <div>
-      <h4 style="margin: 0 0 12px 0; color: #a1a1aa">Secondary</h4>
-      <div style="display: flex; gap: 24px">
-        <a-switch variant="secondary" />
-        <a-switch variant="secondary" default-checked />
-      </div>
-    </div>
-
-    <div>
-      <h4 style="margin: 0 0 12px 0; color: #a1a1aa">Disabled</h4>
-      <div style="display: flex; gap: 24px">
-        <a-switch disabled />
-        <a-switch disabled default-checked />
-      </div>
-    </div>
-
-    <div>
-      <h4 style="margin: 0 0 12px 0; color: #a1a1aa">All Sizes</h4>
-      <div style="display: flex; gap: 24px; align-items: center">
-        <a-switch size="default" default-checked />
-        <a-switch size="small" default-checked />
-        <a-switch size="mini" default-checked />
-      </div>
-    </div>
-  </div>
-</template>
-```
-:::
-
-## 属性
-
-| 参数 | 说明 | 类型 | 可选值 | 默认值 |
-| --- | --- | --- | --- | --- |
-| checked | 是否开启（受控模式） | boolean | — | — |
-| defaultChecked | 默认是否开启（非受控模式） | boolean | — | false |
-| disabled | 是否禁用 | boolean | — | false |
-| size | 尺寸 | string | default / small / mini | default |
-| variant | 变种 | string | default / primary / secondary | default |
-| checkedColor | 自定义开启时的颜色 | string | — | — |
-| uncheckedColor | 自定义关闭时的颜色 | string | — | — |
-| className | 自定义类名 | string | — | — |
-| id | ID | string | — | — |
-
-## 事件
+### Switch Events
 
 | 事件名 | 说明 | 回调参数 |
 | --- | --- | --- |
-| update:checked | 开关状态改变时触发 | (checked: boolean) |
-| change | 开关状态改变时触发 | (checked: boolean, event: Event) |
-
-## 方法
-
-| 方法名 | 说明 |
-| --- | --- |
-| focus | 使开关获得焦点 |
-| blur | 使开关失去焦点 |
+| update:modelValue | 状态改变时触发（v-model） | `(checked: boolean)` |
+| update:checked | 状态改变时触发（v-model:checked） | `(checked: boolean)` |
+| change | 状态改变时触发 | `(checked: boolean, event: Event)` |
 
 ## 注意事项
 
 1. Switch 组件用于在两个状态之间进行切换
-2. 通过 `checked` 属性控制开关状态（受控模式）
-3. 通过 `defaultChecked` 属性设置默认状态（非受控模式）
-4. 通过 `size` 属性设置尺寸：
+2. 推荐使用 `v-model` 进行双向绑定（受控模式）：
+   ```vue
+   <ad-switch v-model="checked" />
+   ```
+3. 也可以使用 `v-model:checked` 进行双向绑定：
+   ```vue
+   <ad-switch v-model:checked="checked" />
+   ```
+4. 通过 `defaultChecked` 属性设置默认状态（非受控模式）
+5. 通过 `size` 属性设置尺寸：
    - `'default'`：默认尺寸（84 × 40）
    - `'small'`：小尺寸（62 × 30）
    - `'mini'`：迷你尺寸（42 × 20）
-5. 通过 `variant` 属性设置变种：
+6. 通过 `variant` 属性设置变种：
    - `'default'`：默认变种
    - `'primary'`：主色调变种
    - `'secondary'`：次色调变种
-6. 通过 `checkedColor` 和 `uncheckedColor` 属性可以自定义开关的颜色
-7. 在受控模式下，需要同时提供 `checked` 和 `@update:checked` 属性
-8. 在非受控模式下，可以使用 `defaultChecked` 属性设置初始状态
-9. Switch 组件支持键盘操作（Tab 键聚焦，空格键切换）
-10. 在暗色模式下，Switch 组件会自动适配主题颜色
+7. 通过 `checkedColor` 和 `uncheckedColor` 属性可以自定义开关的颜色
+8. 在受控模式下，使用 `v-model` 或 `v-model:checked` 进行双向绑定
+9. 在非受控模式下，可以使用 `defaultChecked` 属性设置初始状态
+10. Switch 组件支持键盘操作（Tab 键聚焦，空格键切换）

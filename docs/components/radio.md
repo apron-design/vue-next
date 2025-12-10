@@ -64,12 +64,12 @@ import { AdRadio } from '@apron-design/vue-next'
 <template>
   <div style="display: flex; gap: 48px;">
     <div style="width: 300px;">
-      <ad-radio :checked="true" @change="() => {}">
+      <ad-radio v-model:checked="checked1">
         I have 2 lines content to show so this is a 2 lines content
       </ad-radio>
     </div>
     <div style="width: 300px;">
-      <ad-radio :checked="true" disabled @change="() => {}">
+      <ad-radio v-model:checked="checked2" disabled>
         I have 2 lines content to show so this is a 2 lines content
       </ad-radio>
     </div>
@@ -77,7 +77,11 @@ import { AdRadio } from '@apron-design/vue-next'
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { AdRadio } from '@apron-design/vue-next'
+
+const checked1 = ref(true)
+const checked2 = ref(true)
 </script>
 ```
 :::
@@ -107,12 +111,12 @@ import { AdRadio } from '@apron-design/vue-next'
       <h4 style="margin: 0 0 12px 0; color: #393939;">Checked</h4>
       <div style="display: flex; gap: 48px;">
         <div style="width: 300px;">
-          <ad-radio :checked="true" @change="() => {}">
+          <ad-radio v-model:checked="checked1">
             I have 2 lines content to show so this is a 2 lines content
           </ad-radio>
         </div>
         <div style="width: 300px;">
-          <ad-radio :checked="true" disabled @change="() => {}">
+          <ad-radio v-model:checked="checked2" disabled>
             I have 2 lines content to show so this is a 2 lines content
           </ad-radio>
         </div>
@@ -122,7 +126,11 @@ import { AdRadio } from '@apron-design/vue-next'
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { AdRadio } from '@apron-design/vue-next'
+
+const checked1 = ref(true)
+const checked2 = ref(true)
 </script>
 ```
 :::
@@ -134,7 +142,7 @@ import { AdRadio } from '@apron-design/vue-next'
 :::demo
 ```vue
 <template>
-  <ad-radio :checked="checked" @change="setChecked">
+  <ad-radio v-model:checked="checked">
     Click to toggle: {{ checked ? 'Checked' : 'Unchecked' }}
   </ad-radio>
 </template>
@@ -144,10 +152,6 @@ import { ref } from 'vue'
 import { AdRadio } from '@apron-design/vue-next'
 
 const checked = ref(false)
-
-const setChecked = (value: boolean) => {
-  checked.value = value
-}
 </script>
 ```
 :::
@@ -164,7 +168,7 @@ const setChecked = (value: boolean) => {
       <h4 style="margin: 0 0 12px 0; color: #393939;">
         labelClickable=false (默认，只能点击圆圈)
       </h4>
-      <ad-radio :checked="checked1" @change="setChecked1">
+      <ad-radio v-model:checked="checked1">
         只有点击左边的圆圈才能选中
       </ad-radio>
     </div>
@@ -172,7 +176,7 @@ const setChecked = (value: boolean) => {
       <h4 style="margin: 0 0 12px 0; color: #393939;">
         labelClickable=true (点击文字也可以激活)
       </h4>
-      <ad-radio :checked="checked2" @change="setChecked2" label-clickable>
+      <ad-radio v-model:checked="checked2" label-clickable>
         点击这段文字也可以选中
       </ad-radio>
     </div>
@@ -185,14 +189,6 @@ import { AdRadio } from '@apron-design/vue-next'
 
 const checked1 = ref(false)
 const checked2 = ref(false)
-
-const setChecked1 = (value: boolean) => {
-  checked1.value = value
-}
-
-const setChecked2 = (value: boolean) => {
-  checked2.value = value
-}
 </script>
 ```
 :::

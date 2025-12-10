@@ -1,5 +1,5 @@
 <template>
-  <nav :class="containerClasses" aria-label="分页导航">
+  <nav v-if="totalPages > 0" :class="containerClasses" aria-label="分页导航">
     <!-- 上一页按钮 -->
     <button
       type="button"

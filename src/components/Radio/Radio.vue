@@ -157,7 +157,6 @@ defineExpose({
 // ============================================
 // Radio CSS Variables (Dark Mode)
 // ============================================
-.dark,
 [data-prefers-color='dark'] {
   // Unchecked state
   --apron-radio-bg: @color-neutral-800;

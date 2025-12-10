@@ -2,7 +2,7 @@
   <div
     ref="containerRef"
     :class="containerClasses"
-    tabindex="disabled || loading ? -1 : 0"
+    :tabindex="disabled || loading ? -1 : 0"
     role="combobox"
     :aria-expanded="isOpen"
     aria-haspopup="listbox"
@@ -18,7 +18,12 @@
           !hasValue ? 'apron-select__value--placeholder' : ''
         ]"
       >
-        {{ selectedOption ? selectedOption.label : placeholder }}
+        <template v-if="selectedOption">
+          <component v-if="typeof selectedOption.label === 'function'" :is="selectedOption.label" />
+          <component v-else-if="typeof selectedOption.label === 'object' && selectedOption.label !== null" :is="() => selectedOption.label" />
+          <span v-else>{{ selectedOption.label }}</span>
+        </template>
+        <span v-else>{{ placeholder }}</span>
       </span>
       <span class="apron-select__suffix">
         <LoadingIcon v-if="loading" />
@@ -43,7 +48,9 @@
           :aria-disabled="option.disabled"
           @click="handleSelect(option)"
         >
-          {{ option.label }}
+          <component v-if="typeof option.label === 'function'" :is="option.label" />
+          <component v-else-if="typeof option.label === 'object' && option.label !== null" :is="() => option.label" />
+          <span v-else>{{ option.label }}</span>
         </div>
       </div>
     </div>
@@ -51,7 +58,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, watch, h } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch, h, useId, type VNode } from 'vue'
 import './Select.less'
 
 // 下拉箭头图标
@@ -157,14 +164,14 @@ const LoadingIcon = {
 export type SelectValueType = string | number
 
 export interface SelectOption {
-  label: string
+  label: string | VNode | (() => VNode)
   value: SelectValueType
   disabled?: boolean
 }
 
 export interface SelectProps {
-  /** 当前选中的值 */
-  value?: SelectValueType
+  /** 当前选中的值（v-model） */
+  modelValue?: SelectValueType
   /** 默认选中的值（非受控） */
   defaultValue?: SelectValueType
   /** 选项列表 */
@@ -182,7 +189,7 @@ export interface SelectProps {
 }
 
 const props = withDefaults(defineProps<SelectProps>(), {
-  value: undefined,
+  modelValue: undefined,
   defaultValue: undefined,
   options: () => [],
   placeholder: 'Placeholder goes here',
@@ -193,7 +200,7 @@ const props = withDefaults(defineProps<SelectProps>(), {
 })
 
 const emit = defineEmits<{
-  (e: 'update:value', value: SelectValueType): void
+  (e: 'update:modelValue', value: SelectValueType): void
   (e: 'change', value: SelectValueType, option: SelectOption): void
   (e: 'open-change', open: boolean): void
 }>()
@@ -202,11 +209,11 @@ const emit = defineEmits<{
 const containerRef = ref<HTMLElement | null>(null)
 const isOpen = ref(false)
 const internalValue = ref<SelectValueType | undefined>(props.defaultValue)
-const selectId = `select-${Math.random().toString(36).substr(2, 9)}`
+const selectId = useId()
 
 // Computed
-const isControlled = computed(() => props.value !== undefined)
-const currentValue = computed(() => isControlled.value ? props.value : internalValue.value)
+const isControlled = computed(() => props.modelValue !== undefined)
+const currentValue = computed(() => isControlled.value ? props.modelValue : internalValue.value)
 const selectedOption = computed(() => props.options.find(opt => opt.value === currentValue.value))
 const hasValue = computed(() => currentValue.value !== undefined)
 const isActive = computed(() => isOpen.value || hasValue.value)
@@ -243,7 +250,7 @@ const handleSelect = (option: SelectOption) => {
   if (!isControlled.value) {
     internalValue.value = option.value
   }
-  emit('update:value', option.value)
+  emit('update:modelValue', option.value)
   emit('change', option.value, option)
   isOpen.value = false
   emit('open-change', false)
@@ -291,17 +298,21 @@ const handleClickOutside = (event: MouseEvent) => {
   }
 }
 
-// Lifecycle
-onMounted(() => {
-  document.addEventListener('mousedown', handleClickOutside)
+// Lifecycle - 只在 isOpen 为 true 时添加监听器
+watch(isOpen, (newValue) => {
+  if (newValue) {
+    document.addEventListener('mousedown', handleClickOutside)
+  } else {
+    document.removeEventListener('mousedown', handleClickOutside)
+  }
 })
 
 onUnmounted(() => {
   document.removeEventListener('mousedown', handleClickOutside)
 })
 
-// Watch for value changes
-watch(() => props.value, (newValue) => {
+// Watch for modelValue changes
+watch(() => props.modelValue, (newValue) => {
   if (newValue !== undefined) {
     internalValue.value = newValue
   }

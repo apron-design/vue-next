@@ -1,4 +1,5 @@
 @import '../../styles/variables.less';
+@import '../../styles/mixins.less';
 
 // ============================================
 // Select CSS Variables (Light Mode)
@@ -195,8 +196,7 @@
   // Focus state
   &:focus-visible {
     .apron-select__trigger {
-      outline: 2px solid var(--apron-focus-ring-color);
-      outline-offset: 1px;
+      .focus-ring();
     }
   }
 

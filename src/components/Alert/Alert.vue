@@ -71,6 +71,25 @@ const classes = computed(() => [
 }
 
 // ============================================
+// Alert Container (fixed position)
+// ============================================
+.apron-alert-root {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.apron-alert-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: @spacing-4;
+}
+
+// ============================================
 // Alert Base Styles
 // ============================================
 .apron-alert {
@@ -85,7 +104,46 @@ const classes = computed(() => [
   border-radius: @radius-lg;
   font-family: var(--apron-font-family);
   font-size: @font-size-base;
+  pointer-events: auto;
   box-sizing: border-box;
+
+  // 默认情况下占满父容器宽度
+  width: 100%;
+  min-width: unset;
+  max-width: unset;
+
+  // Animation states
+  opacity: 0;
+  max-height: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  overflow: hidden;
+  transform: translateY(-20px);
+  transition: 
+    opacity 0.3s ease,
+    transform 0.3s ease,
+    max-height 0.3s ease,
+    margin-bottom 0.3s ease,
+    padding 0.3s ease;
+
+  &--visible {
+    opacity: 1;
+    max-height: 200px;
+    margin-bottom: @spacing-3;
+    padding-top: @spacing-2;
+    padding-bottom: @spacing-2;
+    transform: translateY(0);
+  }
+
+  &--leaving {
+    opacity: 0;
+    max-height: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    transform: translateY(-10px);
+  }
 
   // Static display (no animation)
   &--static {
@@ -101,6 +159,14 @@ const classes = computed(() => [
     width: 100%;
     min-width: unset;
     max-width: unset;
+  }
+
+  // Message 中使用的 Alert 样式
+  .apron-alert-container > & {
+    // Message 中使用时限制宽度
+    width: auto;
+    min-width: 300px;
+    max-width: 500px;
   }
 
   // Icon

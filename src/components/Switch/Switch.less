@@ -1,4 +1,5 @@
 @import '../../styles/variables.less';
+@import '../../styles/mixins.less';
 
 // ============================================
 // Switch CSS Variables (Light Mode)
@@ -21,7 +22,6 @@
 // ============================================
 // Switch CSS Variables (Dark Mode)
 // ============================================
-.dark,
 [data-prefers-color='dark'] {
   --apron-switch-unchecked-bg: @color-neutral-700;
   --apron-switch-thumb-bg: #ffffff;
@@ -170,8 +170,7 @@
 
   // Focus state
   &__input:focus-visible + .apron-switch__track {
-    outline: 2px solid var(--apron-color-focus);
-    outline-offset: 2px;
+    .focus-ring();
   }
 
   // Hover state (only darken background, not thumb)

@@ -1,4 +1,5 @@
 @import '../../styles/variables.less';
+@import '../../styles/mixins.less';
 
 // ============================================
 // Pagination CSS Variables (Light Mode)
@@ -15,7 +16,6 @@
 // ============================================
 // Pagination CSS Variables (Dark Mode)
 // ============================================
-.dark,
 [data-prefers-color='dark'] {
   --apron-pagination-text: @color-primary-200;
   --apron-pagination-bg-hover: @color-neutral-700;
@@ -61,8 +61,7 @@
     }
 
     &:focus-visible {
-      outline: 2px solid var(--apron-focus-ring-color);
-      outline-offset: 1px;
+      .focus-ring();
     }
 
     // Active state

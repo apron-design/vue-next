@@ -50,6 +50,7 @@ defineExpose({
 
 <style lang="less">
 @import '../../styles/variables.less';
+@import '../../styles/mixins.less';
 
 // ============================================
 // Collapse CSS Variables (Light Mode)

@@ -1,4 +1,5 @@
 @import '../../styles/variables.less';
+@import '../../styles/mixins.less';
 
 // ============================================
 // Modal CSS Variables (Light Mode)
@@ -16,8 +17,6 @@
 // ============================================
 // Modal CSS Variables (Dark Mode)
 // ============================================
-.dark,
-.dark,
 [data-prefers-color='dark'] {
   --apron-modal-bg: @color-neutral-800;
   --apron-modal-border-color: @color-neutral-700;
@@ -173,8 +172,7 @@
     }
 
     &:focus-visible {
-      outline: 2px solid var(--apron-focus-ring-color);
-      outline-offset: 2px;
+      .focus-ring();
     }
   }
 

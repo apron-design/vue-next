@@ -222,6 +222,7 @@ defineExpose({
 
 <style lang="less">
 @import '../../styles/variables.less';
+@import '../../styles/mixins.less';
 
 // ============================================
 // Form Item Base Styles

@@ -218,8 +218,8 @@ import { AdDatePicker } from '@apron-design/vue-next'
 | loading | 是否加载中 | `boolean` | `false` |
 | inflow | 是否使用 inflow 模式（撑开容器） | `boolean` | `false` |
 | onChange | 选中值改变时的回调 | `(value: { year?: number; month?: number; day?: number }) => void` | - |
-| className | 自定义类名 | `string` | - |
 | onOpenChange | 下拉框展开/收起回调 | `(open: boolean) => void` | - |
+| class | 自定义类名 | `string` | - |
 | yearStart | 年份范围起始 | `number` | `2020` |
 | yearEnd | 年份范围结束 | `number` | `2030` |
 | yearLabel | 年标签 | `string` | `'年'` |

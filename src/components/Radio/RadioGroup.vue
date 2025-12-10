@@ -92,13 +92,15 @@ const normalizedOptions = computed(() => {
 })
 
 // 提供上下文给子组件
-provide('radioGroupContext', {
+const radioGroupContext = {
   value: mergedValue,
   disabled: props.disabled,
   labelClickable: props.labelClickable,
   name: groupName,
   onChange: handleChange,
-})
+}
+
+provide('radioGroupContext', radioGroupContext)
 
 defineExpose({
   value: mergedValue,
@@ -120,17 +122,15 @@ defineExpose({
 // ============================================
 .apron-radio-group {
   display: flex;
-  transition: all @transition-slow;
+  flex-wrap: wrap;
+  gap: var(--apron-radio-group-gap);
 
   &--horizontal {
     flex-direction: row;
-    gap: var(--apron-radio-group-gap);
-    align-items: center;
   }
 
   &--vertical {
     flex-direction: column;
-    gap: var(--apron-radio-group-gap);
   }
 }
 </style>

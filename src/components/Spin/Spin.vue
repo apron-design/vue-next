@@ -1,25 +1,35 @@
 <template>
   <!-- 包裹模式 -->
-  <div v-if="$slots.default" class="apron-spin-wrapper" :class="className">
+  <div v-if="$slots.default" class="apron-spin-wrapper" :class="props.className">
     <slot></slot>
     <SpinOverlay
-      :visible="loading"
-      :icon="icon"
-      :text="text"
-      :placement="placement"
+      :visible="props.loading"
+      :icon="props.icon"
+      :text="props.text"
+      :placement="props.placement"
     />
   </div>
 
   <!-- 独立模式 -->
   <div
-    v-else-if="loading"
+    v-else-if="props.loading"
     class="apron-spin"
-    :class="[className, { 'apron-spin--fullscreen': fullscreen }]"
+    :class="[props.className, { 'apron-spin--fullscreen': props.fullscreen }]"
   >
+    <div v-if="props.fullscreen" class="apron-spin__overlay apron-spin__overlay--visible">
+      <SpinContent
+        :icon="props.icon"
+        :text="props.text"
+        :placement="props.placement"
+        :in-overlay="true"
+      />
+    </div>
     <SpinContent
-      :icon="icon"
-      :text="text"
-      :placement="placement"
+      v-else
+      :icon="props.icon"
+      :text="props.text"
+      :placement="props.placement"
+      :in-overlay="false"
     />
   </div>
 </template>
@@ -96,28 +106,39 @@ const SpinContent = defineComponent({
     icon: [Object, Function] as PropType<VNode | (() => VNode)>,
     text: {
       type: String,
-      default: '加载中'
+      default: ''
     },
     placement: {
       type: String as PropType<SpinPlacement>,
       default: 'center'
+    },
+    inOverlay: {
+      type: Boolean,
+      default: false
     }
   },
   setup(props) {
     const isCenter = props.placement === 'center'
 
-    return () =>
-      h(
+    return () => {
+      // 在 overlay 中才需要位置定位类
+      const contentClasses = [
+        'apron-spin__content',
+        {
+          'apron-spin__content--vertical': isCenter,
+          'apron-spin__content--horizontal': !isCenter
+        }
+      ]
+      
+      // 只有在 overlay 中才添加位置定位类
+      if (props.inOverlay) {
+        contentClasses.push(`apron-spin__content--${props.placement}`)
+      }
+
+      return h(
         'div',
         {
-          class: [
-            'apron-spin__content',
-            `apron-spin__content--${props.placement}`,
-            {
-              'apron-spin__content--vertical': isCenter,
-              'apron-spin__content--horizontal': !isCenter
-            }
-          ]
+          class: contentClasses
         },
         [
           h('span', { class: 'apron-spin__icon' }, [
@@ -131,6 +152,7 @@ const SpinContent = defineComponent({
             h('span', { class: 'apron-spin__text' }, props.text)
         ].filter(Boolean)
       )
+    }
   }
 })
 
@@ -201,7 +223,8 @@ const SpinOverlay = defineComponent({
         h(SpinContent, {
           icon: props.icon,
           text: props.text,
-          placement: props.placement
+          placement: props.placement,
+          inOverlay: true
         })
       )
     }
@@ -295,7 +318,8 @@ const FullscreenSpin = defineComponent({
           h(SpinContent, {
             icon: props.options?.icon,
             text: props.options?.text,
-            placement: props.options?.placement
+            placement: props.options?.placement,
+            inOverlay: true
           })
         )
       )
@@ -366,3 +390,7 @@ defineExpose({
   close
 })
 </script>
+
+<style lang="less">
+@import './Spin.less';
+</style>

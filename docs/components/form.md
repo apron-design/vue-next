@@ -1,227 +1,341 @@
+---
+title: Form 表单
+group: 数据录入
+order: 1
+---
+
 # Form 表单
 
-高性能表单控件，自带数据域管理。包含数据录入、校验以及对应样式。
+高性能、易扩展的表单解决方案，支持数据录入、校验和提交功能。
 
-## 基础用法
+## 何时使用
 
-最基础的表单使用方式。
+- 需要进行数据录入和校验的场景
+- 构建登录、注册、设置等表单页面
+- 需要复杂表单交互和状态管理的应用
 
-:::demo 基础表单包含各种表单项和验证规则。
+## 代码演示
+
+### 基础表单
+
+最简单的表单使用方式，包含基本的字段和提交功能。
+
+:::demo
 ```vue
 <template>
-  <Form :model="formState" :rules="rules" @finish="onFinish" @finishFailed="onFinishFailed">
-    <FormItem label="用户名" name="username">
-      <Input v-model:value="formState.username" />
-    </FormItem>
-    
-    <FormItem label="密码" name="password">
-      <Input v-model:value="formState.password" type="password" />
-    </FormItem>
-    
-    <FormItem>
-      <Button type="primary" html-type="submit">登录</Button>
-    </FormItem>
-  </Form>
-</template>
-
-<script setup>
-import { reactive } from 'vue'
-
-const formState = reactive({
-  username: '',
-  password: '',
-})
-
-const rules = {
-  username: [
-    { required: true, message: '请输入用户名!' },
-    { min: 3, message: '用户名至少3个字符!' }
-  ],
-  password: [
-    { required: true, message: '请输入密码!' },
-    { min: 6, message: '密码至少6个字符!' }
-  ]
-}
-
-const onFinish = (values) => {
-  console.log('Success:', values)
-}
-
-const onFinishFailed = (errorInfo) => {
-  console.log('Failed:', errorInfo)
-}
-</script>
-```
-:::
-
-## 表单布局
-
-表单有三种布局方式：垂直、水平和内联。
-
-:::demo 通过 layout 属性设置表单布局。
-```vue
-<template>
-  <div>
-    <RadioGroup v-model:value="layout" style="margin-bottom: 16px;">
-      <Radio value="vertical">垂直布局</Radio>
-      <Radio value="horizontal">水平布局</Radio>
-      <Radio value="inline">内联布局</Radio>
-    </RadioGroup>
-    
-    <Form :layout="layout" :model="formState">
-      <FormItem label="姓名" name="name">
-        <Input v-model:value="formState.name" />
-      </FormItem>
-      
-      <FormItem label="邮箱" name="email">
-        <Input v-model:value="formState.email" />
-      </FormItem>
-      
-      <FormItem label="年龄" name="age">
-        <Input v-model:value="formState.age" type="number" />
-      </FormItem>
-      
-      <FormItem>
-        <Button type="primary" html-type="submit">提交</Button>
-      </FormItem>
-    </Form>
+  <div style="width: 400px;">
+    <ad-form
+      @finish="handleFinish"
+      @finish-failed="handleFinishFailed"
+    >
+      <ad-form-item name="username" label="用户名" required>
+        <ad-input placeholder="请输入用户名" />
+      </ad-form-item>
+      <ad-form-item name="email" label="邮箱" :rules="[{ type: 'email', message: '请输入有效的邮箱' }]">
+        <ad-input placeholder="请输入邮箱" />
+      </ad-form-item>
+      <ad-form-item name="password" label="密码" required :rules="[{ min: 6, message: '密码至少6位' }]">
+        <ad-input type="password" placeholder="请输入密码" />
+      </ad-form-item>
+      <ad-form-item>
+        <ad-button type="submit" variant="primary">提交</ad-button>
+      </ad-form-item>
+    </ad-form>
   </div>
 </template>
 
-<script setup>
-import { ref, reactive } from 'vue'
+<script setup lang="ts">
+import { AdForm, AdFormItem, AdInput, AdButton } from '@apron-design/vue-next'
 
-const layout = ref('vertical')
-const formState = reactive({
-  name: '',
-  email: '',
-  age: undefined,
-})
+const handleFinish = (values: any) => {
+  console.log('Form submitted:', values)
+  alert('表单提交成功！\n' + JSON.stringify(values, null, 2))
+}
+
+const handleFinishFailed = (errors: any) => {
+  console.log('Form errors:', errors)
+}
 </script>
 ```
 :::
 
-## 表单方法
+### 表单布局
 
-通过 form 实例可以调用表单的各种方法。
+支持三种不同的表单布局：垂直（默认）、水平和内联。
 
-:::demo 使用 form 实例调用表单方法。
+:::demo
 ```vue
 <template>
-  <div>
-    <Form ref="formRef" :model="formState" :rules="rules">
-      <FormItem label="用户名" name="username">
-        <Input v-model:value="formState.username" />
-      </FormItem>
-      
-      <FormItem label="邮箱" name="email">
-        <Input v-model:value="formState.email" />
-      </FormItem>
-    </Form>
-    
-    <div style="margin-top: 16px;">
-      <Button @click="validateFields">验证表单</Button>
-      <Button @click="resetFields" style="margin-left: 8px;">重置表单</Button>
-      <Button @click="setFieldsValue" style="margin-left: 8px;">设置表单值</Button>
+  <div style="display: flex; flex-direction: column; gap: 32px;">
+    <!-- 垂直布局（默认） -->
+    <div style="width: 400px;">
+      <h4>Vertical Layout (Default)</h4>
+      <ad-form layout="vertical">
+        <ad-form-item name="name" label="姓名">
+          <ad-input placeholder="请输入姓名" />
+        </ad-form-item>
+        <ad-form-item name="phone" label="电话">
+          <ad-input placeholder="请输入电话" />
+        </ad-form-item>
+      </ad-form>
+    </div>
+
+    <!-- 水平布局 -->
+    <div style="width: 500px;">
+      <h4>Horizontal Layout</h4>
+      <ad-form layout="horizontal" :label-width="80" label-align="right">
+        <ad-form-item name="name" label="姓名">
+          <ad-input placeholder="请输入姓名" />
+        </ad-form-item>
+        <ad-form-item name="phone" label="电话">
+          <ad-input placeholder="请输入电话" />
+        </ad-form-item>
+        <ad-form-item name="address" label="地址">
+          <ad-input placeholder="请输入地址" />
+        </ad-form-item>
+      </ad-form>
+    </div>
+
+    <!-- 内联布局 -->
+    <div style="width: 600px;">
+      <h4>Inline Layout</h4>
+      <ad-form layout="inline">
+        <ad-form-item name="keyword" label="关键词">
+          <ad-input placeholder="搜索..." />
+        </ad-form-item>
+        <ad-form-item name="category" label="分类">
+          <ad-select
+            :options="[
+              { label: '全部', value: 'all' },
+              { label: '文章', value: 'article' },
+              { label: '产品', value: 'product' },
+            ]"
+            placeholder="选择分类"
+          />
+        </ad-form-item>
+        <ad-form-item>
+          <ad-button variant="primary">搜索</ad-button>
+        </ad-form-item>
+      </ad-form>
     </div>
   </div>
 </template>
 
-<script setup>
-import { ref, reactive } from 'vue'
+<script setup lang="ts">
+import { AdForm, AdFormItem, AdInput, AdSelect, AdButton } from '@apron-design/vue-next'
+</script>
+```
+:::
 
-const formRef = ref()
-const formState = reactive({
-  username: '',
-  email: '',
-})
+### 浮动标签
 
-const rules = {
-  username: [{ required: true, message: '请输入用户名!' }],
-  email: [
-    { required: true, message: '请输入邮箱!' },
-    { type: 'email', message: '请输入有效的邮箱地址!' }
-  ]
+使用浮动标签模式，节省空间并提升用户体验。
+
+:::demo
+```vue
+<template>
+  <div style="width: 400px;">
+    <h4>Floating Label Mode</h4>
+    <ad-form floating-label>
+      <ad-form-item name="username" label="用户名" required>
+        <ad-input />
+      </ad-form-item>
+      <ad-form-item name="email" label="邮箱">
+        <ad-input />
+      </ad-form-item>
+      <ad-form-item name="password" label="密码" required>
+        <ad-input type="password" />
+      </ad-form-item>
+      <ad-form-item>
+        <ad-button type="submit" variant="primary" style="width: 100%;">登录</ad-button>
+      </ad-form-item>
+    </ad-form>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { AdForm, AdFormItem, AdInput, AdButton } from '@apron-design/vue-next'
+</script>
+```
+:::
+
+### 表单验证
+
+支持多种验证规则，包括必填、长度、正则表达式、邮箱、URL等。
+
+:::demo
+```vue
+<template>
+  <div style="width: 400px;">
+    <h4>Form Validation</h4>
+    <ad-form
+      @finish="handleFinish"
+      @finish-failed="handleFinishFailed"
+    >
+      <ad-form-item
+        name="username"
+        label="用户名"
+        required
+        :rules="[
+          { min: 3, message: '用户名至少3个字符' },
+          { max: 20, message: '用户名最多20个字符' },
+        ]"
+      >
+        <ad-input placeholder="3-20个字符" />
+      </ad-form-item>
+      <ad-form-item
+        name="email"
+        label="邮箱"
+        required
+        :rules="[{ type: 'email', message: '请输入有效的邮箱地址' }]"
+      >
+        <ad-input placeholder="example@email.com" />
+      </ad-form-item>
+      <ad-form-item
+        name="password"
+        label="密码"
+        required
+        :rules="[
+          { min: 8, message: '密码至少8个字符' },
+          { pattern: /[A-Z]/, message: '密码需包含大写字母' },
+          { pattern: /[0-9]/, message: '密码需包含数字' },
+        ]"
+        help="密码至少8位，需包含大写字母和数字"
+      >
+        <ad-input type="password" placeholder="输入密码" />
+      </ad-form-item>
+      <ad-form-item
+        name="website"
+        label="个人网站"
+        :rules="[{ type: 'url', message: '请输入有效的URL' }]"
+      >
+        <ad-input placeholder="https://example.com" />
+      </ad-form-item>
+      <ad-form-item name="agree" required :rules="[{ required: true, message: '请同意服务条款' }]">
+        <ad-checkbox>我同意服务条款</ad-checkbox>
+      </ad-form-item>
+      <ad-form-item>
+        <ad-button type="submit" variant="primary">注册</ad-button>
+      </ad-form-item>
+    </ad-form>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { AdForm, AdFormItem, AdInput, AdCheckbox, AdButton } from '@apron-design/vue-next'
+
+const handleFinish = (values: any) => {
+  alert('验证通过！\n' + JSON.stringify(values, null, 2))
 }
 
-const validateFields = () => {
-  formRef.value?.validateFields()
-    .then(values => {
-      console.log('Validate Success:', values)
-    })
-    .catch(errorInfo => {
-      console.log('Validate Failed:', errorInfo)
-    })
-}
-
-const resetFields = () => {
-  formRef.value?.resetFields()
-}
-
-const setFieldsValue = () => {
-  formRef.value?.setFieldsValue({
-    username: '张三',
-    email: 'zhangsan@example.com'
-  })
+const handleFinishFailed = (errors: any) => {
+  console.log('验证失败:', errors)
 }
 </script>
 ```
 :::
 
-## 动态增减表单项
+### 使用表单实例
 
-动态增加或减少表单项。
+通过表单实例实现更复杂的表单操作。
 
-:::demo 动态增减表单项。
+:::demo
 ```vue
 <template>
-  <Form :model="formState" :rules="rules">
-    <FormItem label="姓名" name="name">
-      <Input v-model:value="formState.name" />
-    </FormItem>
-    
-    <FormItem 
-      v-for="(item, index) in formState.items" 
-      :key="item.id"
-      :label="`项目 ${index + 1}`"
-      :name="['items', index, 'value']"
-    >
-      <div style="display: flex; gap: 8px;">
-        <Input v-model:value="item.value" />
-        <Button @click="removeItem(index)">删除</Button>
-      </div>
-    </FormItem>
-    
-    <FormItem>
-      <Button @click="addItem">添加项目</Button>
-      <Button type="primary" html-type="submit" style="margin-left: 8px;">提交</Button>
-    </FormItem>
-  </Form>
+  <div style="width: 400px;">
+    <h4>Using Form Instance</h4>
+    <ad-form ref="formRef">
+      <ad-form-item name="name" label="姓名" required>
+        <ad-input placeholder="请输入姓名" />
+      </ad-form-item>
+      <ad-form-item name="email" label="邮箱" :rules="[{ type: 'email' }]">
+        <ad-input placeholder="请输入邮箱" />
+      </ad-form-item>
+      <ad-form-item name="age" label="年龄">
+        <ad-input placeholder="请输入年龄" />
+      </ad-form-item>
+      <ad-form-item>
+        <div style="display: flex; gap: 8px;">
+          <ad-button @click="handleFill">填充数据</ad-button>
+          <ad-button @click="handleReset">重置</ad-button>
+          <ad-button variant="primary" @click="handleValidate">验证</ad-button>
+        </div>
+      </ad-form-item>
+    </ad-form>
+  </div>
 </template>
 
-<script setup>
-import { ref, reactive } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
+import { AdForm, AdFormItem, AdInput, AdButton } from '@apron-design/vue-next'
 
-let itemId = 0
+const formRef = ref()
 
-const formState = reactive({
-  name: '',
-  items: [{ id: itemId++, value: '' }]
-})
+const handleFill = () => {
+  formRef.value?.setFieldsValue({
+    name: '张三',
+    email: 'zhangsan@example.com',
+    age: '25',
+  })
+}
 
-const rules = {
-  name: [{ required: true, message: '请输入姓名!' }],
-  items: {
-    value: [{ required: true, message: '请输入项目值!' }]
+const handleReset = () => {
+  formRef.value?.resetFields()
+}
+
+const handleValidate = async () => {
+  try {
+    const values = await formRef.value?.validateFields()
+    alert('验证通过！\n' + JSON.stringify(values, null, 2))
+  } catch (errors) {
+    console.log('验证失败:', errors)
   }
 }
+</script>
+```
+:::
 
-const addItem = () => {
-  formState.items.push({ id: itemId++, value: '' })
-}
+### 初始值
 
-const removeItem = (index) => {
-  formState.items.splice(index, 1)
+为表单设置初始值，并监听值的变化。
+
+:::demo
+```vue
+<template>
+  <div style="width: 400px;">
+    <h4>With Initial Values</h4>
+    <ad-form
+      :initial-values="{
+        username: 'admin',
+        email: 'admin@example.com',
+        role: 'admin',
+      }"
+      @values-change="handleValuesChange"
+    >
+      <ad-form-item name="username" label="用户名">
+        <ad-input />
+      </ad-form-item>
+      <ad-form-item name="email" label="邮箱">
+        <ad-input />
+      </ad-form-item>
+      <ad-form-item name="role" label="角色">
+        <ad-select
+          :options="[
+            { label: '管理员', value: 'admin' },
+            { label: '用户', value: 'user' },
+            { label: '访客', value: 'guest' },
+          ]"
+        />
+      </ad-form-item>
+    </ad-form>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { AdForm, AdFormItem, AdInput, AdSelect } from '@apron-design/vue-next'
+
+const handleValuesChange = (changed: any, all: any) => {
+  console.log('Changed:', changed, 'All:', all)
 }
 </script>
 ```
@@ -229,54 +343,70 @@ const removeItem = (index) => {
 
 ## API
 
-### Form Props
+### Form
 
-| 参数名 | 描述 | 类型 | 默认值 |
+| 参数 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| model | 表单数据对象 | `object` | `-` |
-| rules | 表单验证规则 | `object` | `-` |
-| layout | 表单布局 | `'vertical' \| 'horizontal' \| 'inline'` | `'vertical'` |
-| labelCol | label 标签布局 | `object` | `-` |
-| wrapperCol | 需要为输入控件设置布局样式时，使用该属性 | `object` | `-` |
-| colon | 配置 Form.Item 的 colon 的默认值。表示是否显示 label 后面的冒号 | `boolean` | `true` |
-| labelAlign | label 标签的文本对齐方式 | `'left' \| 'right'` | `'right'` |
-| disabled | 设置表单组件禁用 | `boolean` | `false` |
+| form | 表单实例 | `FormInstance` | - |
+| initialValues | 初始值 | `Partial<T>` | - |
+| layout | 表单布局 | `'horizontal' \| 'vertical' \| 'inline'` | `'vertical'` |
+| floatingLabel | 是否使用浮动标签 | `boolean` | `false` |
+| labelWidth | 标签宽度（horizontal 布局时有效） | `number \| string` | - |
+| labelAlign | 标签对齐方式 | `'left' \| 'right'` | `'right'` |
+| disabled | 是否禁用整个表单 | `boolean` | `false` |
+| class | 自定义类名 | `string` | - |
 
 ### Form Events
 
-| 事件名 | 描述 | 参数 |
+| 事件名 | 说明 | 回调参数 |
 | --- | --- | --- |
-| finish | 提交表单且数据验证成功后回调事件 | `Function(values)` |
-| finishFailed | 提交表单且数据验证失败后回调事件 | `Function({ values, errorFields, outOfDate })` |
-| valuesChange | 字段值更新时触发回调事件 | `Function(changedValues, allValues)` |
+| finish | 表单提交回调 | `(values: T) => void` |
+| finishFailed | 表单提交失败回调 | `(errors: Record<string, string>) => void` |
+| valuesChange | 字段值改变回调 | `(changedValues: Partial<T>, allValues: T) => void` |
 
-### Form Methods
+### FormItem
 
-| 方法名 | 描述 | 参数 |
-| --- | --- | --- |
-| validateFields | 触发表单验证 | `Function(nameList?: NamePath[])` |
-| validateField | 验证单个字段 | `Function(name: NamePath)` |
-| resetFields | 重置表单 | `Function(fields?: NamePath[])` |
-| setFieldsValue | 设置表单的值 | `Function(values)` |
-| getFieldsValue | 获取表单的值 | `Function()` |
-| getFieldError | 获取某个字段的错误信息 | `Function(name: NamePath)` |
-| getFieldsError | 获取一组字段的错误信息 | `Function(nameList?: NamePath[])` |
-| isFieldTouched | 判断某个字段是否被用户操作过 | `Function(name: NamePath)` |
-| isFieldsTouched | 判断字段是否被用户操作过 | `Function(nameList?: NamePath[], allTouched?: boolean)` |
-| scrollToField | 滚动到对应字段位置 | `Function(name: NamePath, options: [[scrollIntoView]](https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView)'s option)` |
-
-### Form.Item Props
-
-| 参数名 | 描述 | 类型 | 默认值 |
+| 参数 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| name | 字段名，支持数组 | `string \| number \| (string \| number)[]` | `-` |
-| label | label 标签的文本 | `string \| slot` | `-` |
-| rules | 校验规则 | `object \| array` | `-` |
-| help | 提示信息，如不设置，则会根据校验规则自动生成 | `string \| slot` | `-` |
-| extra | 额外的提示信息，和 help 类似，当需要错误信息和提示文案同时出现时，可以使用这个 | `string \| slot` | `-` |
-| required | 是否必填，如不设置，则会根据校验规则自动生成 | `boolean` | `false` |
-| colon | 配合 label 属性使用，表示是否显示 label 后面的冒号 | `boolean` | `true` |
-| labelCol | label 标签布局 | `object` | `-` |
-| wrapperCol | 需要为输入控件设置布局样式时，使用该属性 | `object` | `-` |
-| hasFeedback | 配合 validateStatus 属性使用，展示校验状态图标 | `boolean` | `false` |
-| validateStatus | 校验状态 | `'success' \| 'warning' \| 'error' \| 'validating'` | `-` |
+| name | 字段名 | `string` | - |
+| label | 标签文本 | `string` | - |
+| required | 是否必填（显示红色星号） | `boolean` | `false` |
+| rules | 验证规则 | `ValidationRule[]` | `[]` |
+| floatingLabel | 是否使用浮动标签（覆盖 Form 级别设置） | `boolean` | - |
+| help | 帮助文本 | `string` | - |
+| extra | 额外提示 | `string` | - |
+| noLabel | 是否隐藏标签 | `boolean` | `false` |
+| class | 自定义类名 | `string` | - |
+| labelWidth | 标签宽度（覆盖 Form 级别设置） | `number \| string` | - |
+| valuePropName | 值属性名 | `string` | `'value'` |
+| trigger | 触发方式 | `string` | `'onChange'` |
+| validateTrigger | 值收集触发方式 | `string \| string[]` | `'onBlur'` |
+
+### FormInstance
+
+| 方法 | 说明 | 类型 |
+| --- | --- | --- |
+| getFieldValue | 获取字段值 | `(name: keyof T) => unknown` |
+| getFieldsValue | 获取所有字段值 | `() => T` |
+| setFieldValue | 设置字段值 | `(name: keyof T, value: unknown) => void` |
+| setFieldsValue | 设置多个字段值 | `(values: Partial<T>) => void` |
+| resetFields | 重置字段 | `() => void` |
+| validateFields | 验证所有字段 | `() => Promise<T>` |
+| validateField | 验证单个字段 | `(name: keyof T) => Promise<unknown>` |
+| getFieldError | 获取字段错误 | `(name: keyof T) => string \| undefined` |
+| getFieldsError | 获取所有字段错误 | `() => Record<keyof T, string \| undefined>` |
+| isFieldTouched | 字段是否被触摸过 | `(name: keyof T) => boolean` |
+| isFieldValidating | 字段是否正在验证 | `(name: keyof T) => boolean` |
+| submit | 提交表单 | `() => void` |
+
+### ValidationRule
+
+| 参数 | 说明 | 类型 |
+| --- | --- | --- |
+| required | 是否必填 | `boolean` |
+| message | 错误信息 | `string` |
+| min | 最小长度 | `number` |
+| max | 最大长度 | `number` |
+| pattern | 正则表达式 | `RegExp` |
+| validator | 自定义验证器 | `(value: unknown) => Promise<void> \| void` |
+| type | 类型验证 | `'string' \| 'number' \| 'email' \| 'url'` |

@@ -15,7 +15,6 @@
 // ============================================
 // Popover CSS Variables (Dark Mode)
 // ============================================
-.dark,
 [data-prefers-color='dark'] {
   --apron-popover-bg: @color-neutral-900;
   --apron-popover-border-color: @color-neutral-700;
@@ -129,8 +128,7 @@
     transition: all @transition-slow;
 
     &:focus-visible {
-      outline: 2px solid var(--apron-focus-ring-color);
-      outline-offset: 1px;
+      .focus-ring();
     }
 
     // Primary
@@ -221,7 +219,6 @@
 }
 
 // Dark mode button overrides
-.dark,
 [data-prefers-color='dark'] {
   .apron-popover__btn {
     &--primary {

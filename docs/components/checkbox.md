@@ -107,6 +107,112 @@ const checked2 = ref(false)
 ```
 :::
 
+### 复选框组
+
+使用 `CheckboxGroup` 组合多个复选框。
+
+:::demo
+```vue
+<template>
+  <div style="display: flex; flex-direction: column; gap: 16px;">
+    <ad-checkbox-group
+      v-model:value="value"
+      :options="[
+        { label: '苹果', value: 'apple' },
+        { label: '香蕉', value: 'banana' },
+        { label: '橙子', value: 'orange' },
+        { label: '葡萄', value: 'grape' },
+      ]"
+    />
+    <p style="margin: 0;">
+      已选中: {{ value.join(', ') || '无' }}
+    </p>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { AdCheckboxGroup } from '@apron-design/vue-next'
+
+const value = ref(['apple'])
+</script>
+```
+:::
+
+### 垂直排列
+
+通过 `direction` 属性设置垂直排列。
+
+:::demo
+```vue
+<template>
+  <ad-checkbox-group
+    v-model:value="value"
+    direction="vertical"
+    :options="[
+      { label: '选项一', value: 'option1' },
+      { label: '选项二', value: 'option2' },
+      { label: '选项三', value: 'option3' },
+    ]"
+  />
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { AdCheckboxGroup } from '@apron-design/vue-next'
+
+const value = ref(['option1'])
+</script>
+```
+:::
+
+### 全选效果
+
+实现全选/反选的典型交互模式。
+
+:::demo
+```vue
+<template>
+  <div style="display: flex; flex-direction: column; gap: 16px;">
+    <ad-checkbox
+      :indeterminate="indeterminate"
+      :checked="checkAll"
+      @change="onCheckAllChange"
+    >
+      全选
+    </ad-checkbox>
+    <div style="border-left: 2px solid #e4e4e7; padding-left: 16px;">
+      <ad-checkbox-group
+        direction="vertical"
+        v-model:value="checkedList"
+        :options="allOptions.map((item) => ({
+          label: item.charAt(0).toUpperCase() + item.slice(1),
+          value: item,
+        }))"
+      />
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+import { AdCheckbox, AdCheckboxGroup } from '@apron-design/vue-next'
+
+const allOptions = ['apple', 'banana', 'orange', 'grape']
+const checkedList = ref(['apple', 'banana'])
+
+const checkAll = computed(() => allOptions.length === checkedList.value.length)
+const indeterminate = computed(() => 
+  checkedList.value.length > 0 && checkedList.value.length < allOptions.length
+)
+
+const onCheckAllChange = (checked: boolean) => {
+  checkedList.value = checked ? allOptions : []
+}
+</script>
+```
+:::
+
 ## API
 
 ### Checkbox
@@ -134,3 +240,31 @@ const checked2 = ref(false)
 | 名称 | 说明 |
 | --- | --- |
 | default | 复选框标签内容 |
+
+### CheckboxGroup
+
+| 参数 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| value | 当前选中的值数组（受控） | `(string \| number)[]` | - |
+| defaultValue | 默认选中的值数组（非受控） | `(string \| number)[]` | `[]` |
+| options | 选项配置 | `(CheckboxOptionType \| string \| number)[]` | - |
+| disabled | 是否禁用整组 | `boolean` | `false` |
+| direction | 排列方向 | `'horizontal' \| 'vertical'` | `'horizontal'` |
+| onChange | 选中值改变时的回调 | `(checkedValues: (string \| number)[]) => void` | - |
+| class | 自定义类名 | `string` | - |
+| labelClickable | 点击文字部分是否可以激活复选框 | `boolean` | `true` |
+
+### CheckboxGroup Events
+
+| 事件名 | 说明 | 回调参数 |
+| --- | --- | --- |
+| update:value | 选中值改变时触发（v-model:value） | `(value: CheckboxValueType[])` |
+| change | 选中值改变时触发 | `(checkedValues: CheckboxValueType[])` |
+
+### CheckboxOptionType
+
+| 参数 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| label | 选项标签 | `string` | - |
+| value | 选项值 | `string \| number` | - |
+| disabled | 是否禁用 | `boolean` | `false` |

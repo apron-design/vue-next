@@ -83,7 +83,6 @@ const handleClose = (e: MouseEvent) => {
 // ============================================
 // Tag CSS Variables (Dark Mode)
 // ============================================
-.dark,
 [data-prefers-color='dark'] {
   // Primary
   --apron-tag-primary-bg: @color-primary-200;

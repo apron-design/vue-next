@@ -1,157 +1,486 @@
+---
+title: Select 选择器
+group: 数据录入
+order: 1
+---
+
 # Select 选择器
 
-用于从一组选项中选择一个或多个值的下拉选择器。
+选择器用于从一组选项中选择一个或多个选项。
 
-## 基础用法
+## 何时使用
 
-基础的选择器用法。
+- 需要从多个选项中选择一个值时
+- 选项数量较多，不适合使用单选框时
+- 表单中需要用户提供选择时
 
-:::demo
-```vue
-<template>
-  <a-select v-model="value" placeholder="请选择">
-    <a-option value="option1">选项1</a-option>
-    <a-option value="option2">选项2</a-option>
-    <a-option value="option3">选项3</a-option>
-  </a-select>
-</template>
+## 代码演示
 
-<script setup>
-import { ref } from 'vue'
-const value = ref('')
-</script>
-```
-:::
+### 基础用法
 
-## 禁用状态
-
-选择器不可用状态。
+最简单的选择器使用方式。
 
 :::demo
 ```vue
 <template>
-  <a-select v-model="value" disabled placeholder="请选择">
-    <a-option value="option1">选项1</a-option>
-    <a-option value="option2">选项2</a-option>
-    <a-option value="option3">选项3</a-option>
-  </a-select>
-</template>
-
-<script setup>
-import { ref } from 'vue'
-const value = ref('')
-</script>
-```
-:::
-
-## 可清空
-
-可清空已选择的内容。
-
-:::demo
-```vue
-<template>
-  <a-select v-model="value" clearable placeholder="请选择">
-    <a-option value="option1">选项1</a-option>
-    <a-option value="option2">选项2</a-option>
-    <a-option value="option3">选项3</a-option>
-  </a-select>
-</template>
-
-<script setup>
-import { ref } from 'vue'
-const value = ref('')
-</script>
-```
-:::
-
-## 多选
-
-支持多选操作。
-
-:::demo
-```vue
-<template>
-  <a-select v-model="value" multiple placeholder="请选择">
-    <a-option value="option1">选项1</a-option>
-    <a-option value="option2">选项2</a-option>
-    <a-option value="option3">选项3</a-option>
-    <a-option value="option4">选项4</a-option>
-  </a-select>
-</template>
-
-<script setup>
-import { ref } from 'vue'
-const value = ref([])
-</script>
-```
-:::
-
-## 自定义尺寸
-
-支持自定义尺寸。
-
-:::demo
-```vue
-<template>
-  <div style="display: flex; flex-direction: column; gap: 16px;">
-    <a-select v-model="value1" size="small" placeholder="小尺寸">
-      <a-option value="option1">选项1</a-option>
-      <a-option value="option2">选项2</a-option>
-    </a-select>
-    
-    <a-select v-model="value2" size="medium" placeholder="默认尺寸">
-      <a-option value="option1">选项1</a-option>
-      <a-option value="option2">选项2</a-option>
-    </a-select>
-    
-    <a-select v-model="value3" size="large" placeholder="大尺寸">
-      <a-option value="option1">选项1</a-option>
-      <a-option value="option2">选项2</a-option>
-    </a-select>
+  <div style="width: 400px;">
+    <ad-select :options="options" placeholder="Placeholder goes here" />
   </div>
 </template>
 
-<script setup>
-import { ref } from 'vue'
-const value1 = ref('')
-const value2 = ref('')
-const value3 = ref('')
+<script setup lang="ts">
+import { AdSelect } from '@apron-design/vue-next'
+
+const options = [
+  { label: 'Option 1', value: 'option1' },
+  { label: 'Option 2', value: 'option2', disabled: true },
+  { label: 'Selected Option', value: 'selected' },
+  { label: 'Hover Option', value: 'hover' },
+  { label: 'Option 5 goes here', value: 'option5' },
+]
 </script>
 ```
 :::
 
-## 属性
+### 不同状态
 
-| 参数 | 说明 | 类型 | 可选值 | 默认值 |
-| ---- | ---- | ---- | ---- | ---- |
-| modelValue / v-model | 绑定值 | string / number / boolean / Array | — | — |
-| placeholder | 占位文字 | string | — | 请选择 |
-| disabled | 是否禁用 | boolean | — | false |
-| clearable | 是否可以清空选项 | boolean | — | false |
-| multiple | 是否多选 | boolean | — | false |
-| size | 尺寸 | string | small / medium / large | medium |
+选择器支持多种状态：正常、选中/聚焦、加载中、禁用。
 
-## 事件
+:::demo
+```vue
+<template>
+  <div style="display: flex; flex-direction: column; gap: 32px; width: 600px;">
+    <div style="display: flex; gap: 48px;">
+      <div style="flex: 1;">
+        <h4 style="margin: 0 0 12px 0; color: #393939;">Normal</h4>
+        <ad-select :options="defaultOptions" placeholder="Placeholder goes here" />
+      </div>
+      <div style="flex: 1;">
+        <h4 style="margin: 0 0 12px 0; color: #393939;">Selected/Focused</h4>
+        <ad-select :options="defaultOptions" default-value="option1" />
+      </div>
+    </div>
+
+    <div style="display: flex; gap: 48px;">
+      <div style="flex: 1;">
+        <h4 style="margin: 0 0 12px 0; color: #393939;">Loading</h4>
+        <ad-select :options="defaultOptions" placeholder="Placeholder goes here" loading />
+      </div>
+      <div style="flex: 1;">
+        <h4 style="margin: 0 0 12px 0; color: #393939;">Loading (with value)</h4>
+        <ad-select :options="defaultOptions" default-value="option1" loading />
+      </div>
+    </div>
+
+    <div>
+      <h4 style="margin: 0 0 12px 0; color: #393939;">Disabled</h4>
+      <div style="width: 50%;">
+        <ad-select :options="defaultOptions" default-value="option1" disabled />
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { AdSelect } from '@apron-design/vue-next'
+
+const defaultOptions = [
+  { label: 'Option 1', value: 'option1' },
+  { label: 'Option 2', value: 'option2', disabled: true },
+  { label: 'Selected Option', value: 'selected' },
+  { label: 'Hover Option', value: 'hover' },
+  { label: 'Option 5 goes here', value: 'option5' },
+]
+</script>
+```
+:::
+
+### 正常状态
+
+:::demo
+```vue
+<template>
+  <div style="width: 400px;">
+    <h4 style="margin: 0 0 12px 0; color: #393939;">Normal</h4>
+    <ad-select :options="defaultOptions" placeholder="Placeholder goes here" />
+  </div>
+</template>
+
+<script setup lang="ts">
+import { AdSelect } from '@apron-design/vue-next'
+
+const defaultOptions = [
+  { label: 'Option 1', value: 'option1' },
+  { label: 'Option 2', value: 'option2', disabled: true },
+  { label: 'Selected Option', value: 'selected' },
+  { label: 'Hover Option', value: 'hover' },
+  { label: 'Option 5 goes here', value: 'option5' },
+]
+</script>
+```
+:::
+
+### 选中/聚焦状态
+
+:::demo
+```vue
+<template>
+  <div style="width: 400px;">
+    <h4 style="margin: 0 0 12px 0; color: #393939;">Selected/Focused</h4>
+    <ad-select
+      :options="defaultOptions"
+      default-value="option1"
+      placeholder="Placeholder goes here"
+    />
+  </div>
+</template>
+
+<script setup lang="ts">
+import { AdSelect } from '@apron-design/vue-next'
+
+const defaultOptions = [
+  { label: 'Option 1', value: 'option1' },
+  { label: 'Option 2', value: 'option2', disabled: true },
+  { label: 'Selected Option', value: 'selected' },
+  { label: 'Hover Option', value: 'hover' },
+  { label: 'Option 5 goes here', value: 'option5' },
+]
+</script>
+```
+:::
+
+### 加载状态
+
+:::demo
+```vue
+<template>
+  <div style="display: flex; flex-direction: column; gap: 24px; width: 400px;">
+    <div>
+      <h4 style="margin: 0 0 12px 0; color: #393939;">Loading (no value)</h4>
+      <ad-select
+        :options="defaultOptions"
+        placeholder="Placeholder goes here"
+        loading
+      />
+    </div>
+    <div>
+      <h4 style="margin: 0 0 12px 0; color: #393939;">Loading (with value)</h4>
+      <ad-select
+        :options="defaultOptions"
+        default-value="option1"
+        loading
+      />
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { AdSelect } from '@apron-design/vue-next'
+
+const defaultOptions = [
+  { label: 'Option 1', value: 'option1' },
+  { label: 'Option 2', value: 'option2', disabled: true },
+  { label: 'Selected Option', value: 'selected' },
+  { label: 'Hover Option', value: 'hover' },
+  { label: 'Option 5 goes here', value: 'option5' },
+]
+</script>
+```
+:::
+
+### 禁用状态
+
+:::demo
+```vue
+<template>
+  <div style="width: 400px;">
+    <h4 style="margin: 0 0 12px 0; color: #393939;">Disabled</h4>
+    <ad-select
+      :options="defaultOptions"
+      default-value="option1"
+      disabled
+    />
+  </div>
+</template>
+
+<script setup lang="ts">
+import { AdSelect } from '@apron-design/vue-next'
+
+const defaultOptions = [
+  { label: 'Option 1', value: 'option1' },
+  { label: 'Option 2', value: 'option2', disabled: true },
+  { label: 'Selected Option', value: 'selected' },
+  { label: 'Hover Option', value: 'hover' },
+  { label: 'Option 5 goes here', value: 'option5' },
+]
+</script>
+```
+:::
+
+### 下拉框展开
+
+:::demo
+```vue
+<template>
+  <div style="width: 400px;">
+    <h4 style="margin: 0 0 12px 0; color: #393939;">Dropdown</h4>
+    <ad-select
+      :options="defaultOptions"
+      v-model="value"
+      placeholder="Select an option"
+    />
+    <p style="margin: 12px 0 0; color: #666;">
+      Selected: {{ value || 'None' }}
+    </p>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { AdSelect } from '@apron-design/vue-next'
+
+const value = ref('selected')
+
+const defaultOptions = [
+  { label: 'Option 1', value: 'option1' },
+  { label: 'Option 2', value: 'option2', disabled: true },
+  { label: 'Selected Option', value: 'selected' },
+  { label: 'Hover Option', value: 'hover' },
+  { label: 'Option 5 goes here', value: 'option5' },
+]
+</script>
+```
+:::
+
+### 带滚动条（超过5个选项）
+
+:::demo
+```vue
+<template>
+  <div style="width: 400px;">
+    <h4 style="margin: 0 0 12px 0; color: #393939;">With Scrolling (8 options)</h4>
+    <ad-select
+      :options="manyOptions"
+      placeholder="Select an option"
+    />
+  </div>
+</template>
+
+<script setup lang="ts">
+import { AdSelect } from '@apron-design/vue-next'
+
+const manyOptions = [
+  { label: 'Option 1', value: '1' },
+  { label: 'Option 2', value: '2' },
+  { label: 'Option 3', value: '3' },
+  { label: 'Option 4', value: '4' },
+  { label: 'Option 5', value: '5' },
+  { label: 'Option 6', value: '6' },
+  { label: 'Option 7', value: '7' },
+  { label: 'Option 8', value: '8' },
+]
+</script>
+```
+:::
+
+### Inflow 模式
+
+在 Inflow 模式下，下拉框会展开容器高度。
+
+:::demo
+```vue
+<template>
+  <div style="width: 400px;">
+    <h4 style="margin: 0 0 12px 0; color: #393939;">Inflow Mode</h4>
+    <div style="border: 1px solid #e4e4e7; border-radius: 12px; padding: 16px;">
+      <p style="margin: 0 0 12px; color: #666;">
+        Container will expand when dropdown opens
+      </p>
+      <ad-select
+        :options="defaultOptions"
+        v-model="value"
+        placeholder="Select an option"
+        inflow
+      />
+      <p style="margin: 12px 0 0; color: #666;">
+        Selected: {{ value || 'None' }}
+      </p>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { AdSelect } from '@apron-design/vue-next'
+
+const value = ref()
+
+const defaultOptions = [
+  { label: 'Option 1', value: 'option1' },
+  { label: 'Option 2', value: 'option2', disabled: true },
+  { label: 'Selected Option', value: 'selected' },
+  { label: 'Hover Option', value: 'hover' },
+  { label: 'Option 5 goes here', value: 'option5' },
+]
+</script>
+```
+:::
+
+### Float 模式（默认）
+
+在 Float 模式下，下拉框会浮动在内容之上。
+
+:::demo
+```vue
+<template>
+  <div style="width: 400px;">
+    <h4 style="margin: 0 0 12px 0; color: #393939;">Float Mode (Default)</h4>
+    <div style="border: 1px solid #e4e4e7; border-radius: 12px; padding: 16px;">
+      <p style="margin: 0 0 12px; color: #666;">
+        Dropdown floats over content
+      </p>
+      <ad-select
+        :options="defaultOptions"
+        v-model="value"
+        placeholder="Select an option"
+      />
+      <p style="margin: 12px 0 0; color: #666;">
+        Selected: {{ value || 'None' }}
+      </p>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { AdSelect } from '@apron-design/vue-next'
+
+const value = ref()
+
+const defaultOptions = [
+  { label: 'Option 1', value: 'option1' },
+  { label: 'Option 2', value: 'option2', disabled: true },
+  { label: 'Selected Option', value: 'selected' },
+  { label: 'Hover Option', value: 'hover' },
+  { label: 'Option 5 goes here', value: 'option5' },
+]
+</script>
+```
+:::
+
+### 带禁用选项
+
+:::demo
+```vue
+<template>
+  <div style="width: 400px;">
+    <h4 style="margin: 0 0 12px 0; color: #393939;">With Disabled Options</h4>
+    <ad-select
+      :options="[
+        { label: 'Available Option 1', value: '1' },
+        { label: 'Disabled Option', value: '2', disabled: true },
+        { label: 'Available Option 3', value: '3' },
+        { label: 'Another Disabled', value: '4', disabled: true },
+        { label: 'Available Option 5', value: '5' },
+      ]"
+      placeholder="Select an option"
+    />
+  </div>
+</template>
+
+<script setup lang="ts">
+import { AdSelect } from '@apron-design/vue-next'
+</script>
+```
+:::
+
+### 受控模式
+
+在受控模式下，可以通过 `v-model` 和 `@change` 事件控制选择器的值。
+
+:::demo
+```vue
+<template>
+  <div style="width: 400px;">
+    <h4 style="margin: 0 0 12px 0; color: #393939;">Controlled Mode</h4>
+    <ad-select
+      :options="defaultOptions"
+      v-model="value"
+      @change="handleChange"
+    />
+    <div style="margin-top: 16px; display: flex; gap: 8px;">
+      <ad-button @click="value = 'option1'">Set Option 1</ad-button>
+      <ad-button @click="value = 'selected'">Set Selected</ad-button>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { AdSelect, AdButton } from '@apron-design/vue-next'
+
+const value = ref('option1')
+
+const defaultOptions = [
+  { label: 'Option 1', value: 'option1' },
+  { label: 'Option 2', value: 'option2', disabled: true },
+  { label: 'Selected Option', value: 'selected' },
+  { label: 'Hover Option', value: 'hover' },
+  { label: 'Option 5 goes here', value: 'option5' },
+]
+
+const handleChange = (val: string | number) => {
+  console.log('Value changed:', val)
+}
+</script>
+```
+:::
+
+## API
+
+### Select Props
+
+| 参数 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| v-model / modelValue | 当前选中的值（受控模式） | `string \| number` | - |
+| defaultValue | 默认选中的值（非受控模式） | `string \| number` | - |
+| options | 选项列表 | `SelectOption[]` | `[]` |
+| placeholder | 占位文本 | `string` | `'Placeholder goes here'` |
+| disabled | 是否禁用 | `boolean` | `false` |
+| loading | 是否加载中 | `boolean` | `false` |
+| inflow | 是否使用 inflow 模式（撑开容器） | `boolean` | `false` |
+| class | 自定义类名 | `string` | - |
+
+### Select Events
 
 | 事件名 | 说明 | 回调参数 |
-| ---- | ---- | ---- |
-| change | 选中值发生变化时触发 | 选中项的值 |
-| clear | 可清空的单选模式下用户点击清空按钮时触发 | — |
-| visible-change | 下拉框出现/隐藏时触发 | 出现则为 true，隐藏则为 false |
+| --- | --- | --- |
+| change | 选中值改变时的回调 | `(value: string \| number, option: SelectOption) => void` |
+| open-change | 下拉框展开/收起回调 | `(open: boolean) => void` |
+| update:modelValue | v-model 更新事件 | `(value: string \| number) => void` |
 
-## 插槽
+### SelectOption
 
-| 插槽名 | 说明 |
-| ---- | ---- |
-| default | 自定义选项内容 |
-| prefix | 输入框头部内容 |
-| suffix | 输入框尾部内容 |
+| 参数 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| label | 选项标签 | `string \| VNode \| (() => VNode)` | - |
+| value | 选项值 | `string \| number` | - |
+| disabled | 是否禁用该选项 | `boolean` | - |
 
-## Option 属性
+## 注意事项
 
-| 参数 | 说明 | 类型 | 可选值 | 默认值 |
-| ---- | ---- | ---- | ---- | ---- |
-| value | 选项的值 | string / number / boolean | — | — |
-| label | 选项标签 | string | — | — |
-| disabled | 是否禁用该选项 | boolean | — | false |
+1. 选择器支持两种模式：
+   - 受控模式：通过 `v-model` 双向绑定控制值
+   - 非受控模式：通过 `defaultValue` 属性设置默认值
+2. 使用 `v-model` 进行双向绑定是最推荐的方式，它会自动处理值的更新
+3. 通过 `inflow` 属性可以切换下拉框的显示模式：
+   - `inflow=false`（默认）：下拉框浮动显示
+   - `inflow=true`：下拉框撑开容器显示
+4. 在加载状态下，选择器会显示加载图标，此时无法进行交互
+5. 可以为选项设置 `disabled` 属性来禁用特定选项
+6. 选择器支持键盘导航：
+   - Enter 或空格键：打开/关闭下拉框
+   - Escape 键：关闭下拉框
+   - 方向键：导航选项
+7. 选择器会自动处理点击外部区域关闭下拉框的逻辑
+8. 在暗色模式下，选择器会自动适配主题颜色

@@ -27,7 +27,7 @@ Spin 组件用于页面或组件的加载状态指示，提供多种展示方式
 </template>
 
 <script setup lang="ts">
-import { Spin } from '@apron-design/vue-next'
+import { AdSpin } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -43,7 +43,7 @@ import { Spin } from '@apron-design/vue-next'
 </template>
 
 <script setup lang="ts">
-import { Spin } from '@apron-design/vue-next'
+import { AdSpin } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -59,7 +59,7 @@ import { Spin } from '@apron-design/vue-next'
 </template>
 
 <script setup lang="ts">
-import { Spin } from '@apron-design/vue-next'
+import { AdSpin } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -94,7 +94,7 @@ Spin 组件可以包裹其他内容，在加载时显示遮罩层。
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Spin, Button } from '@apron-design/vue-next'
+import { AdSpin, AdButton } from '@apron-design/vue-next'
 
 const loading = ref(true)
 </script>
@@ -134,7 +134,7 @@ Spin 组件支持多种位置选项。
 </template>
 
 <script setup lang="ts">
-import { Spin } from '@apron-design/vue-next'
+import { AdSpin } from '@apron-design/vue-next'
 
 const placements = [
   'top-left',
@@ -185,7 +185,7 @@ const placements = [
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Spin, Button } from '@apron-design/vue-next'
+import { AdSpin, AdButton } from '@apron-design/vue-next'
 
 const placement = ref('center')
 
@@ -211,31 +211,30 @@ const placements = [
 :::demo
 ```vue
 <template>
-  <ad-spin :loading="true" :icon="customIcon" text="自定义图标" />
+  <ad-spin :loading="true" :icon="CustomLoadingIcon" text="自定义图标" />
 </template>
 
 <script setup lang="ts">
 import { h } from 'vue'
-import { Spin } from '@apron-design/vue-next'
+import { AdSpin } from '@apron-design/vue-next'
 
-const customIcon = () =>
-  h('svg', {
-    width: '32',
-    height: '32',
-    viewBox: '0 0 32 32',
-    fill: 'none',
-    style: { animation: 'spin 1s linear infinite' }
-  }, [
-    h('circle', { cx: '16', cy: '4', r: '3', fill: 'currentColor', opacity: '1' }),
-    h('circle', { cx: '24.5', cy: '7.5', r: '3', fill: 'currentColor', opacity: '0.875' }),
-    h('circle', { cx: '28', cy: '16', r: '3', fill: 'currentColor', opacity: '0.75' }),
-    h('circle', { cx: '24.5', cy: '24.5', r: '3', fill: 'currentColor', opacity: '0.625' }),
-    h('circle', { cx: '16', cy: '28', r: '3', fill: 'currentColor', opacity: '0.5' }),
-    h('circle', { cx: '7.5', cy: '24.5', r: '3', fill: 'currentColor', opacity: '0.375' }),
-    h('circle', { cx: '4', cy: '16', r: '3', fill: 'currentColor', opacity: '0.25' }),
-    h('circle', { cx: '7.5', cy: '7.5', r: '3', fill: 'currentColor', opacity: '0.125' }),
-    h('style', {}, '@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }')
-  ])
+const CustomLoadingIcon = () => h('svg', {
+  width: '32',
+  height: '32',
+  viewBox: '0 0 32 32',
+  fill: 'none',
+  style: { animation: 'spin 1s linear infinite' }
+}, [
+  h('circle', { cx: '16', cy: '4', r: '3', fill: 'currentColor', opacity: '1' }),
+  h('circle', { cx: '24.5', cy: '7.5', r: '3', fill: 'currentColor', opacity: '0.875' }),
+  h('circle', { cx: '28', cy: '16', r: '3', fill: 'currentColor', opacity: '0.75' }),
+  h('circle', { cx: '24.5', cy: '24.5', r: '3', fill: 'currentColor', opacity: '0.625' }),
+  h('circle', { cx: '16', cy: '28', r: '3', fill: 'currentColor', opacity: '0.5' }),
+  h('circle', { cx: '7.5', cy: '24.5', r: '3', fill: 'currentColor', opacity: '0.375' }),
+  h('circle', { cx: '4', cy: '16', r: '3', fill: 'currentColor', opacity: '0.25' }),
+  h('circle', { cx: '7.5', cy: '7.5', r: '3', fill: 'currentColor', opacity: '0.125' }),
+  h('style', {}, '@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }')
+])
 </script>
 ```
 :::
@@ -256,12 +255,12 @@ const customIcon = () =>
 </template>
 
 <script setup lang="ts">
-import { Spin, Button } from '@apron-design/vue-next'
+import { AdSpin, AdButton } from '@apron-design/vue-next'
 
 const handleShow = () => {
-  Spin.show({ text: '全屏加载中...' })
+  AdSpin.show({ text: '全屏加载中...' })
   setTimeout(() => {
-    Spin.close()
+    AdSpin.close()
   }, 3000)
 }
 </script>
@@ -292,7 +291,7 @@ const handleShow = () => {
 </template>
 
 <script setup lang="ts">
-import { Spin, Button } from '@apron-design/vue-next'
+import { AdSpin, AdButton } from '@apron-design/vue-next'
 
 const placements = [
   'center',
@@ -305,9 +304,9 @@ const placements = [
 ]
 
 const handleShow = (placement: string) => {
-  Spin.show({ text: `位置: ${placement}`, placement })
+  AdSpin.show({ text: `位置: ${placement}`, placement: placement as any })
   setTimeout(() => {
-    Spin.close()
+    AdSpin.close()
   }, 2000)
 }
 </script>
@@ -362,7 +361,7 @@ const handleShow = (placement: string) => {
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Spin, Button } from '@apron-design/vue-next'
+import { AdSpin, AdButton } from '@apron-design/vue-next'
 
 const loading = ref(true)
 </script>
@@ -407,7 +406,7 @@ const loading = ref(true)
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Spin, Button } from '@apron-design/vue-next'
+import { AdSpin, AdButton } from '@apron-design/vue-next'
 
 const loading = ref(true)
 </script>
@@ -422,16 +421,16 @@ const loading = ref(true)
 | --- | --- | --- | --- |
 | loading | 是否显示加载中 | `boolean` | `true` |
 | icon | 自定义图标 | `VNode \| (() => VNode)` | - |
-| text | 提示文字 | `string` | `'加载中'` |
+| text | 提示文字 | `string` | - |
 | placement | 位置 | `'center' \| 'top' \| 'bottom' \| 'left' \| 'right' \| 'top-left' \| 'top-right' \| 'bottom-left' \| 'bottom-right'` | `'center'` |
-| className | 自定义类名 | `string` | - |
+| class | 自定义类名 | `string` | - |
 | fullscreen | 是否全屏 | `boolean` | `false` |
 
 ### Spin Slots
 
 | 名称 | 说明 |
 | --- | --- |
-| default | 子元素（包裹模式） |
+| default | 被包裹的内容（包裹模式） |
 
 ### Spin Static Methods
 
@@ -451,7 +450,7 @@ const loading = ref(true)
    - `'top'`、`'bottom'`、`'left'`、`'right'`：对应边缘居中
    - `'top-left'`、`'top-right'`、`'bottom-left'`、`'bottom-right'`：对应角落
 4. 通过 `text` 属性可以设置提示文字
-5. 通过 `icon` 属性可以自定义加载图标
+5. 通过 `icon` 属性可以自定义加载图标，需要使用 Vue 的 `h` 函数创建 VNode
 6. 全屏模式：
    - 使用 `Spin.show()` 方法显示全屏加载状态
    - 使用 `Spin.close()` 方法关闭全屏加载状态

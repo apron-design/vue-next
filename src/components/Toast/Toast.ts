@@ -1,5 +1,6 @@
-import { createApp, h, ref, watch } from 'vue'
+import { createApp, h, ref, watch, defineComponent, type PropType, onMounted, onUnmounted } from 'vue'
 import type { ToastType, ToastOptions } from './types'
+import './Toast.less'
 
 // 成功图标
 const SuccessIcon = () => h('svg', {
@@ -100,62 +101,88 @@ const iconMap: Record<ToastType, () => any> = {
 }
 
 // Toast 内容组件
-const ToastContent = (props: { type: ToastType; text?: string; icon?: any }) => {
-  return h('div', { class: 'apron-toast__content' }, [
-    h('div', { class: 'apron-toast__icon' }, [
-      props.icon || h(iconMap[props.type])
-    ]),
-    props.text && h('div', { class: 'apron-toast__text' }, props.text)
-  ])
-}
-
-// Toast 容器组件
-const ToastContainer = (props: { visible: boolean; options: ToastOptions }) => {
-  const isVisible = ref(false)
-  const isAnimating = ref(false)
-
-  // 监听visible变化
-  const updateVisibility = () => {
-    if (props.visible) {
-      isVisible.value = true
-      isAnimating.value = true
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          isAnimating.value = false
-        })
-      })
-    } else {
-      isAnimating.value = true
-      setTimeout(() => {
-        isVisible.value = false
-        isAnimating.value = false
-      }, 300)
+const ToastContent = defineComponent({
+  props: {
+    type: {
+      type: String as PropType<ToastType>,
+      required: true
+    },
+    text: String,
+    icon: null
+  },
+  setup(props) {
+    return () => {
+      const Icon = iconMap[props.type]
+      return h('div', { class: 'apron-toast__content' }, [
+        h('div', { class: 'apron-toast__icon' }, [
+          props.icon || h(Icon)
+        ]),
+        props.text && h('div', { class: 'apron-toast__text' }, props.text)
+      ])
     }
   }
+})
 
-  // 监听props.visible变化
-  watch(() => props.visible, updateVisibility, { immediate: true })
+// Toast 容器组件
+const ToastContainer = defineComponent({
+  props: {
+    visible: Boolean,
+    options: Object as PropType<ToastOptions>
+  },
+  setup(props) {
+    const isVisible = ref(false)
+    const isAnimating = ref(false)
+    let closeTimer: ReturnType<typeof setTimeout> | null = null
 
-  return () => {
-    if (!isVisible.value) return null
+    // 监听visible变化
+    watch(() => props.visible, (newVisible) => {
+      // 清除之前的关闭定时器
+      if (closeTimer) {
+        clearTimeout(closeTimer)
+        closeTimer = null
+      }
 
-    const classNames = [
-      'apron-toast',
-      props.visible && !isAnimating.value && 'apron-toast--visible',
-      isAnimating.value && (props.visible ? 'apron-toast--entering' : 'apron-toast--leaving')
-    ].filter(Boolean).join(' ')
+      if (newVisible) {
+        isVisible.value = true
+        isAnimating.value = true
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            isAnimating.value = false
+          })
+        })
+      } else {
+        if (isVisible.value) {
+          isAnimating.value = true
+          closeTimer = setTimeout(() => {
+            isVisible.value = false
+            isAnimating.value = false
+            closeTimer = null
+          }, 300)
+        }
+      }
+    }, { immediate: true })
 
-    return h('div', { class: 'apron-toast__overlay' }, [
-      h('div', { class: classNames }, [
-        h(ToastContent({
-          type: props.options.type || 'success',
-          text: props.options.text,
-          icon: props.options.icon
-        }))
+    return () => {
+      if (!isVisible.value) return null
+
+      const classNames = [
+        'apron-toast',
+        props.visible && !isAnimating.value && 'apron-toast--visible',
+        isAnimating.value && (props.visible ? 'apron-toast--entering' : 'apron-toast--leaving')
+      ].filter(Boolean).join(' ')
+
+      return h('div', { class: 'apron-toast__overlay' }, [
+        h('div', { class: classNames }, [
+          h(ToastContent, {
+            type: props.options?.type || 'success',
+            text: props.options?.text,
+            icon: props.options?.icon
+          })
+        ])
       ])
-    ])
+    }
   }
-}
+})
 
 // 全局状态管理
 let toastContainer: HTMLDivElement | null = null
@@ -164,23 +191,32 @@ let setGlobalVisible: ((visible: boolean) => void) | null = null
 let setGlobalOptions: ((options: ToastOptions) => void) | null = null
 let autoCloseTimer: ReturnType<typeof setTimeout> | null = null
 
-const GlobalToastManager = () => {
-  const visible = ref(false)
-  const options = ref<ToastOptions>({})
+const GlobalToastManager = defineComponent({
+  setup() {
+    const visible = ref(false)
+    const options = ref<ToastOptions>({})
 
-  setGlobalVisible = (val: boolean) => {
-    visible.value = val
+    onMounted(() => {
+      setGlobalVisible = (val: boolean) => {
+        visible.value = val
+      }
+
+      setGlobalOptions = (opts: ToastOptions) => {
+        options.value = opts
+      }
+    })
+
+    onUnmounted(() => {
+      setGlobalVisible = null
+      setGlobalOptions = null
+    })
+
+    return () => h(ToastContainer, {
+      visible: visible.value,
+      options: options.value
+    })
   }
-
-  setGlobalOptions = (opts: ToastOptions) => {
-    options.value = opts
-  }
-
-  return h(ToastContainer({
-    visible: visible.value,
-    options: options.value
-  }))
-}
+})
 
 // SSR 检查
 const canUseDOM = typeof window !== 'undefined' && typeof document !== 'undefined'
@@ -198,6 +234,9 @@ const ensureContainer = () => {
   }
 }
 
+// 全局状态标志
+let isToastVisible = false
+
 // 显示 Toast
 const showToast = (options: ToastOptions) => {
   ensureContainer()
@@ -208,12 +247,41 @@ const showToast = (options: ToastOptions) => {
     autoCloseTimer = null
   }
 
-  setTimeout(() => {
-    if (setGlobalOptions) {
-      setGlobalOptions(options)
-    }
+  // 先更新选项
+  if (setGlobalOptions) {
+    setGlobalOptions(options)
+  }
+
+  // 如果 Toast 正在显示，先关闭它
+  if (isToastVisible && setGlobalVisible) {
+    setGlobalVisible(false)
+    isToastVisible = false
+    // 等待关闭动画完成后再显示新的 Toast
+    setTimeout(() => {
+      if (setGlobalOptions) {
+        setGlobalOptions(options)
+      }
+      if (setGlobalVisible) {
+        setGlobalVisible(true)
+        isToastVisible = true
+      }
+
+      // 自动关闭（loading 类型默认不自动关闭）
+      const duration = options.duration ?? (options.type === 'loading' ? 0 : 2000)
+      if (duration > 0) {
+        autoCloseTimer = setTimeout(() => {
+          if (setGlobalVisible) {
+            setGlobalVisible(false)
+            isToastVisible = false
+          }
+        }, duration)
+      }
+    }, 350) // 等待关闭动画完成（300ms + 50ms 缓冲）
+  } else {
+    // 直接显示
     if (setGlobalVisible) {
       setGlobalVisible(true)
+      isToastVisible = true
     }
 
     // 自动关闭（loading 类型默认不自动关闭）
@@ -222,10 +290,11 @@ const showToast = (options: ToastOptions) => {
       autoCloseTimer = setTimeout(() => {
         if (setGlobalVisible) {
           setGlobalVisible(false)
+          isToastVisible = false
         }
       }, duration)
     }
-  }, 0)
+  }
 }
 
 // 关闭 Toast
@@ -236,6 +305,7 @@ const closeToast = () => {
   }
   if (setGlobalVisible) {
     setGlobalVisible(false)
+    isToastVisible = false
   }
 }
 

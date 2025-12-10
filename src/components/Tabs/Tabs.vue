@@ -72,7 +72,6 @@ defineExpose({
 // ============================================
 // Tabs CSS Variables (Dark Mode)
 // ============================================
-.dark,
 [data-prefers-color='dark'] {
   --apron-tabs-text-color: @color-primary-300;
   --apron-tabs-text-active-color: @color-primary-100;

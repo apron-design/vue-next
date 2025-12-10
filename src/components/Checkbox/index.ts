@@ -1,5 +1,7 @@
 import AdCheckbox from './Checkbox.vue'
+import AdCheckboxGroup from './CheckboxGroup.vue'
 
 export type { CheckboxProps } from './Checkbox.vue'
-export { AdCheckbox }
+export type { CheckboxGroupProps, CheckboxOptionType, CheckboxValueType } from './CheckboxGroup.vue'
+export { AdCheckbox, AdCheckboxGroup }
 export default AdCheckbox

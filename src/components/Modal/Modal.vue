@@ -147,13 +147,14 @@ watch(() => props.open, (newOpen) => {
   if (newOpen) {
     isVisible.value = true
     isAnimating.value = true
-    // 要用页面滚动
+    // 禁用页面滚动
     document.body.style.overflow = 'hidden'
     // 等待 DOM 更新后触发动画
     nextTick(() => {
       requestAnimationFrame(() => {
-        isAnimating.value = false
-        emit('afterOpenChange', true)
+        requestAnimationFrame(() => {
+          isAnimating.value = false
+        })
       })
     })
   } else {
@@ -168,6 +169,13 @@ watch(() => props.open, (newOpen) => {
     }, 300)
   }
 }, { immediate: true })
+
+// 通知打开完成
+watch([() => props.open, isAnimating, isVisible], ([open, animating, visible]) => {
+  if (open && !animating && visible) {
+    emit('afterOpenChange', true)
+  }
+})
 
 // 处理 ESC 键关闭
 const handleEscape = (e: KeyboardEvent) => {

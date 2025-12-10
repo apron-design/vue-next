@@ -1,31 +1,33 @@
 <template>
-  <div>
-    <slot 
-      :ref="(el: any) => triggerRef = el as HTMLElement"
-      @mouseenter="open"
-      @mouseleave="close"
-    ></slot>
-    <Teleport to="body" v-if="visible">
-      <div
-        ref="tooltipRef"
-        :class="['apron-tooltip', props.className]"
-        :style="{ top: position.top + 'px', left: position.left + 'px' }"
-        @mouseenter="handleTooltipMouseEnter"
-        @mouseleave="handleTooltipMouseLeave"
-        role="tooltip"
-      >
-        <div class="apron-tooltip__arrow"></div>
-        <div class="apron-tooltip__content">
-          <slot name="content">{{ content }}</slot>
-        </div>
+  <span
+    ref="wrapperRef"
+    @mouseenter="handleMouseEnter"
+    @mouseleave="handleMouseLeave"
+    style="display: inline-block;"
+  >
+    <slot></slot>
+  </span>
+  <Teleport to="body" v-if="visible && hasContent">
+    <div
+      ref="tooltipRef"
+      :class="['apron-tooltip', props.className]"
+      :style="{ top: position.top + 'px', left: position.left + 'px' }"
+      @mouseenter="handleTooltipMouseEnter"
+      @mouseleave="handleTooltipMouseLeave"
+      role="tooltip"
+    >
+      <div class="apron-tooltip__arrow"></div>
+      <div class="apron-tooltip__content">
+        <slot name="content">{{ content }}</slot>
       </div>
-    </Teleport>
-  </div>
+    </div>
+  </Teleport>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, nextTick, useSlots } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick, watch, computed, useSlots } from 'vue'
 import type { TooltipProps } from './types'
+import './Tooltip.less'
 
 // 默认属性
 const props = withDefaults(defineProps<TooltipProps>(), {
@@ -36,8 +38,16 @@ const props = withDefaults(defineProps<TooltipProps>(), {
 // 定义 emits
 const emit = defineEmits(['update:visible'])
 
+// 插槽
+const slots = useSlots()
+
+// 检查是否有内容
+const hasContent = computed(() => {
+  return Boolean(props.content) || Boolean(slots.content)
+})
+
 // 引用
-const triggerRef = ref<HTMLElement | null>(null)
+const wrapperRef = ref<HTMLElement | null>(null)
 const tooltipRef = ref<HTMLDivElement | null>(null)
 const hoverTimeout = ref<ReturnType<typeof setTimeout> | null>(null)
 
@@ -45,14 +55,11 @@ const hoverTimeout = ref<ReturnType<typeof setTimeout> | null>(null)
 const visible = ref(false)
 const position = ref({ top: 0, left: 0 })
 
-// 插槽
-const slots = useSlots()
-
 // 计算位置（Tooltip 在触发元素上方，箭头指向下方）
 const updatePosition = () => {
-  if (!triggerRef.value || !tooltipRef.value) return
+  if (!wrapperRef.value || !tooltipRef.value) return
 
-  const triggerRect = triggerRef.value.getBoundingClientRect()
+  const triggerRect = wrapperRef.value.getBoundingClientRect()
   const tooltipRect = tooltipRef.value.getBoundingClientRect()
 
   const top = triggerRect.top - tooltipRect.height - 8 + window.scrollY
@@ -69,6 +76,8 @@ const updatePosition = () => {
 
 // 打开 Tooltip
 const open = () => {
+  if (!hasContent.value) return
+  
   if (hoverTimeout.value) {
     clearTimeout(hoverTimeout.value)
     hoverTimeout.value = null
@@ -77,7 +86,9 @@ const open = () => {
   
   // 延迟计算以确保 DOM 已渲染
   nextTick(() => {
-    updatePosition()
+    requestAnimationFrame(() => {
+      updatePosition()
+    })
   })
 }
 
@@ -86,6 +97,16 @@ const close = () => {
   hoverTimeout.value = setTimeout(() => {
     visible.value = false
   }, 100)
+}
+
+// 处理鼠标进入
+const handleMouseEnter = () => {
+  open()
+}
+
+// 处理鼠标离开
+const handleMouseLeave = () => {
+  close()
 }
 
 // Tooltip 的 hover 事件（保持打开）
@@ -112,6 +133,17 @@ const handleScroll = () => {
     updatePosition()
   }
 }
+
+// 监听 visible 变化，更新位置
+watch(visible, (newVisible) => {
+  if (newVisible) {
+    nextTick(() => {
+      requestAnimationFrame(() => {
+        updatePosition()
+      })
+    })
+  }
+})
 
 // 生命周期钩子
 onMounted(() => {

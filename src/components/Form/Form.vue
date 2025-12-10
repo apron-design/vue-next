@@ -310,6 +310,7 @@ const classes = computed(() => [
 
 <style lang="less">
 @import '../../styles/variables.less';
+@import '../../styles/mixins.less';
 
 // ============================================
 // Form CSS Variables (Light Mode)
