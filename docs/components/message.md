@@ -24,16 +24,15 @@ order: 3
 ```vue
 <template>
   <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-    <Button @click="() => message.info('This is an info message')">Info</Button>
-    <Button @click="() => message.success('Operation successful!')" variant="primary">Success</Button>
-    <Button @click="() => message.warning('Please be careful!')" variant="warning">Warning</Button>
-    <Button @click="() => message.error('Something went wrong!')" variant="danger">Error</Button>
+    <ad-button @click="() => message.info('This is an info message')">Info</ad-button>
+    <ad-button @click="() => message.success('Operation successful!')" variant="primary">Success</ad-button>
+    <ad-button @click="() => message.warning('Please be careful!')" variant="warning">Warning</ad-button>
+    <ad-button @click="() => message.error('Something went wrong!')" variant="danger">Error</ad-button>
   </div>
 </template>
 
 <script setup lang="ts">
 import { message } from '@apron-design/vue-next'
-import { Button } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -46,16 +45,15 @@ import { Button } from '@apron-design/vue-next'
 ```vue
 <template>
   <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-    <Button @click="() => message.show('info', 'Info message via show()')">Show Info</Button>
-    <Button @click="() => message.show('success', 'Success message via show()')" variant="primary">Show Success</Button>
-    <Button @click="() => message.show('warning', 'Warning message via show()')" variant="warning">Show Warning</Button>
-    <Button @click="() => message.show('error', 'Error message via show()')" variant="danger">Show Error</Button>
+    <ad-button @click="() => message.show('info', 'Info message via show()')">Show Info</ad-button>
+    <ad-button @click="() => message.show('success', 'Success message via show()')" variant="primary">Show Success</ad-button>
+    <ad-button @click="() => message.show('warning', 'Warning message via show()')" variant="warning">Show Warning</ad-button>
+    <ad-button @click="() => message.show('error', 'Error message via show()')" variant="danger">Show Error</ad-button>
   </div>
 </template>
 
 <script setup lang="ts">
 import { message } from '@apron-design/vue-next'
-import { Button } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -67,12 +65,11 @@ import { Button } from '@apron-design/vue-next'
 :::demo
 ```vue
 <template>
-  <Button @click="showMultiple">Show Multiple Messages</Button>
+  <ad-button @click="showMultiple">Show Multiple Messages</ad-button>
 </template>
 
 <script setup lang="ts">
 import { message } from '@apron-design/vue-next'
-import { Button } from '@apron-design/vue-next'
 
 const showMultiple = () => {
   message.info('First message')
@@ -92,15 +89,14 @@ const showMultiple = () => {
 ```vue
 <template>
   <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-    <Button @click="() => message.info('2 seconds', 2000)">2s Duration</Button>
-    <Button @click="() => message.success('10 seconds', 10000)" variant="primary">10s Duration</Button>
-    <Button @click="() => message.warning('Will not auto close', 0)" variant="warning">No Auto Close</Button>
+    <ad-button @click="() => message.info('2 seconds', 2000)">2s Duration</ad-button>
+    <ad-button @click="() => message.success('10 seconds', 10000)" variant="primary">10s Duration</ad-button>
+    <ad-button @click="() => message.warning('Will not auto close', 0)" variant="warning">No Auto Close</ad-button>
   </div>
 </template>
 
 <script setup lang="ts">
 import { message } from '@apron-design/vue-next'
-import { Button } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -112,12 +108,11 @@ import { Button } from '@apron-design/vue-next'
 :::demo
 ```vue
 <template>
-  <Button @click="showRichContent">Show Rich Content</Button>
+  <ad-button @click="showRichContent">Show Rich Content</ad-button>
 </template>
 
 <script setup lang="ts">
 import { message } from '@apron-design/vue-next'
-import { Button } from '@apron-design/vue-next'
 
 const showRichContent = () => {
   message.success('Your file report.pdf has been uploaded successfully!')
@@ -134,15 +129,14 @@ const showRichContent = () => {
 ```vue
 <template>
   <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-    <Button @click="showMessage">Show Message</Button>
-    <Button @click="removeMessage" :disabled="!messageId">Remove Message</Button>
+    <ad-button @click="showMessage">Show Message</ad-button>
+    <ad-button @click="removeMessage" :disabled="!messageId">Remove Message</ad-button>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import { message } from '@apron-design/vue-next'
-import { Button } from '@apron-design/vue-next'
 
 const messageId = ref<string | null>(null)
 
@@ -169,14 +163,13 @@ const removeMessage = () => {
 ```vue
 <template>
   <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-    <Button @click="showMultipleMessages">Show Multiple Messages</Button>
-    <Button @click="() => message.clear()" variant="danger">Clear All</Button>
+    <ad-button @click="showMultipleMessages">Show Multiple Messages</ad-button>
+    <ad-button @click="() => message.clear()" variant="danger">Clear All</ad-button>
   </div>
 </template>
 
 <script setup lang="ts">
 import { message } from '@apron-design/vue-next'
-import { Button } from '@apron-design/vue-next'
 
 const showMultipleMessages = () => {
   message.info('Message 1', 0)
@@ -197,21 +190,20 @@ const showMultipleMessages = () => {
 <template>
   <div style="display: flex; flex-direction: column; gap: 12px;">
     <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-      <Button @click="handleSuccess" variant="primary">成功操作</Button>
-      <Button @click="handleError" variant="default">错误操作</Button>
-      <Button @click="handleWarning" variant="warning">警告提示</Button>
-      <Button @click="handleInfo" variant="default">信息提示</Button>
+      <ad-button @click="handleSuccess" variant="primary">成功操作</ad-button>
+      <ad-button @click="handleError" variant="default">错误操作</ad-button>
+      <ad-button @click="handleWarning" variant="warning">警告提示</ad-button>
+      <ad-button @click="handleInfo" variant="default">信息提示</ad-button>
     </div>
     <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-      <Button @click="handleCustom">自定义时长</Button>
-      <Button @click="() => message.clear()" variant="danger">清除所有</Button>
+      <ad-button @click="handleCustom">自定义时长</ad-button>
+      <ad-button @click="() => message.clear()" variant="danger">清除所有</ad-button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { message } from '@apron-design/vue-next'
-import { Button } from '@apron-design/vue-next'
 
 const handleSuccess = () => {
   message.success('操作成功！')
@@ -261,3 +253,10 @@ const handleCustom = () => {
 | message | 消息内容 | `string` | - |
 | duration | 显示时长（毫秒），设置为 0 则不自动关闭 | `number` | `5000` |
 | id | 消息唯一标识符，用于移除消息 | `string` | - |
+
+## 注意事项
+
+- Message 组件会自动挂载到 `body` 元素上，无需手动引入组件
+- 多个消息会按顺序向下排列，先进先出
+- 消息内容支持字符串类型
+- 在暗色模式下，Message 组件会自动适配主题颜色

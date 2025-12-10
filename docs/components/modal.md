@@ -1,3 +1,9 @@
+---
+title: Modal 对话框
+group: 反馈组件
+order: 3
+---
+
 # Modal 对话框
 
 模态对话框用于显示重要的信息或请求用户输入。它会中断用户的当前操作，直到用户与对话框进行交互。
@@ -19,8 +25,8 @@
 ```vue
 <template>
   <div>
-    <Button @click="basicOpen = true">打开对话框</Button>
-    <Modal
+    <ad-button @click="basicOpen = true">打开对话框</ad-button>
+    <ad-modal
       v-model:open="basicOpen"
       title="基础对话框"
       @close="basicOpen = false"
@@ -28,13 +34,13 @@
     >
       <p>这是对话框的内容。</p>
       <p>点击蒙层或按 ESC 键可以关闭对话框。</p>
-    </Modal>
+    </ad-modal>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
-import { Modal, Button } from '@apron-design/vue-next'
+import { AdModal, AdButton } from '@apron-design/vue-next'
 
 const basicOpen = ref(false)
 
@@ -54,8 +60,8 @@ const handleBasicOk = () => {
 ```vue
 <template>
   <div>
-    <Button @click="withoutTitleOpen = true">无标题对话框</Button>
-    <Modal
+    <ad-button @click="withoutTitleOpen = true">无标题对话框</ad-button>
+    <ad-modal
       v-model:open="withoutTitleOpen"
       @close="withoutTitleOpen = false"
       @ok="withoutTitleOpen = false"
@@ -63,13 +69,13 @@ const handleBasicOk = () => {
       ok-text="关闭"
     >
       <p>这是一个没有标题的对话框。</p>
-    </Modal>
+    </ad-modal>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
-import { Modal, Button } from '@apron-design/vue-next'
+import { AdModal, AdButton } from '@apron-design/vue-next'
 
 const withoutTitleOpen = ref(false)
 </script>
@@ -84,8 +90,8 @@ const withoutTitleOpen = ref(false)
 ```vue
 <template>
   <div>
-    <Button @click="withoutFooterOpen = true">无底部对话框</Button>
-    <Modal
+    <ad-button @click="withoutFooterOpen = true">无底部对话框</ad-button>
+    <ad-modal
       v-model:open="withoutFooterOpen"
       title="无底部对话框"
       @close="withoutFooterOpen = false"
@@ -93,13 +99,13 @@ const withoutTitleOpen = ref(false)
     >
       <p>这是一个没有底部的对话框。</p>
       <p>你可以通过关闭按钮或点击蒙层来关闭它。</p>
-    </Modal>
+    </ad-modal>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
-import { Modal, Button } from '@apron-design/vue-next'
+import { AdModal, AdButton } from '@apron-design/vue-next'
 
 const withoutFooterOpen = ref(false)
 </script>
@@ -114,8 +120,8 @@ const withoutFooterOpen = ref(false)
 ```vue
 <template>
   <div>
-    <Button @click="noCloseByOverlayOpen = true">禁止点击蒙层关闭</Button>
-    <Modal
+    <ad-button @click="noCloseByOverlayOpen = true">禁止点击蒙层关闭</ad-button>
+    <ad-modal
       v-model:open="noCloseByOverlayOpen"
       title="禁止点击蒙层关闭"
       :close-by-overlay="false"
@@ -126,13 +132,13 @@ const withoutFooterOpen = ref(false)
     >
       <p>这个对话框不能通过点击蒙层来关闭。</p>
       <p>请点击按钮或关闭图标来关闭。</p>
-    </Modal>
+    </ad-modal>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
-import { Modal, Button } from '@apron-design/vue-next'
+import { AdModal, AdButton } from '@apron-design/vue-next'
 
 const noCloseByOverlayOpen = ref(false)
 </script>
@@ -147,8 +153,8 @@ const noCloseByOverlayOpen = ref(false)
 ```vue
 <template>
   <div>
-    <Button @click="notClosableOpen = true">不可关闭对话框</Button>
-    <Modal
+    <ad-button @click="notClosableOpen = true">不可关闭对话框</ad-button>
+    <ad-modal
       v-model:open="notClosableOpen"
       title="重要提示"
       :closable="false"
@@ -156,17 +162,17 @@ const noCloseByOverlayOpen = ref(false)
       @close="notClosableOpen = false"
     >
       <template #footer>
-        <Button @click="notClosableOpen = false">我已阅读并同意</Button>
+        <ad-button @click="notClosableOpen = false">我已阅读并同意</ad-button>
       </template>
       <p>这是一条重要信息，你必须阅读后才能关闭。</p>
       <p>没有关闭按钮，也不能点击蒙层关闭。</p>
-    </Modal>
+    </ad-modal>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
-import { Modal, Button } from '@apron-design/vue-next'
+import { AdModal, AdButton } from '@apron-design/vue-next'
 
 const notClosableOpen = ref(false)
 </script>
@@ -181,24 +187,24 @@ const notClosableOpen = ref(false)
 ```vue
 <template>
   <div>
-    <Button @click="customWidthOpen = true">自定义宽度（800px）</Button>
-    <Modal
+    <ad-button @click="customWidthOpen = true">自定义宽度（800px）</ad-button>
+    <ad-modal
       v-model:open="customWidthOpen"
       title="宽对话框"
       :width="800"
       @close="customWidthOpen = false"
     >
       <template #footer>
-        <Button @click="customWidthOpen = false">关闭</Button>
+        <ad-button @click="customWidthOpen = false">关闭</ad-button>
       </template>
       <p>这是一个宽度为 800px 的对话框。</p>
-    </Modal>
+    </ad-modal>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
-import { Modal, Button } from '@apron-design/vue-next'
+import { AdModal, AdButton } from '@apron-design/vue-next'
 
 const customWidthOpen = ref(false)
 </script>
@@ -213,25 +219,25 @@ const customWidthOpen = ref(false)
 ```vue
 <template>
   <div>
-    <Button @click="longContentOpen = true">长内容对话框</Button>
-    <Modal
+    <ad-button @click="longContentOpen = true">长内容对话框</ad-button>
+    <ad-modal
       v-model:open="longContentOpen"
       title="长内容对话框"
       @close="longContentOpen = false"
     >
       <template #footer>
-        <Button @click="longContentOpen = false">关闭</Button>
+        <ad-button @click="longContentOpen = false">关闭</ad-button>
       </template>
       <div v-for="i in 20" :key="i">
         <p>这是第 {{ i }} 段内容。Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
       </div>
-    </Modal>
+    </ad-modal>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
-import { Modal, Button } from '@apron-design/vue-next'
+import { AdModal, AdButton } from '@apron-design/vue-next'
 
 const longContentOpen = ref(false)
 </script>
@@ -246,8 +252,8 @@ const longContentOpen = ref(false)
 ```vue
 <template>
   <div>
-    <Button @click="confirmOpen = true">确认对话框</Button>
-    <Modal
+    <ad-button @click="confirmOpen = true">确认对话框</ad-button>
+    <ad-modal
       v-model:open="confirmOpen"
       title="确认删除"
       :width="400"
@@ -257,13 +263,13 @@ const longContentOpen = ref(false)
       :ok-button-props="{ danger: true }"
     >
       <p>确定要删除这条记录吗？此操作不可撤销。</p>
-    </Modal>
+    </ad-modal>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
-import { Modal, Button } from '@apron-design/vue-next'
+import { AdModal, AdButton } from '@apron-design/vue-next'
 
 const confirmOpen = ref(false)
 
@@ -283,8 +289,8 @@ const handleConfirmOk = () => {
 ```vue
 <template>
   <div>
-    <Button @click="customButtonsOpen = true">自定义按钮</Button>
-    <Modal
+    <ad-button @click="customButtonsOpen = true">自定义按钮</ad-button>
+    <ad-modal
       v-model:open="customButtonsOpen"
       title="自定义按钮文字和变种"
       @close="customButtonsOpen = false"
@@ -295,13 +301,13 @@ const handleConfirmOk = () => {
       :cancel-button-props="{ variant: 'text' }"
     >
       <p>确认按钮使用 secondary 变种，取消按钮使用 text 变种。</p>
-    </Modal>
+    </ad-modal>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
-import { Modal, Button } from '@apron-design/vue-next'
+import { AdModal, AdButton } from '@apron-design/vue-next'
 
 const customButtonsOpen = ref(false)
 
@@ -321,8 +327,8 @@ const handleCustomButtonsOk = () => {
 ```vue
 <template>
   <div>
-    <Button @click="withoutCancelOpen = true">只有确认按钮</Button>
-    <Modal
+    <ad-button @click="withoutCancelOpen = true">只有确认按钮</ad-button>
+    <ad-modal
       v-model:open="withoutCancelOpen"
       title="提示"
       @close="withoutCancelOpen = false"
@@ -331,13 +337,13 @@ const handleCustomButtonsOk = () => {
       ok-text="知道了"
     >
       <p>这个对话框只有一个确认按钮。</p>
-    </Modal>
+    </ad-modal>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
-import { Modal, Button } from '@apron-design/vue-next'
+import { AdModal, AdButton } from '@apron-design/vue-next'
 
 const withoutCancelOpen = ref(false)
 </script>
@@ -352,15 +358,15 @@ const withoutCancelOpen = ref(false)
 ```vue
 <template>
   <div>
-    <Button @click="formOpen = true">表单对话框</Button>
-    <Modal
+    <ad-button @click="formOpen = true">表单对话框</ad-button>
+    <ad-modal
       v-model:open="formOpen"
       title="新建用户"
       @close="formOpen = false"
     >
       <template #footer>
-        <Button @click="formOpen = false">取消</Button>
-        <Button @click="handleFormSubmit">提交</Button>
+        <ad-button @click="formOpen = false">取消</ad-button>
+        <ad-button @click="handleFormSubmit">提交</ad-button>
       </template>
       <div style="display: flex; flex-direction: column; gap: 16px;">
         <div>
@@ -398,13 +404,13 @@ const withoutCancelOpen = ref(false)
           />
         </div>
       </div>
-    </Modal>
+    </ad-modal>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
-import { Modal, Button } from '@apron-design/vue-next'
+import { AdModal, AdButton } from '@apron-design/vue-next'
 
 const formOpen = ref(false)
 const username = ref('')
@@ -426,31 +432,66 @@ const handleFormSubmit = () => {
 ```vue
 <template>
   <div>
-    <Button @click="customFooterOpen = true">自定义底部</Button>
-    <Modal
+    <ad-button @click="customFooterOpen = true">自定义底部</ad-button>
+    <ad-modal
       v-model:open="customFooterOpen"
       title="自定义底部"
       @close="customFooterOpen = false"
     >
       <template #footer>
         <div style="display: flex; justify-content: space-between; width: 100%;">
-          <Button @click="console.log('帮助')">帮助</Button>
+          <ad-button @click="console.log('帮助')">帮助</ad-button>
           <div style="display: flex; gap: 8px;">
-            <Button @click="customFooterOpen = false">取消</Button>
-            <Button @click="customFooterOpen = false">确定</Button>
+            <ad-button @click="customFooterOpen = false">取消</ad-button>
+            <ad-button @click="customFooterOpen = false">确定</ad-button>
           </div>
         </div>
       </template>
       <p>这个对话框有自定义的底部布局。</p>
-    </Modal>
+    </ad-modal>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
-import { Modal, Button } from '@apron-design/vue-next'
+import { AdModal, AdButton } from '@apron-design/vue-next'
 
 const customFooterOpen = ref(false)
+</script>
+```
+:::
+
+### 深色模式
+
+在深色模式下，对话框会自动适应主题颜色。
+
+:::demo
+```vue
+<template>
+  <div
+    data-prefers-color="dark"
+    style="padding: 32px; background-color: #18181b; border-radius: 12px;"
+  >
+    <ad-button @click="darkModeOpen = true">Dark Mode Modal</ad-button>
+    <ad-modal
+      v-model:open="darkModeOpen"
+      title="深色模式"
+      @close="darkModeOpen = false"
+    >
+      <template #footer>
+        <ad-button @click="darkModeOpen = false">取消</ad-button>
+        <ad-button @click="darkModeOpen = false">确定</ad-button>
+      </template>
+      <p>这是深色模式下的对话框。</p>
+    </ad-modal>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { AdModal, AdButton } from '@apron-design/vue-next'
+
+const darkModeOpen = ref(false)
 </script>
 ```
 :::
@@ -461,24 +502,24 @@ const customFooterOpen = ref(false)
 
 | 参数 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| open | 是否显示对话框 | boolean | `false` |
-| title | 标题 | string | - |
-| closable | 是否显示关闭按钮 | boolean | `true` |
-| closeByOverlay | 点击蒙层是否可以关闭 | boolean | `true` |
-| width | 对话框宽度 | number \| string | `520` |
-| footer | 自定义 footer，设置为 null 则不显示 | undefined \| null | - |
-| showFooter | 是否显示 footer | boolean | `true` |
-| okText | 确认按钮文字 | string | `'确定'` |
-| cancelText | 取消按钮文字 | string | `'取消'` |
-| okButtonProps | 确认按钮属性 | Record<string, any> | - |
-| cancelButtonProps | 取消按钮属性 | Record<string, any> | - |
-| showCancel | 是否显示取消按钮 | boolean | `true` |
-| class | 自定义类名 | string | - |
-| centered | 是否居中显示 | boolean | `true` |
+| open / v-model:open | 是否显示对话框 | `boolean` | `false` |
+| title | 标题 | `string \| VNode \| (() => VNode)` | - |
+| closable | 是否显示关闭按钮 | `boolean` | `true` |
+| closeByOverlay | 点击蒙层是否可以关闭 | `boolean` | `true` |
+| width | 对话框宽度 | `number \| string` | `520` |
+| footer | 自定义 footer，设置为 null 则不显示 | `VNode \| (() => VNode) \| null` | - |
+| showFooter | 是否显示 footer | `boolean` | `true` |
+| okText | 确认按钮文字 | `string` | `'确定'` |
+| cancelText | 取消按钮文字 | `string` | `'取消'` |
+| okButtonProps | 确认按钮属性 | `Record<string, any>` | - |
+| cancelButtonProps | 取消按钮属性 | `Record<string, any>` | - |
+| showCancel | 是否显示取消按钮 | `boolean` | `true` |
+| class | 自定义类名 | `string` | - |
+| centered | 是否居中显示 | `boolean` | `true` |
 
 ### Modal Events
 
-| 事件名 | 说明 | 参数 |
+| 事件名 | 说明 | 回调参数 |
 | --- | --- | --- |
 | update:open | 对话框打开状态改变时触发 | `(open: boolean)` |
 | close | 关闭时触发 | - |
@@ -498,3 +539,5 @@ const customFooterOpen = ref(false)
 2. 按 ESC 键可以关闭对话框（除非设置了 `closable={false}`）
 3. 点击蒙层可以关闭对话框（除非设置了 `closeByOverlay={false}`）
 4. 对话框会在页面 body 上创建 Portal，确保层级高于其他元素
+5. 使用 `v-model:open` 进行双向绑定是最推荐的方式
+6. 在暗色模式下，对话框会自动适配主题颜色

@@ -61,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, useId, useAttrs } from 'vue'
+import { ref, computed, useId } from 'vue'
 
 export interface CheckboxProps {
   /** 是否选中 */

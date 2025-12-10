@@ -14,6 +14,7 @@
       @blur="handleBlur"
       :disabled="disabled"
       autocomplete="one-time-code"
+      v-bind="inputAttrs"
     />
     <!-- 展示框 -->
     <div class="apron-input-otp__display">
@@ -41,13 +42,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from 'vue'
-import type { InputHTMLAttributes } from 'vue'
+import { ref, computed, onMounted, useAttrs } from 'vue'
 
 export type InputOtpSize = 'default' | 'small'
 export type InputOtpStatus = 'default' | 'success' | 'error'
 
-export interface InputOtpProps extends /* @vue-ignore */ Omit<InputHTMLAttributes, 'type' | 'size' | 'onChange'> {
+export interface InputOtpProps {
   /** 格式：* 表示输入位，其他字符直接渲染，如 "****" 或 "***-***" */
   format?: string
   /** 尺寸 */
@@ -62,10 +62,20 @@ export interface InputOtpProps extends /* @vue-ignore */ Omit<InputHTMLAttribute
   defaultValue?: string
   /** 状态：success 显示成功样式，error 显示错误样式 */
   status?: InputOtpStatus
+  /** 值改变时的回调 */
+  onChange?: (value: string) => void
+  /** 输入完成时的回调（满足长度时自动触发） */
+  onFinish?: (value: string) => void
+  /** 输入完成时的回调（同 onFinish） */
+  onComplete?: (value: string) => void
+  /** error 状态下按退格键重置时的回调 */
+  onStatusReset?: () => void
   /** 是否禁用 */
   disabled?: boolean
   /** 是否自动聚焦 */
   autoFocus?: boolean
+  /** 自定义类名 */
+  class?: string
 }
 
 const props = withDefaults(defineProps<InputOtpProps>(), {
@@ -87,11 +97,18 @@ const emit = defineEmits<{
   (e: 'status-reset'): void
 }>()
 
+const attrs = useAttrs()
 const inputRef = ref<HTMLInputElement | null>(null)
 const isFocused = ref(false)
 const internalValue = ref(props.defaultValue)
 
-// 合并 ref
+// 过滤掉不需要透传到 input 的属性
+const inputAttrs = computed(() => {
+  const { type, size, onChange, class: _, ...rest } = attrs
+  return rest
+})
+
+// 暴露 ref 和常用方法
 defineExpose({
   $el: inputRef,
   focus: () => inputRef.value?.focus(),
@@ -107,6 +124,7 @@ onMounted(() => {
 
 const isControlled = computed(() => props.value !== undefined)
 const inputValue = computed(() => (isControlled.value ? props.value || '' : internalValue.value || ''))
+
 // 解析 format，获取输入位数量和结构
 const formatInfo = computed(() => {
   const slots: Array<{ type: 'input' | 'separator'; char?: string; index?: number }> = []
@@ -148,13 +166,17 @@ const handleChange = (e: Event) => {
     internalValue.value = newValue
   }
   
+  // 触发事件
   emit('update:value', newValue)
   emit('change', newValue)
+  props.onChange?.(newValue)
 
   // 检查是否输入完成
   if (newValue.length === formatInfo.value.inputCount) {
     emit('finish', newValue)
     emit('complete', newValue)
+    props.onFinish?.(newValue)
+    props.onComplete?.(newValue)
   }
 }
 
@@ -169,8 +191,10 @@ const handleKeyDown = (e: KeyboardEvent) => {
     }
     emit('update:value', newValue)
     emit('change', newValue)
+    props.onChange?.(newValue)
     // 通知外部重置状态
     emit('status-reset')
+    props.onStatusReset?.()
   }
 }
 

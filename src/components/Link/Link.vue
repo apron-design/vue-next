@@ -73,7 +73,6 @@ const classes = computed(() => {
 // ============================================
 // Link CSS Variables (Dark Mode)
 // ============================================
-.dark,
 [data-prefers-color='dark'] {
   // Primary variant
   --apron-link-primary-color: @color-primary-200;

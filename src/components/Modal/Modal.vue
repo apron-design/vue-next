@@ -26,7 +26,9 @@
           <!-- Header -->
           <div v-if="title" class="apron-modal__header">
             <div id="modal-title" class="apron-modal__title">
-              {{ title }}
+              <component v-if="typeof title === 'function'" :is="title" />
+              <component v-else-if="typeof title === 'object'" :is="() => title" />
+              <span v-else>{{ title }}</span>
             </div>
           </div>
 
@@ -37,13 +39,17 @@
 
           <!-- Footer -->
           <div v-if="showFooter && footer !== null" class="apron-modal__footer">
-            <slot v-if="footer !== undefined" name="footer" />
+            <template v-if="footer !== undefined">
+              <component v-if="typeof footer === 'function'" :is="footer" />
+              <component v-else-if="typeof footer === 'object'" :is="() => footer" />
+              <slot v-else name="footer" />
+            </template>
             <template v-else>
               <AdButton
                 v-if="showCancel"
                 variant="default"
                 v-bind="cancelButtonProps"
-                @click="onClose"
+                @click="handleClose"
               >
                 {{ cancelText }}
               </AdButton>
@@ -63,7 +69,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, onUnmounted, nextTick, h } from 'vue'
+import { ref, computed, watch, onUnmounted, nextTick, h, type VNode } from 'vue'
 import type { CSSProperties, Ref } from 'vue'
 import { AdButton } from '../Button'
 
@@ -88,11 +94,13 @@ const CloseIcon = {
   }
 }
 
+import type { VNode } from 'vue'
+
 export interface ModalProps {
   /** 是否显示对话框 */
   open?: boolean
   /** 标题 */
-  title?: string
+  title?: string | VNode | (() => VNode)
   /** 是否显示关闭按钮 */
   closable?: boolean
   /** 点击蒙层是否可以关闭 */
@@ -100,7 +108,7 @@ export interface ModalProps {
   /** 对话框宽度 */
   width?: number | string
   /** 自定义 footer，设置为 null 则不显示 */
-  footer?: undefined | null
+  footer?: VNode | (() => VNode) | null
   /** 是否显示 footer */
   showFooter?: boolean
   /** 确认按钮文字 */
@@ -158,15 +166,17 @@ watch(() => props.open, (newOpen) => {
       })
     })
   } else {
-    isAnimating.value = true
-    // 等待动画完成后隐藏
-    setTimeout(() => {
-      isVisible.value = false
-      isAnimating.value = false
-      // 恢复页面滚动
-      document.body.style.overflow = ''
-      emit('afterOpenChange', false)
-    }, 300)
+    if (isVisible.value) {
+      isAnimating.value = true
+      // 等待动画完成后隐藏
+      setTimeout(() => {
+        isVisible.value = false
+        isAnimating.value = false
+        // 恢复页面滚动
+        document.body.style.overflow = ''
+        emit('afterOpenChange', false)
+      }, 300)
+    }
   }
 }, { immediate: true })
 
@@ -184,9 +194,14 @@ const handleEscape = (e: KeyboardEvent) => {
   }
 }
 
-onMounted(() => {
-  document.addEventListener('keydown', handleEscape)
-})
+// 只在 open 为 true 时添加 ESC 键监听
+watch(() => props.open, (newOpen) => {
+  if (newOpen) {
+    document.addEventListener('keydown', handleEscape)
+  } else {
+    document.removeEventListener('keydown', handleEscape)
+  }
+}, { immediate: true })
 
 onUnmounted(() => {
   document.removeEventListener('keydown', handleEscape)

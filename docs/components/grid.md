@@ -23,64 +23,62 @@ order: 5
 :::demo
 ```vue
 <template>
-  <div style="display: flex; flex-direction: column; gap: 16px;">
+  <div>
     <ad-row>
       <ad-col :span="24">
-        <DemoBox>col-24</DemoBox>
+        <div class="demo-box">col-24</div>
       </ad-col>
     </ad-row>
     <ad-row>
       <ad-col :span="12">
-        <DemoBox>col-12</DemoBox>
+        <div class="demo-box">col-12</div>
       </ad-col>
       <ad-col :span="12">
-        <DemoBox light>col-12</DemoBox>
+        <div class="demo-box demo-box-light">col-12</div>
       </ad-col>
     </ad-row>
     <ad-row>
       <ad-col :span="8">
-        <DemoBox>col-8</DemoBox>
+        <div class="demo-box">col-8</div>
       </ad-col>
       <ad-col :span="8">
-        <DemoBox light>col-8</DemoBox>
+        <div class="demo-box demo-box-light">col-8</div>
       </ad-col>
       <ad-col :span="8">
-        <DemoBox>col-8</DemoBox>
+        <div class="demo-box">col-8</div>
       </ad-col>
     </ad-row>
     <ad-row>
       <ad-col :span="6">
-        <DemoBox>col-6</DemoBox>
+        <div class="demo-box">col-6</div>
       </ad-col>
       <ad-col :span="6">
-        <DemoBox light>col-6</DemoBox>
+        <div class="demo-box demo-box-light">col-6</div>
       </ad-col>
       <ad-col :span="6">
-        <DemoBox>col-6</DemoBox>
+        <div class="demo-box">col-6</div>
       </ad-col>
       <ad-col :span="6">
-        <DemoBox light>col-6</DemoBox>
+        <div class="demo-box demo-box-light">col-6</div>
       </ad-col>
     </ad-row>
   </div>
 </template>
 
-<script setup lang="ts">
-import { AdRow, AdCol } from '@apron-design/vue-next'
-
-const DemoBox = ({ children, height = 40, light = false }: any) => {
-  return h('div', {
-    style: {
-      height: `${height}px`,
-      lineHeight: `${height}px`,
-      textAlign: 'center',
-      color: '#fff',
-      backgroundColor: light ? 'rgba(0, 146, 255, 0.75)' : 'rgba(0, 146, 255, 1)',
-      borderRadius: '4px',
-    }
-  }, children)
+<style scoped>
+.demo-box {
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  color: #fff;
+  background-color: rgba(0, 146, 255, 1);
+  border-radius: 4px;
 }
-</script>
+
+.demo-box-light {
+  background-color: rgba(0, 146, 255, 0.75);
+}
+</style>
 ```
 :::
 
@@ -91,70 +89,63 @@ const DemoBox = ({ children, height = 40, light = false }: any) => {
 :::demo
 ```vue
 <template>
-  <div style="display: flex; flex-direction: column; gap: 16px;">
+  <div>
     <p>水平间隔 16px</p>
     <ad-row :gutter="16">
       <ad-col :span="6">
-        <DemoBox>col-6</DemoBox>
+        <div class="demo-box">col-6</div>
       </ad-col>
       <ad-col :span="6">
-        <DemoBox>col-6</DemoBox>
+        <div class="demo-box">col-6</div>
       </ad-col>
       <ad-col :span="6">
-        <DemoBox>col-6</DemoBox>
+        <div class="demo-box">col-6</div>
       </ad-col>
       <ad-col :span="6">
-        <DemoBox>col-6</DemoBox>
+        <div class="demo-box">col-6</div>
       </ad-col>
     </ad-row>
     
     <p>水平间隔 16px，垂直间隔 24px</p>
     <ad-row :gutter="[16, 24]">
       <ad-col :span="6">
-        <DemoBox>col-6</DemoBox>
+        <div class="demo-box">col-6</div>
       </ad-col>
       <ad-col :span="6">
-        <DemoBox>col-6</DemoBox>
+        <div class="demo-box">col-6</div>
       </ad-col>
       <ad-col :span="6">
-        <DemoBox>col-6</DemoBox>
+        <div class="demo-box">col-6</div>
       </ad-col>
       <ad-col :span="6">
-        <DemoBox>col-6</DemoBox>
+        <div class="demo-box">col-6</div>
       </ad-col>
       <ad-col :span="6">
-        <DemoBox>col-6</DemoBox>
+        <div class="demo-box">col-6</div>
       </ad-col>
       <ad-col :span="6">
-        <DemoBox>col-6</DemoBox>
+        <div class="demo-box">col-6</div>
       </ad-col>
       <ad-col :span="6">
-        <DemoBox>col-6</DemoBox>
+        <div class="demo-box">col-6</div>
       </ad-col>
       <ad-col :span="6">
-        <DemoBox>col-6</DemoBox>
+        <div class="demo-box">col-6</div>
       </ad-col>
     </ad-row>
   </div>
 </template>
 
-<script setup lang="ts">
-import { h } from 'vue'
-import { AdRow, AdCol } from '@apron-design/vue-next'
-
-const DemoBox = ({ children, height = 40, light = false }: any) => {
-  return h('div', {
-    style: {
-      height: `${height}px`,
-      lineHeight: `${height}px`,
-      textAlign: 'center',
-      color: '#fff',
-      backgroundColor: light ? 'rgba(0, 146, 255, 0.75)' : 'rgba(0, 146, 255, 1)',
-      borderRadius: '4px',
-    }
-  }, children)
+<style scoped>
+.demo-box {
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  color: #fff;
+  background-color: rgba(0, 146, 255, 1);
+  border-radius: 4px;
 }
-</script>
+</style>
 ```
 :::
 
@@ -165,48 +156,41 @@ const DemoBox = ({ children, height = 40, light = false }: any) => {
 :::demo
 ```vue
 <template>
-  <div style="display: flex; flex-direction: column; gap: 16px;">
+  <div>
     <ad-row>
       <ad-col :span="8">
-        <DemoBox>col-8</DemoBox>
+        <div class="demo-box">col-8</div>
       </ad-col>
       <ad-col :span="8" :offset="8">
-        <DemoBox>col-8 offset-8</DemoBox>
+        <div class="demo-box">col-8 offset-8</div>
       </ad-col>
     </ad-row>
     <ad-row>
       <ad-col :span="6" :offset="6">
-        <DemoBox>col-6 offset-6</DemoBox>
+        <div class="demo-box">col-6 offset-6</div>
       </ad-col>
       <ad-col :span="6" :offset="6">
-        <DemoBox>col-6 offset-6</DemoBox>
+        <div class="demo-box">col-6 offset-6</div>
       </ad-col>
     </ad-row>
     <ad-row>
       <ad-col :span="12" :offset="6">
-        <DemoBox>col-12 offset-6</DemoBox>
+        <div class="demo-box">col-12 offset-6</div>
       </ad-col>
     </ad-row>
   </div>
 </template>
 
-<script setup lang="ts">
-import { h } from 'vue'
-import { AdRow, AdCol } from '@apron-design/vue-next'
-
-const DemoBox = ({ children, height = 40, light = false }: any) => {
-  return h('div', {
-    style: {
-      height: `${height}px`,
-      lineHeight: `${height}px`,
-      textAlign: 'center',
-      color: '#fff',
-      backgroundColor: light ? 'rgba(0, 146, 255, 0.75)' : 'rgba(0, 146, 255, 1)',
-      borderRadius: '4px',
-    }
-  }, children)
+<style scoped>
+.demo-box {
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  color: #fff;
+  background-color: rgba(0, 146, 255, 1);
+  border-radius: 4px;
 }
-</script>
+</style>
 ```
 :::
 
@@ -217,35 +201,32 @@ const DemoBox = ({ children, height = 40, light = false }: any) => {
 :::demo
 ```vue
 <template>
-  <div style="display: flex; flex-direction: column; gap: 16px;">
+  <div>
     <ad-row>
       <ad-col :span="18" :push="6">
-        <DemoBox>col-18 push-6</DemoBox>
+        <div class="demo-box">col-18 push-6</div>
       </ad-col>
       <ad-col :span="6" :pull="18">
-        <DemoBox light>col-6 pull-18</DemoBox>
+        <div class="demo-box demo-box-light">col-6 pull-18</div>
       </ad-col>
     </ad-row>
   </div>
 </template>
 
-<script setup lang="ts">
-import { h } from 'vue'
-import { AdRow, AdCol } from '@apron-design/vue-next'
-
-const DemoBox = ({ children, height = 40, light = false }: any) => {
-  return h('div', {
-    style: {
-      height: `${height}px`,
-      lineHeight: `${height}px`,
-      textAlign: 'center',
-      color: '#fff',
-      backgroundColor: light ? 'rgba(0, 146, 255, 0.75)' : 'rgba(0, 146, 255, 1)',
-      borderRadius: '4px',
-    }
-  }, children)
+<style scoped>
+.demo-box {
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  color: #fff;
+  background-color: rgba(0, 146, 255, 1);
+  border-radius: 4px;
 }
-</script>
+
+.demo-box-light {
+  background-color: rgba(0, 146, 255, 0.75);
+}
+</style>
 ```
 :::
 
@@ -256,122 +237,119 @@ const DemoBox = ({ children, height = 40, light = false }: any) => {
 :::demo
 ```vue
 <template>
-  <div style="display: flex; flex-direction: column; gap: 16px;">
+  <div>
     <p>justify: start</p>
     <ad-row justify="start" style="background: rgba(0, 0, 0, 0.05);">
       <ad-col :span="4">
-        <DemoBox>col-4</DemoBox>
+        <div class="demo-box">col-4</div>
       </ad-col>
       <ad-col :span="4">
-        <DemoBox light>col-4</DemoBox>
+        <div class="demo-box demo-box-light">col-4</div>
       </ad-col>
       <ad-col :span="4">
-        <DemoBox>col-4</DemoBox>
+        <div class="demo-box">col-4</div>
       </ad-col>
       <ad-col :span="4">
-        <DemoBox light>col-4</DemoBox>
+        <div class="demo-box demo-box-light">col-4</div>
       </ad-col>
     </ad-row>
 
     <p>justify: center</p>
     <ad-row justify="center" style="background: rgba(0, 0, 0, 0.05);">
       <ad-col :span="4">
-        <DemoBox>col-4</DemoBox>
+        <div class="demo-box">col-4</div>
       </ad-col>
       <ad-col :span="4">
-        <DemoBox light>col-4</DemoBox>
+        <div class="demo-box demo-box-light">col-4</div>
       </ad-col>
       <ad-col :span="4">
-        <DemoBox>col-4</DemoBox>
+        <div class="demo-box">col-4</div>
       </ad-col>
       <ad-col :span="4">
-        <DemoBox light>col-4</DemoBox>
+        <div class="demo-box demo-box-light">col-4</div>
       </ad-col>
     </ad-row>
 
     <p>justify: end</p>
     <ad-row justify="end" style="background: rgba(0, 0, 0, 0.05);">
       <ad-col :span="4">
-        <DemoBox>col-4</DemoBox>
+        <div class="demo-box">col-4</div>
       </ad-col>
       <ad-col :span="4">
-        <DemoBox light>col-4</DemoBox>
+        <div class="demo-box demo-box-light">col-4</div>
       </ad-col>
       <ad-col :span="4">
-        <DemoBox>col-4</DemoBox>
+        <div class="demo-box">col-4</div>
       </ad-col>
       <ad-col :span="4">
-        <DemoBox light>col-4</DemoBox>
+        <div class="demo-box demo-box-light">col-4</div>
       </ad-col>
     </ad-row>
 
     <p>justify: space-between</p>
     <ad-row justify="space-between" style="background: rgba(0, 0, 0, 0.05);">
       <ad-col :span="4">
-        <DemoBox>col-4</DemoBox>
+        <div class="demo-box">col-4</div>
       </ad-col>
       <ad-col :span="4">
-        <DemoBox light>col-4</DemoBox>
+        <div class="demo-box demo-box-light">col-4</div>
       </ad-col>
       <ad-col :span="4">
-        <DemoBox>col-4</DemoBox>
+        <div class="demo-box">col-4</div>
       </ad-col>
       <ad-col :span="4">
-        <DemoBox light>col-4</DemoBox>
+        <div class="demo-box demo-box-light">col-4</div>
       </ad-col>
     </ad-row>
 
     <p>justify: space-around</p>
     <ad-row justify="space-around" style="background: rgba(0, 0, 0, 0.05);">
       <ad-col :span="4">
-        <DemoBox>col-4</DemoBox>
+        <div class="demo-box">col-4</div>
       </ad-col>
       <ad-col :span="4">
-        <DemoBox light>col-4</DemoBox>
+        <div class="demo-box demo-box-light">col-4</div>
       </ad-col>
       <ad-col :span="4">
-        <DemoBox>col-4</DemoBox>
+        <div class="demo-box">col-4</div>
       </ad-col>
       <ad-col :span="4">
-        <DemoBox light>col-4</DemoBox>
+        <div class="demo-box demo-box-light">col-4</div>
       </ad-col>
     </ad-row>
 
     <p>justify: space-evenly</p>
     <ad-row justify="space-evenly" style="background: rgba(0, 0, 0, 0.05);">
       <ad-col :span="4">
-        <DemoBox>col-4</DemoBox>
+        <div class="demo-box">col-4</div>
       </ad-col>
       <ad-col :span="4">
-        <DemoBox light>col-4</DemoBox>
+        <div class="demo-box demo-box-light">col-4</div>
       </ad-col>
       <ad-col :span="4">
-        <DemoBox>col-4</DemoBox>
+        <div class="demo-box">col-4</div>
       </ad-col>
       <ad-col :span="4">
-        <DemoBox light>col-4</DemoBox>
+        <div class="demo-box demo-box-light">col-4</div>
       </ad-col>
     </ad-row>
   </div>
 </template>
 
-<script setup lang="ts">
-import { h } from 'vue'
-import { AdRow, AdCol } from '@apron-design/vue-next'
-
-const DemoBox = ({ children, height = 40, light = false }: any) => {
-  return h('div', {
-    style: {
-      height: `${height}px`,
-      lineHeight: `${height}px`,
-      textAlign: 'center',
-      color: '#fff',
-      backgroundColor: light ? 'rgba(0, 146, 255, 0.75)' : 'rgba(0, 146, 255, 1)',
-      borderRadius: '4px',
-    }
-  }, children)
+<style scoped>
+.demo-box {
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  color: #fff;
+  background-color: rgba(0, 146, 255, 1);
+  border-radius: 4px;
 }
-</script>
+
+.demo-box-light {
+  background-color: rgba(0, 146, 255, 0.75);
+}
+</style>
 ```
 :::
 
@@ -382,74 +360,70 @@ const DemoBox = ({ children, height = 40, light = false }: any) => {
 :::demo
 ```vue
 <template>
-  <div style="display: flex; flex-direction: column; gap: 16px;">
+  <div>
     <p>align: top</p>
     <ad-row align="top" justify="center" style="background: rgba(0, 0, 0, 0.05);">
       <ad-col :span="4">
-        <DemoBox :height="100">col-4</DemoBox>
+        <div class="demo-box" style="height: 100px;">col-4</div>
       </ad-col>
       <ad-col :span="4">
-        <DemoBox :height="50" light>col-4</DemoBox>
+        <div class="demo-box demo-box-light" style="height: 50px;">col-4</div>
       </ad-col>
       <ad-col :span="4">
-        <DemoBox :height="120">col-4</DemoBox>
+        <div class="demo-box" style="height: 120px;">col-4</div>
       </ad-col>
       <ad-col :span="4">
-        <DemoBox :height="80" light>col-4</DemoBox>
+        <div class="demo-box demo-box-light" style="height: 80px;">col-4</div>
       </ad-col>
     </ad-row>
 
     <p>align: middle</p>
     <ad-row align="middle" justify="center" style="background: rgba(0, 0, 0, 0.05);">
       <ad-col :span="4">
-        <DemoBox :height="100">col-4</DemoBox>
+        <div class="demo-box" style="height: 100px;">col-4</div>
       </ad-col>
       <ad-col :span="4">
-        <DemoBox :height="50" light>col-4</DemoBox>
+        <div class="demo-box demo-box-light" style="height: 50px;">col-4</div>
       </ad-col>
       <ad-col :span="4">
-        <DemoBox :height="120">col-4</DemoBox>
+        <div class="demo-box" style="height: 120px;">col-4</div>
       </ad-col>
       <ad-col :span="4">
-        <DemoBox :height="80" light>col-4</DemoBox>
+        <div class="demo-box demo-box-light" style="height: 80px;">col-4</div>
       </ad-col>
     </ad-row>
 
     <p>align: bottom</p>
     <ad-row align="bottom" justify="center" style="background: rgba(0, 0, 0, 0.05);">
       <ad-col :span="4">
-        <DemoBox :height="100">col-4</DemoBox>
+        <div class="demo-box" style="height: 100px;">col-4</div>
       </ad-col>
       <ad-col :span="4">
-        <DemoBox :height="50" light>col-4</DemoBox>
+        <div class="demo-box demo-box-light" style="height: 50px;">col-4</div>
       </ad-col>
       <ad-col :span="4">
-        <DemoBox :height="120">col-4</DemoBox>
+        <div class="demo-box" style="height: 120px;">col-4</div>
       </ad-col>
       <ad-col :span="4">
-        <DemoBox :height="80" light>col-4</DemoBox>
+        <div class="demo-box demo-box-light" style="height: 80px;">col-4</div>
       </ad-col>
     </ad-row>
   </div>
 </template>
 
-<script setup lang="ts">
-import { h } from 'vue'
-import { AdRow, AdCol } from '@apron-design/vue-next'
-
-const DemoBox = ({ children, height = 40, light = false }: any) => {
-  return h('div', {
-    style: {
-      height: `${height}px`,
-      lineHeight: `${height}px`,
-      textAlign: 'center',
-      color: '#fff',
-      backgroundColor: light ? 'rgba(0, 146, 255, 0.75)' : 'rgba(0, 146, 255, 1)',
-      borderRadius: '4px',
-    }
-  }, children)
+<style scoped>
+.demo-box {
+  line-height: 40px;
+  text-align: center;
+  color: #fff;
+  background-color: rgba(0, 146, 255, 1);
+  border-radius: 4px;
 }
-</script>
+
+.demo-box-light {
+  background-color: rgba(0, 146, 255, 0.75);
+}
+</style>
 ```
 :::
 
@@ -460,56 +434,53 @@ const DemoBox = ({ children, height = 40, light = false }: any) => {
 :::demo
 ```vue
 <template>
-  <div style="display: flex; flex-direction: column; gap: 16px;">
+  <div>
     <p>百分比</p>
     <ad-row>
       <ad-col :flex="2">
-        <DemoBox>2 / 5</DemoBox>
+        <div class="demo-box">2 / 5</div>
       </ad-col>
       <ad-col :flex="3">
-        <DemoBox light>3 / 5</DemoBox>
+        <div class="demo-box demo-box-light">3 / 5</div>
       </ad-col>
     </ad-row>
 
     <p>固定宽度</p>
     <ad-row>
       <ad-col flex="100px">
-        <DemoBox>100px</DemoBox>
+        <div class="demo-box">100px</div>
       </ad-col>
       <ad-col flex="auto">
-        <DemoBox light>auto</DemoBox>
+        <div class="demo-box demo-box-light">auto</div>
       </ad-col>
     </ad-row>
 
     <p>flex 属性</p>
     <ad-row>
       <ad-col flex="1 1 200px">
-        <DemoBox>1 1 200px</DemoBox>
+        <div class="demo-box">1 1 200px</div>
       </ad-col>
       <ad-col flex="0 1 300px">
-        <DemoBox light>0 1 300px</DemoBox>
+        <div class="demo-box demo-box-light">0 1 300px</div>
       </ad-col>
     </ad-row>
   </div>
 </template>
 
-<script setup lang="ts">
-import { h } from 'vue'
-import { AdRow, AdCol } from '@apron-design/vue-next'
-
-const DemoBox = ({ children, height = 40, light = false }: any) => {
-  return h('div', {
-    style: {
-      height: `${height}px`,
-      lineHeight: `${height}px`,
-      textAlign: 'center',
-      color: '#fff',
-      backgroundColor: light ? 'rgba(0, 146, 255, 0.75)' : 'rgba(0, 146, 255, 1)',
-      borderRadius: '4px',
-    }
-  }, children)
+<style scoped>
+.demo-box {
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  color: #fff;
+  background-color: rgba(0, 146, 255, 1);
+  border-radius: 4px;
 }
-</script>
+
+.demo-box-light {
+  background-color: rgba(0, 146, 255, 0.75);
+}
+</style>
 ```
 :::
 
@@ -520,47 +491,40 @@ const DemoBox = ({ children, height = 40, light = false }: any) => {
 :::demo
 ```vue
 <template>
-  <div style="display: flex; flex-direction: column; gap: 16px;">
+  <div>
     <ad-row :gutter="[16, 16]">
       <ad-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
-        <DemoBox>Col</DemoBox>
+        <div class="demo-box">Col</div>
       </ad-col>
       <ad-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
-        <DemoBox>Col</DemoBox>
+        <div class="demo-box">Col</div>
       </ad-col>
       <ad-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
-        <DemoBox>Col</DemoBox>
+        <div class="demo-box">Col</div>
       </ad-col>
       <ad-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
-        <DemoBox>Col</DemoBox>
+        <div class="demo-box">Col</div>
       </ad-col>
       <ad-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
-        <DemoBox>Col</DemoBox>
+        <div class="demo-box">Col</div>
       </ad-col>
       <ad-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
-        <DemoBox>Col</DemoBox>
+        <div class="demo-box">Col</div>
       </ad-col>
     </ad-row>
   </div>
 </template>
 
-<script setup lang="ts">
-import { h } from 'vue'
-import { AdRow, AdCol } from '@apron-design/vue-next'
-
-const DemoBox = ({ children, height = 40, light = false }: any) => {
-  return h('div', {
-    style: {
-      height: `${height}px`,
-      lineHeight: `${height}px`,
-      textAlign: 'center',
-      color: '#fff',
-      backgroundColor: light ? 'rgba(0, 146, 255, 0.75)' : 'rgba(0, 146, 255, 1)',
-      borderRadius: '4px',
-    }
-  }, children)
+<style scoped>
+.demo-box {
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  color: #fff;
+  background-color: rgba(0, 146, 255, 1);
+  border-radius: 4px;
 }
-</script>
+</style>
 ```
 :::
 

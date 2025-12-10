@@ -24,8 +24,8 @@ order: 3
 ```vue
 <template>
   <ad-popover title="提示标题" content="这是 Popover 的内容区域，可以放置任何文本信息。">
-    <template #trigger="{ open }">
-      <ad-button @click="open">点击显示</ad-button>
+    <template #trigger="{ handleClick, triggerRef }">
+      <ad-button :ref="triggerRef" @click="handleClick">点击显示</ad-button>
     </template>
   </ad-popover>
 </template>

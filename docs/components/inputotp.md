@@ -1,3 +1,9 @@
+---
+title: InputOtp 验证码输入框
+group: 数据录入
+order: 1
+---
+
 # InputOtp 验证码输入框
 
 用于输入验证码的专用输入框，支持多种格式和交互方式。
@@ -9,7 +15,7 @@
 - 需要在移动端弹出数字键盘
 - 需要验证完成后自动触发回调
 
-## 示例
+## 代码演示
 
 ### 基础用法
 
@@ -18,7 +24,7 @@
 :::demo
 ```vue
 <template>
-  <InputOtp format="******" />
+  <ad-input-otp format="******" />
 </template>
 ```
 :::
@@ -33,23 +39,23 @@
   <div style="display: flex; flex-direction: column; gap: 32px;">
     <div>
       <h4>4位验证码 (****)</h4>
-      <InputOtp format="****" />
+      <ad-input-otp format="****" />
     </div>
     <div>
       <h4>6位验证码 (******)</h4>
-      <InputOtp format="******" />
+      <ad-input-otp format="******" />
     </div>
     <div>
       <h4>带分隔符 (***-***)</h4>
-      <InputOtp format="***-***" />
+      <ad-input-otp format="***-***" />
     </div>
     <div>
       <h4>自定义分隔 (**-**-**)</h4>
-      <InputOtp format="**-**-**" />
+      <ad-input-otp format="**-**-**" />
     </div>
     <div>
       <h4>带空格分隔 (*** ***)</h4>
-      <InputOtp format="*** ***" />
+      <ad-input-otp format="*** ***" />
     </div>
   </div>
 </template>
@@ -66,11 +72,11 @@
   <div style="display: flex; flex-direction: column; gap: 32px;">
     <div>
       <h4>默认尺寸 (高60 宽40)</h4>
-      <InputOtp format="****" />
+      <ad-input-otp format="****" />
     </div>
     <div>
       <h4>小尺寸 (高40 宽28)</h4>
-      <InputOtp format="****" size="small" />
+      <ad-input-otp format="****" size="small" />
     </div>
   </div>
 </template>
@@ -87,11 +93,11 @@
   <div style="display: flex; flex-direction: column; gap: 32px;">
     <div>
       <h4>正方形 - 默认尺寸 (40x40)</h4>
-      <InputOtp format="****" square />
+      <ad-input-otp format="****" square />
     </div>
     <div>
       <h4>正方形 - 小尺寸 (28x28)</h4>
-      <InputOtp format="****" size="small" square />
+      <ad-input-otp format="****" size="small" square />
     </div>
   </div>
 </template>
@@ -108,11 +114,11 @@
   <div style="display: flex; flex-direction: column; gap: 32px;">
     <div>
       <h4>数字类型 (移动端弹出数字键盘)</h4>
-      <InputOtp format="****" type="number" />
+      <ad-input-otp format="****" type="number" />
     </div>
     <div>
       <h4>文本类型 (允许字母)</h4>
-      <InputOtp format="****" type="text" />
+      <ad-input-otp format="****" type="text" />
     </div>
   </div>
 </template>
@@ -129,19 +135,19 @@
   <div style="display: flex; flex-direction: column; gap: 32px;">
     <div>
       <h4>空状态</h4>
-      <InputOtp format="****" />
+      <ad-input-otp format="****" />
     </div>
     <div>
       <h4>部分填充</h4>
-      <InputOtp format="****" default-value="12" />
+      <ad-input-otp format="****" default-value="12" />
     </div>
     <div>
       <h4>完全填充</h4>
-      <InputOtp format="****" default-value="1234" />
+      <ad-input-otp format="****" default-value="1234" />
     </div>
     <div>
       <h4>禁用</h4>
-      <InputOtp format="****" disabled default-value="12" />
+      <ad-input-otp format="****" disabled default-value="12" />
     </div>
   </div>
 </template>
@@ -158,15 +164,15 @@
   <div style="display: flex; flex-direction: column; gap: 32px;">
     <div>
       <h4>默认状态</h4>
-      <InputOtp format="****" default-value="1234" />
+      <ad-input-otp format="****" default-value="1234" />
     </div>
     <div>
       <h4>成功状态 (success)</h4>
-      <InputOtp format="****" default-value="1234" status="success" />
+      <ad-input-otp format="****" default-value="1234" status="success" />
     </div>
     <div>
       <h4>错误状态 (error) - 按退格键一次性清空</h4>
-      <InputOtp format="****" default-value="1234" status="error" />
+      <ad-input-otp format="****" default-value="1234" status="error" />
     </div>
   </div>
 </template>
@@ -181,7 +187,7 @@
 ```vue
 <template>
   <div style="display: flex; flex-direction: column; gap: 16px; align-items: center;">
-    <InputOtp
+    <ad-input-otp
       format="***-***"
       v-model:value="value"
       @finish="completed = true"
@@ -233,7 +239,7 @@ const reset = () => {
     <p style="margin: 0; color: #666; font-size: 14px;">
       提示：正确验证码是 123456
     </p>
-    <InputOtp
+    <ad-input-otp
       format="***-***"
       v-model:value="value"
       @finish="handleFinish"

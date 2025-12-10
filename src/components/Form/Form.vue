@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, reactive, provide, watch, watchEffect } from 'vue'
+import { ref, computed, reactive, provide, watchEffect } from 'vue'
 import type { Ref } from 'vue'
 
 export type FormLayout = 'horizontal' | 'vertical' | 'inline'
@@ -255,8 +255,8 @@ const handleSubmit = async (e: Event) => {
   }
 }
 
-// Context 值
-provide('formContext', {
+// Context 值 - 使用 computed 确保响应式
+const formContextValue = computed(() => ({
   layout: props.layout,
   floatingLabel: props.floatingLabel,
   labelWidth: props.labelWidth,
@@ -275,7 +275,9 @@ provide('formContext', {
   registerField,
   unregisterField,
   validateField,
-})
+}))
+
+provide('formContext', formContextValue)
 
 // 如果提供了外部 form 实例，则同步方法
 watchEffect(() => {

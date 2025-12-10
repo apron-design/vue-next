@@ -58,7 +58,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, watch, h, useId, type VNode } from 'vue'
+import { ref, computed, onUnmounted, watch, h, useId, type VNode } from 'vue'
 import './Select.less'
 
 // 下拉箭头图标

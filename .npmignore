@@ -1,0 +1,37 @@
+# Source files
+src/
+docs/
+
+# Config files
+.dumirc.ts
+vite.config.ts
+vite.lib.config.ts
+tsconfig.json
+tsconfig.node.json
+.eslintrc.cjs
+.prettierrc
+
+# Development files
+.git/
+.gitignore
+node_modules/
+.DS_Store
+
+# Tests
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+
+# Build temp
+temp-server/
+
+# Documentation
+*.md
+!README.md
+!README.zh-CN.md
+
+# Lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
