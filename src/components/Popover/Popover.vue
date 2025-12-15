@@ -1,5 +1,25 @@
 <template>
+  <div :ref="(el) => { if (el) triggerRef = el.firstElementChild as HTMLElement }" :data-popover-trigger="popoverId">
+    <slot 
+      name="trigger" 
+      :open="open" 
+      :close="close" 
+      :visible="visible" 
+      :trigger-ref="triggerRef"
+      :handle-click="handleTriggerClick"
+      :handle-mouse-enter="handleTriggerMouseEnter"
+      :handle-mouse-leave="handleTriggerMouseLeave"
+    />
+  </div>
   <Teleport to="body">
+    <!-- Bridge area to connect trigger and popover for hover mode -->
+    <div
+      v-if="visible && props.mode === 'hover'"
+      :data-popover-bridge="popoverId"
+      class="apron-popover__bridge"
+      :style="bridgeStyle"
+      @mouseenter="handlePopoverMouseEnter"
+    />
     <div
       v-if="visible"
       ref="popoverRef"
@@ -25,11 +45,10 @@
       </div>
     </div>
   </Teleport>
-  <slot name="trigger" :open="open" :close="close" :visible="visible" />
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, nextTick, watch } from 'vue'
+import { ref, computed, onMounted, onUnmounted, nextTick, watch, type VNode } from 'vue'
 import './Popover.less'
 
 // Global state management: only one Popover shown at a time
@@ -86,6 +105,7 @@ const emit = defineEmits<{
 const visible = defineModel<boolean>('visible', { default: false })
 
 const popoverRef = ref<HTMLElement | null>(null)
+const triggerRef = ref<HTMLElement | null>(null)
 const popoverId = generatePopoverId()
 const hoverTimeout = ref<number | null>(null)
 const position = ref({ top: 0, left: 0 })
@@ -95,6 +115,35 @@ const containerClasses = computed(() => [
   props.class
 ].filter(Boolean).join(' '))
 
+// Bridge area style for hover mode (invisible area connecting trigger and popover)
+const bridgeStyle = computed(() => {
+  if (props.mode !== 'hover' || !visible.value) return { display: 'none' }
+  
+  const triggerEl = getTriggerElement()
+  if (!triggerEl || !popoverRef.value) return { display: 'none' }
+  
+  const triggerRect = triggerEl.getBoundingClientRect()
+  const popoverRect = popoverRef.value.getBoundingClientRect()
+  
+  // Calculate bridge area between trigger and popover
+  const gap = 4
+  const bridgeTop = triggerRect.top - gap + window.scrollY
+  const bridgeHeight = gap
+  const bridgeLeft = Math.min(triggerRect.left, popoverRect.left) + window.scrollX
+  const bridgeRight = Math.max(triggerRect.right, popoverRect.right) + window.scrollX
+  const bridgeWidth = bridgeRight - bridgeLeft
+  
+  return {
+    position: 'absolute',
+    top: `${bridgeTop}px`,
+    left: `${bridgeLeft}px`,
+    width: `${bridgeWidth}px`,
+    height: `${bridgeHeight}px`,
+    zIndex: '9999',
+    pointerEvents: 'auto'
+  }
+})
+
 // Calculate position (Popover above trigger element, arrow pointing down)
 const updatePosition = () => {
   const triggerEl = getTriggerElement()
@@ -103,7 +152,9 @@ const updatePosition = () => {
   const triggerRect = triggerEl.getBoundingClientRect()
   const popoverRect = popoverRef.value.getBoundingClientRect()
 
-  const top = triggerRect.top - popoverRect.height - 8 + window.scrollY
+  // Reduce gap from 8px to 4px to make it easier to move from trigger to popover
+  const gap = 4
+  const top = triggerRect.top - popoverRect.height - gap + window.scrollY
   let left = triggerRect.left + triggerRect.width / 2 - popoverRect.width / 2 + window.scrollX
 
   // Boundary detection
@@ -115,18 +166,16 @@ const updatePosition = () => {
   position.value = { top, left }
 }
 
-// Get trigger element (the element before the popover in the DOM)
+// Get trigger element
 const getTriggerElement = (): HTMLElement | null => {
-  const el = popoverRef.value
-  if (!el) return null
-  
-  // Find the previous sibling element (the trigger)
-  let sibling = el.previousElementSibling
-  while (sibling && sibling.nodeType !== Node.ELEMENT_NODE) {
-    sibling = sibling.previousElementSibling
+  // First try to use triggerRef
+  if (triggerRef.value) {
+    return triggerRef.value
   }
-  
-  return sibling as HTMLElement | null
+  // Fallback: try to find trigger element in the DOM
+  // This is a fallback for backward compatibility
+  const slotEl = document.querySelector(`[data-popover-trigger="${popoverId}"]`)
+  return slotEl as HTMLElement | null
 }
 
 // Open Popover
@@ -171,16 +220,23 @@ watch(visible, (newVisible) => {
   }
 })
 
-// Click outside to close (click mode)
+// Click outside to close (both click and hover mode)
 const handleClickOutside = (e: MouseEvent) => {
-  if (props.mode === 'click' && visible.value) {
+  if (visible.value) {
     const triggerEl = getTriggerElement()
-    if (
-      triggerEl &&
-      !triggerEl.contains(e.target as Node) &&
-      popoverRef.value &&
-      !popoverRef.value.contains(e.target as Node)
-    ) {
+    // Check if click is outside both trigger and popover
+    const isOutsideTrigger = triggerEl && !triggerEl.contains(e.target as Node)
+    const isOutsidePopover = popoverRef.value && !popoverRef.value.contains(e.target as Node)
+    // Also check bridge area (for hover mode)
+    const bridgeEl = document.querySelector(`[data-popover-bridge="${popoverId}"]`)
+    const isOutsideBridge = !bridgeEl || !bridgeEl.contains(e.target as Node)
+    
+    if (isOutsideTrigger && isOutsidePopover && isOutsideBridge) {
+      // Clear hover timeout if in hover mode
+      if (props.mode === 'hover' && hoverTimeout.value) {
+        window.clearTimeout(hoverTimeout.value)
+        hoverTimeout.value = null
+      }
       close()
     }
   }
@@ -194,18 +250,59 @@ onUnmounted(() => {
   document.removeEventListener('mousedown', handleClickOutside)
 })
 
-// Handle hover events
+// Handle click on trigger element
+const handleTriggerClick = () => {
+  if (props.mode === 'click') {
+    if (visible.value) {
+      close()
+    } else {
+      open()
+    }
+  }
+}
+
+// Handle hover events on trigger element
+const handleTriggerMouseEnter = () => {
+  if (props.mode === 'hover') {
+    // Clear any pending close timeout when mouse enters trigger
+    if (hoverTimeout.value) {
+      window.clearTimeout(hoverTimeout.value)
+      hoverTimeout.value = null
+    }
+    open()
+  }
+}
+
+const handleTriggerMouseLeave = () => {
+  if (props.mode === 'hover') {
+    // Set timeout to close when mouse leaves trigger
+    // Increase delay to 300ms to allow time for mouse to move to popover
+    // This gives users enough time to move from trigger to popover
+    hoverTimeout.value = window.setTimeout(() => {
+      close()
+      hoverTimeout.value = null
+    }, 300) as unknown as number
+  }
+}
+
+// Handle hover events on popover
 const handlePopoverMouseEnter = () => {
-  if (props.mode === 'hover' && hoverTimeout.value) {
-    window.clearTimeout(hoverTimeout.value)
+  if (props.mode === 'hover') {
+    // Clear any pending close timeout when mouse enters popover
+    if (hoverTimeout.value) {
+      window.clearTimeout(hoverTimeout.value)
+      hoverTimeout.value = null
+    }
   }
 }
 
 const handlePopoverMouseLeave = () => {
   if (props.mode === 'hover') {
+    // Set timeout to close when mouse leaves popover
     hoverTimeout.value = window.setTimeout(() => {
       close()
-    }, 100) as unknown as number
+      hoverTimeout.value = null
+    }, 300) as unknown as number
   }
 }
 </script>

@@ -129,22 +129,44 @@ import { AdForm, AdFormItem, AdInput, AdSelect, AdButton } from '@apron-design/v
 
 ### 浮动标签
 
-使用浮动标签模式，节省空间并提升用户体验。
+使用浮动标签模式，节省空间并提升用户体验。标签会在输入框内部显示，当输入框获得焦点或有值时，标签会自动浮动到顶部。
 
 :::demo
 ```vue
 <template>
   <div style="width: 400px;">
-    <h4>Floating Label Mode</h4>
-    <ad-form floating-label>
+    <h4>浮动标签模式</h4>
+    <ad-form floating-label @finish="handleFinish">
       <ad-form-item name="username" label="用户名" required>
-        <ad-input />
+        <template #default="{ value, onChange, onFocus, onBlur }">
+          <ad-input 
+            :value="value" 
+            @update:value="onChange" 
+            @focus="onFocus" 
+            @blur="onBlur" 
+          />
+        </template>
       </ad-form-item>
-      <ad-form-item name="email" label="邮箱">
-        <ad-input />
+      <ad-form-item name="email" label="邮箱地址" :rules="[{ type: 'email', message: '请输入有效的邮箱' }]">
+        <template #default="{ value, onChange, onFocus, onBlur }">
+          <ad-input 
+            :value="value" 
+            @update:value="onChange" 
+            @focus="onFocus" 
+            @blur="onBlur" 
+          />
+        </template>
       </ad-form-item>
       <ad-form-item name="password" label="密码" required>
-        <ad-input type="password" />
+        <template #default="{ value, onChange, onFocus, onBlur }">
+          <ad-input 
+            type="password" 
+            :value="value" 
+            @update:value="onChange" 
+            @focus="onFocus" 
+            @blur="onBlur" 
+          />
+        </template>
       </ad-form-item>
       <ad-form-item>
         <ad-button type="submit" variant="primary" style="width: 100%;">登录</ad-button>
@@ -155,9 +177,21 @@ import { AdForm, AdFormItem, AdInput, AdSelect, AdButton } from '@apron-design/v
 
 <script setup lang="ts">
 import { AdForm, AdFormItem, AdInput, AdButton } from '@apron-design/vue-next'
+
+const handleFinish = (values: any) => {
+  console.log('表单提交:', values)
+  alert('登录成功！\n' + JSON.stringify(values, null, 2))
+}
 </script>
 ```
 :::
+
+**使用说明：**
+
+1. 在 `<ad-form>` 上设置 `floating-label` 属性启用浮动标签模式
+2. 使用作用域插槽接收 `value`、`onChange`、`onFocus`、`onBlur` 等属性
+3. 将这些属性正确绑定到输入组件上，确保浮动效果正常工作
+4. 标签会在聚焦或有值时自动浮动到输入框顶部
 
 ### 表单验证
 
@@ -259,7 +293,7 @@ const handleFinishFailed = (errors: any) => {
           <ad-button @click="handleFill">填充数据</ad-button>
           <ad-button @click="handleReset">重置</ad-button>
           <ad-button variant="primary" @click="handleValidate">验证</ad-button>
-        </div>
+    </div>
       </ad-form-item>
     </ad-form>
   </div>
@@ -328,7 +362,7 @@ const handleValidate = async () => {
         />
       </ad-form-item>
     </ad-form>
-  </div>
+      </div>
 </template>
 
 <script setup lang="ts">

@@ -32,7 +32,7 @@ pnpm add @apron-design/vue-next
 ```ts
 import { createApp } from 'vue'
 import ApronDesignVue from '@apron-design/vue-next'
-import '@apron-design/vue-next/dist/style.css'
+import '@apron-design/vue-next/styles'
 
 const app = createApp(App)
 app.use(ApronDesignVue)
@@ -40,14 +40,18 @@ app.use(ApronDesignVue)
 
 ### Import Per Component (Recommended)
 
-```ts
-import { createApp } from 'vue'
-import { Button, Divider } from '@apron-design/vue-next'
-import '@apron-design/vue-next/dist/style.css'
+```vue
+<script setup lang="ts">
+import { AdButton, AdDivider } from '@apron-design/vue-next'
+import '@apron-design/vue-next/styles'
+</script>
 
-const app = createApp(App)
-app.use(Button)
-app.use(Divider)
+<template>
+  <div>
+    <ad-button variant="primary">Click Me</ad-button>
+    <ad-divider />
+  </div>
+</template>
 ```
 
 ## Documentation

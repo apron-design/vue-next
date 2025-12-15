@@ -92,7 +92,9 @@ provide('rowContext', {
 .apron-row {
   display: flex;
   flex-flow: row wrap;
+  width: 100%;
   min-width: 0;
+  box-sizing: border-box;
 
   // justify 对齐
   &--justify-start {

@@ -6,15 +6,13 @@ order: 3
 
 # Message 全局提示
 
-全局展示操作反馈信息，常用于通知用户操作结果。Message 组件提供了一种轻量级的反馈机制，不会打断用户的操作流程。
+全局展示操作反馈信息，常用于通知用户操作结果。
 
 ## 何时使用
 
 - 需要向用户显示操作反馈时
 - 需要全局性的简短通知时
 - 不希望打断用户操作流程的通知场景
-- 表单提交、数据删除等操作的结果反馈
-- 系统状态变更通知
 
 ## 代码演示
 
@@ -34,8 +32,7 @@ order: 3
 </template>
 
 <script setup lang="ts">
-import { AdMessage as message } from '@apron-design/vue-next'
-import { AdButton } from '@apron-design/vue-next'
+import { message } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -56,8 +53,7 @@ import { AdButton } from '@apron-design/vue-next'
 </template>
 
 <script setup lang="ts">
-import { AdMessage as message } from '@apron-design/vue-next'
-import { AdButton } from '@apron-design/vue-next'
+import { message } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -73,8 +69,7 @@ import { AdButton } from '@apron-design/vue-next'
 </template>
 
 <script setup lang="ts">
-import { AdMessage as message } from '@apron-design/vue-next'
-import { AdButton } from '@apron-design/vue-next'
+import { message } from '@apron-design/vue-next'
 
 const showMultiple = () => {
   message.info('First message')
@@ -101,8 +96,7 @@ const showMultiple = () => {
 </template>
 
 <script setup lang="ts">
-import { AdMessage as message } from '@apron-design/vue-next'
-import { AdButton } from '@apron-design/vue-next'
+import { message } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -118,8 +112,7 @@ import { AdButton } from '@apron-design/vue-next'
 </template>
 
 <script setup lang="ts">
-import { AdMessage as message } from '@apron-design/vue-next'
-import { AdButton } from '@apron-design/vue-next'
+import { message } from '@apron-design/vue-next'
 
 const showRichContent = () => {
   message.success('Your file report.pdf has been uploaded successfully!')
@@ -143,8 +136,7 @@ const showRichContent = () => {
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { AdMessage as message } from '@apron-design/vue-next'
-import { AdButton } from '@apron-design/vue-next'
+import { message } from '@apron-design/vue-next'
 
 const messageId = ref<string | null>(null)
 
@@ -177,8 +169,7 @@ const removeMessage = () => {
 </template>
 
 <script setup lang="ts">
-import { AdMessage as message } from '@apron-design/vue-next'
-import { AdButton } from '@apron-design/vue-next'
+import { message } from '@apron-design/vue-next'
 
 const showMultipleMessages = () => {
   message.info('Message 1', 0)
@@ -212,8 +203,7 @@ const showMultipleMessages = () => {
 </template>
 
 <script setup lang="ts">
-import { AdMessage as message } from '@apron-design/vue-next'
-import { AdButton } from '@apron-design/vue-next'
+import { message } from '@apron-design/vue-next'
 
 const handleSuccess = () => {
   message.success('操作成功！')
@@ -255,33 +245,18 @@ const handleCustom = () => {
 | message.remove | 移除指定消息 | `(id: string) => void` |
 | message.clear | 清除所有消息 | `() => void` |
 
-### MessageManager
-
-MessageManager 是一个内部组件，负责管理所有消息的显示、排序和移除。它通过 Teleport 将消息挂载到 body 元素下，确保消息始终显示在页面顶层。通常情况下，开发者无需直接与 MessageManager 交互，而是通过暴露的 message API 进行操作。
-
-### Message Props
+### 参数说明
 
 | 参数 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| type | 消息类型 | `'info' \| 'success' \| 'warning' \| 'error'` | `'info'` |
-| message | 消息内容 | `string` | `''` |
+| type | 消息类型 | `'info' \| 'success' \| 'warning' \| 'error'` | - |
+| message | 消息内容 | `string` | - |
 | duration | 显示时长（毫秒），设置为 0 则不自动关闭 | `number` | `5000` |
-| leaving | 是否正在离开动画状态 | `boolean` | `false` |
+| id | 消息唯一标识符，用于移除消息 | `string` | - |
 
-### Message Events
+## 注意事项
 
-| 事件名 | 说明 | 回调参数 |
-| --- | --- | --- |
-| close | 消息关闭时触发 | `() => void` |
-
-### message Methods
-
-| 方法 | 说明 | 类型 |
-| --- | --- | --- |
-| message.show | 显示消息 | `(type: 'info' \| 'success' \| 'warning' \| 'error', message: string, duration?: number) => string` |
-| message.info | 显示信息消息 | `(message: string, duration?: number) => string` |
-| message.success | 显示成功消息 | `(message: string, duration?: number) => string` |
-| message.warning | 显示警告消息 | `(message: string, duration?: number) => string` |
-| message.error | 显示错误消息 | `(message: string, duration?: number) => string` |
-| message.remove | 移除指定消息 | `(id: string) => void` |
-| message.clear | 清除所有消息 | `() => void` |
+- Message 组件会自动挂载到 `body` 元素上，无需手动引入组件
+- 多个消息会按顺序向下排列，先进先出
+- 消息内容支持字符串类型
+- 在暗色模式下，Message 组件会自动适配主题颜色

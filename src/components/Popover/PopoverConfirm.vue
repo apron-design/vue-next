@@ -1,4 +1,14 @@
 <template>
+  <div :ref="(el) => { if (el) triggerRef = el.firstElementChild as HTMLElement }" :data-popover-trigger="popoverId">
+    <slot 
+      name="trigger" 
+      :open="open" 
+      :close="close" 
+      :visible="visible" 
+      :trigger-ref="triggerRef"
+      :handle-click="handleTriggerClick"
+    />
+  </div>
   <Teleport to="body">
     <div
       v-if="visible"
@@ -37,11 +47,10 @@
       </div>
     </div>
   </Teleport>
-  <slot name="trigger" :open="open" :close="close" :visible="visible" />
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, nextTick, watch, type VNode, h } from 'vue'
+import { ref, computed, onMounted, onUnmounted, nextTick, watch, type VNode } from 'vue'
 import './Popover.less'
 
 // Global state management: only one Popover shown at a time
@@ -115,6 +124,7 @@ const emit = defineEmits<{
 const visible = defineModel<boolean>('visible', { default: false })
 
 const popoverRef = ref<HTMLElement | null>(null)
+const triggerRef = ref<HTMLElement | null>(null)
 const popoverId = generatePopoverId()
 const position = ref({ top: 0, left: 0 })
 
@@ -132,7 +142,9 @@ const updatePosition = () => {
   const triggerRect = triggerEl.getBoundingClientRect()
   const popoverRect = popoverRef.value.getBoundingClientRect()
 
-  const top = triggerRect.top - popoverRect.height - 8 + window.scrollY
+  // Reduce gap from 8px to 4px to make it easier to move from trigger to popover
+  const gap = 4
+  const top = triggerRect.top - popoverRect.height - gap + window.scrollY
   let left = triggerRect.left + triggerRect.width / 2 - popoverRect.width / 2 + window.scrollX
 
   // Boundary detection
@@ -144,18 +156,25 @@ const updatePosition = () => {
   position.value = { top, left }
 }
 
-// Get trigger element (the element before the popover in the DOM)
+// Get trigger element
 const getTriggerElement = (): HTMLElement | null => {
-  const el = popoverRef.value
-  if (!el) return null
-  
-  // Find the previous sibling element (the trigger)
-  let sibling = el.previousElementSibling
-  while (sibling && sibling.nodeType !== Node.ELEMENT_NODE) {
-    sibling = sibling.previousElementSibling
+  // First try to use triggerRef
+  if (triggerRef.value) {
+    return triggerRef.value
   }
-  
-  return sibling as HTMLElement | null
+  // Fallback: try to find trigger element in the DOM
+  // This is a fallback for backward compatibility
+  const slotEl = document.querySelector(`[data-popover-trigger="${popoverId}"]`)
+  return slotEl as HTMLElement | null
+}
+
+// Handle click on trigger element
+const handleTriggerClick = () => {
+  if (visible.value) {
+    close()
+  } else {
+    open()
+  }
 }
 
 // Open Popover
@@ -211,16 +230,15 @@ watch(visible, (newVisible) => {
   }
 })
 
-// Click outside to close
+// Click outside to close (always enabled)
 const handleClickOutside = (e: MouseEvent) => {
   if (visible.value) {
     const triggerEl = getTriggerElement()
-    if (
-      triggerEl &&
-      !triggerEl.contains(e.target as Node) &&
-      popoverRef.value &&
-      !popoverRef.value.contains(e.target as Node)
-    ) {
+    // Check if click is outside both trigger and popover
+    const isOutsideTrigger = triggerEl && !triggerEl.contains(e.target as Node)
+    const isOutsidePopover = popoverRef.value && !popoverRef.value.contains(e.target as Node)
+    
+    if (isOutsideTrigger && isOutsidePopover) {
       close()
     }
   }

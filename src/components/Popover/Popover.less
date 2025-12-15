@@ -296,6 +296,18 @@
 }
 
 // ============================================
+// Bridge area (for hover mode)
+// ============================================
+.apron-popover__bridge {
+  position: absolute;
+  background: transparent;
+  pointer-events: auto;
+  // Make it slightly larger to ensure mouse can move through
+  padding: 2px;
+  margin: -2px;
+}
+
+// ============================================
 // Animation
 // ============================================
 @keyframes apron-popover-fade-in {

@@ -69,5 +69,8 @@ export const AdMessage = {
   clear: clearAllMessages,
 }
 
+// 导出 message 别名以保持与 React 版本的一致性
+export const message = AdMessage
+
 export type { MessageProps } from './Message.vue'
 export default AdMessage
