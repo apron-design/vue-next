@@ -1,6 +1,6 @@
 {
   "name": "@apron-design/vue-next",
-  "version": "21.0.1",
+  "version": "21.0.2",
   "description": "Apron Design - A modern, intelligent Vue 3 component library built with TypeScript and Less. Featuring 40+ components with dark mode support.",
   "type": "module",
   "main": "./dist/index.cjs",

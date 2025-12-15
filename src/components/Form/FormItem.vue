@@ -301,7 +301,7 @@ defineExpose({
 
     .apron-form-item__floating-label {
       position: absolute;
-      top: 20px;
+      top: 50%;
       left: @spacing-4;
       transform: translateY(-50%);
       color: var(--apron-form-floating-label-color);

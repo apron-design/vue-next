@@ -27,7 +27,7 @@ order: 8
     <div style="margin-bottom: 16px; color: #666; font-size: 14px;">
       调整浏览器窗口宽度查看效果（断点：1024px）
     </div>
-    <Button @click="open = true">打开响应式弹窗</Button>
+    <ad-button @click="open = true">打开响应式弹窗</ad-button>
     <ResponsiveModal
       v-model:open="open"
       title="响应式弹窗"
@@ -42,7 +42,7 @@ order: 8
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { ResponsiveModal, Button } from '@apron-design/vue-next'
+import { AdResponsiveModal as ResponsiveModal, AdButton } from '@apron-design/vue-next'
 
 const open = ref(false)
 
@@ -65,7 +65,7 @@ const handleOk = () => {
     <div style="margin-bottom: 16px; color: #666; font-size: 14px;">
       断点设置为 768px
     </div>
-    <Button @click="open = true">打开（768px 断点）</Button>
+    <ad-button @click="open = true">打开（768px 断点）</ad-button>
     <ResponsiveModal
       v-model:open="open"
       title="自定义断点"
@@ -82,7 +82,7 @@ const handleOk = () => {
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { ResponsiveModal, Button } from '@apron-design/vue-next'
+import { AdResponsiveModal as ResponsiveModal, AdButton } from '@apron-design/vue-next'
 
 const open = ref(false)
 </script>
@@ -100,7 +100,7 @@ const open = ref(false)
     <div style="margin-bottom: 16px; color: #666; font-size: 14px;">
       移动端从底部弹出（默认）
     </div>
-    <Button @click="open = true">底部弹出</Button>
+    <ad-button @click="open = true">底部弹出</ad-button>
     <ResponsiveModal
       v-model:open="open"
       title="底部弹出"
@@ -116,7 +116,7 @@ const open = ref(false)
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { ResponsiveModal, Button } from '@apron-design/vue-next'
+import { AdResponsiveModal as ResponsiveModal, AdButton } from '@apron-design/vue-next'
 
 const open = ref(false)
 </script>
@@ -130,7 +130,7 @@ const open = ref(false)
     <div style="margin-bottom: 16px; color: #666; font-size: 14px;">
       移动端从右侧弹出
     </div>
-    <Button @click="open = true">右侧弹出</Button>
+    <ad-button @click="open = true">右侧弹出</ad-button>
     <ResponsiveModal
       v-model:open="open"
       title="右侧弹出"
@@ -145,7 +145,7 @@ const open = ref(false)
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { ResponsiveModal, Button } from '@apron-design/vue-next'
+import { AdResponsiveModal as ResponsiveModal, AdButton } from '@apron-design/vue-next'
 
 const open = ref(false)
 </script>
@@ -213,7 +213,7 @@ const open = ref(false)
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { ResponsiveModal, Button } from '@apron-design/vue-next'
+import { AdResponsiveModal as ResponsiveModal, AdButton } from '@apron-design/vue-next'
 
 const open = ref(false)
 const username = ref('')
@@ -254,7 +254,7 @@ const handleSubmit = () => {
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { ResponsiveModal, Button } from '@apron-design/vue-next'
+import { AdResponsiveModal as ResponsiveModal, AdButton } from '@apron-design/vue-next'
 
 const open = ref(false)
 
@@ -289,7 +289,7 @@ const handleDelete = () => {
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { ResponsiveModal, Button } from '@apron-design/vue-next'
+import { AdResponsiveModal as ResponsiveModal, AdButton } from '@apron-design/vue-next'
 
 const open = ref(false)
 </script>
@@ -318,7 +318,7 @@ const open = ref(false)
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { ResponsiveModal, Button } from '@apron-design/vue-next'
+import { AdResponsiveModal as ResponsiveModal, AdButton } from '@apron-design/vue-next'
 
 const open = ref(false)
 

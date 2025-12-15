@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import { Pagination } from '@apron-design/vue-next'
+import { AdPagination as Pagination } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -50,7 +50,7 @@ import { Pagination } from '@apron-design/vue-next'
 </template>
 
 <script setup>
-import { Pagination } from '@apron-design/vue-next'
+import { AdPagination as Pagination } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -66,7 +66,7 @@ import { Pagination } from '@apron-design/vue-next'
 </template>
 
 <script setup>
-import { Pagination } from '@apron-design/vue-next'
+import { AdPagination as Pagination } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -82,7 +82,7 @@ import { Pagination } from '@apron-design/vue-next'
 </template>
 
 <script setup>
-import { Pagination } from '@apron-design/vue-next'
+import { AdPagination as Pagination } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -109,7 +109,7 @@ import { Pagination } from '@apron-design/vue-next'
 
 <script setup>
 import { ref } from 'vue'
-import { Pagination } from '@apron-design/vue-next'
+import { AdPagination as Pagination } from '@apron-design/vue-next'
 
 const current = ref(1)
 
@@ -144,7 +144,7 @@ const setCurrent = (page) => {
 </template>
 
 <script setup>
-import { Pagination } from '@apron-design/vue-next'
+import { AdPagination as Pagination } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -160,7 +160,7 @@ import { Pagination } from '@apron-design/vue-next'
 </template>
 
 <script setup>
-import { Pagination } from '@apron-design/vue-next'
+import { AdPagination as Pagination } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -176,7 +176,7 @@ import { Pagination } from '@apron-design/vue-next'
 </template>
 
 <script setup>
-import { Pagination } from '@apron-design/vue-next'
+import { AdPagination as Pagination } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -192,7 +192,7 @@ import { Pagination } from '@apron-design/vue-next'
 </template>
 
 <script setup>
-import { Pagination } from '@apron-design/vue-next'
+import { AdPagination as Pagination } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -208,7 +208,7 @@ import { Pagination } from '@apron-design/vue-next'
 </template>
 
 <script setup>
-import { Pagination } from '@apron-design/vue-next'
+import { AdPagination as Pagination } from '@apron-design/vue-next'
 </script>
 ```
 :::
@@ -250,7 +250,7 @@ import { Pagination } from '@apron-design/vue-next'
 
 <script setup>
 import { ref, computed } from 'vue'
-import { Pagination } from '@apron-design/vue-next'
+import { AdPagination as Pagination } from '@apron-design/vue-next'
 
 const current = ref(1)
 const pageSize = 5
@@ -291,7 +291,7 @@ const setCurrent = (page) => {
 </template>
 
 <script setup>
-import { Pagination } from '@apron-design/vue-next'
+import { AdPagination as Pagination } from '@apron-design/vue-next'
 </script>
 ```
 :::
