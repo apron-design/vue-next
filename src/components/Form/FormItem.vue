@@ -2,12 +2,12 @@
   <div :class="classes">
     <!-- 标签 -->
     <label
-      v-if="!props.noLabel && props.label && !useFloatingLabel"
+      v-if="!noLabel && label && !useFloatingLabel"
       :for="itemId"
       class="apron-form-item__label"
       :style="labelStyle"
     >
-      {{ props.label }}
+      {{ label }}
       <span v-if="isRequired" class="apron-form-item__required">*</span>
     </label>
 
@@ -15,46 +15,36 @@
     <div class="apron-form-item__control">
       <!-- 浮动标签 -->
       <label
-        v-if="useFloatingLabel && props.label"
+        v-if="useFloatingLabel && label"
         :for="itemId"
         class="apron-form-item__floating-label"
       >
-        {{ props.label }}
+        {{ label }}
         <span v-if="isRequired" class="apron-form-item__required">*</span>
       </label>
 
       <!-- 子元素 -->
       <div class="apron-form-item__content">
-        <slot
-          v-if="props.name"
-          :id="itemId"
-          :value="value"
-          :disabled="ctx.disabled"
-          :placeholder="useFloatingLabel && props.label ? '' : undefined"
-          :onFocus="handleFocus"
-          :onBlur="handleBlur"
-          :onChange="handleChange"
-        />
-        <slot v-else />
+        <slot />
       </div>
 
       <!-- 错误信息 -->
       <div v-if="error" class="apron-form-item__error">{{ error }}</div>
 
       <!-- 帮助文本 -->
-      <div v-else-if="props.help" class="apron-form-item__help">{{ props.help }}</div>
+      <div v-else-if="help" class="apron-form-item__help">{{ help }}</div>
 
       <!-- 额外提示 -->
-      <div v-if="props.extra" class="apron-form-item__extra">{{ props.extra }}</div>
+      <div v-if="extra" class="apron-form-item__extra">{{ extra }}</div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, inject, onMounted, onUnmounted, useId } from 'vue'
-import type { ComputedRef } from 'vue'
+import { ref, computed, inject, onMounted, onUnmounted, watch } from 'vue'
+import type { Ref } from 'vue'
 
-interface FormContextValue {
+interface FormContext {
   layout: string
   floatingLabel: boolean
   labelWidth?: number | string
@@ -122,34 +112,21 @@ const props = withDefaults(defineProps<FormItemProps>(), {
 })
 
 // 获取表单上下文
-const formContextRaw = inject<ComputedRef<FormContextValue> | FormContextValue>('formContext')
+const formContext = inject<FormContext>('formContext')
 
-if (!formContextRaw) {
+if (!formContext) {
   throw new Error('FormItem must be used within a Form')
 }
 
-// 解包 computed ref
-const formContext = computed(() => {
-  return typeof formContextRaw === 'object' && 'value' in formContextRaw
-    ? formContextRaw.value
-    : formContextRaw
-})
-
 // 生成唯一ID
-const itemId = useId() || `form-item-${Math.random().toString(36).substr(2, 9)}`
+const itemId = ref(`form-item-${Math.random().toString(36).substr(2, 9)}`)
 const isFocused = ref(false)
 
 // 确定是否使用浮动标签
-const useFloatingLabel = computed(() => {
-  const ctx = formContext.value
-  return props.floatingLabel ?? ctx.floatingLabel
-})
+const useFloatingLabel = computed(() => props.floatingLabel ?? formContext.floatingLabel)
 
 // 确定标签宽度
-const labelWidth = computed(() => {
-  const ctx = formContext.value
-  return props.labelWidth ?? ctx.labelWidth
-})
+const labelWidth = computed(() => props.labelWidth ?? formContext.labelWidth)
 
 // 合并 required 规则
 const mergedRules = computed(() => {
@@ -165,26 +142,19 @@ const isRequired = computed(() => props.required || mergedRules.value.some((r) =
 // 注册/注销字段
 onMounted(() => {
   if (props.name) {
-    formContext.value.registerField(props.name, mergedRules.value)
+    formContext.registerField(props.name, mergedRules.value)
   }
 })
 
 onUnmounted(() => {
   if (props.name) {
-    formContext.value.unregisterField(props.name)
+    formContext.unregisterField(props.name)
   }
 })
 
 // 获取字段值和错误
-const value = computed(() => {
-  const ctx = formContext.value
-  return props.name ? ctx.getFieldValue(props.name) : undefined
-})
-
-const error = computed(() => {
-  const ctx = formContext.value
-  return props.name ? ctx.getFieldError(props.name) : undefined
-})
+const value = computed(() => props.name ? formContext.getFieldValue(props.name) : undefined)
+const error = computed(() => props.name ? formContext.getFieldError(props.name) : undefined)
 
 // 是否有值
 const hasValue = computed(() => value.value !== undefined && value.value !== null && value.value !== '')
@@ -192,13 +162,13 @@ const hasValue = computed(() => value.value !== undefined && value.value !== nul
 // 处理值变化
 const handleChange = (newValue: unknown) => {
   if (props.name) {
-    formContext.value.setFieldValue(props.name, newValue)
-    formContext.value.setFieldTouched(props.name, true)
+    formContext.setFieldValue(props.name, newValue)
+    formContext.setFieldTouched(props.name, true)
 
     // 如果 validateTrigger 包含 onChange，则触发验证
     const triggers = Array.isArray(props.validateTrigger) ? props.validateTrigger : [props.validateTrigger]
     if (triggers.includes('onChange')) {
-      formContext.value.validateField(props.name).catch(() => {})
+      formContext.validateField(props.name).catch(() => {})
     }
   }
 }
@@ -207,12 +177,12 @@ const handleChange = (newValue: unknown) => {
 const handleBlur = () => {
   isFocused.value = false
   if (props.name) {
-    formContext.value.setFieldTouched(props.name, true)
+    formContext.setFieldTouched(props.name, true)
 
     // 如果 validateTrigger 包含 onBlur，则触发验证
     const triggers = Array.isArray(props.validateTrigger) ? props.validateTrigger : [props.validateTrigger]
     if (triggers.includes('onBlur')) {
-      formContext.value.validateField(props.name).catch(() => {})
+      formContext.validateField(props.name).catch(() => {})
     }
   }
 }
@@ -222,29 +192,22 @@ const handleFocus = () => {
   isFocused.value = true
 }
 
-// 获取 context 用于模板
-const ctx = computed(() => formContext.value)
-
-const classes = computed(() => {
-  const ctx = formContext.value
-  return [
-    'apron-form-item',
-    `apron-form-item--${ctx.layout}`,
-    useFloatingLabel.value && 'apron-form-item--floating-label',
-    useFloatingLabel.value && (isFocused.value || hasValue.value) && 'apron-form-item--floating-active',
-    error.value && 'apron-form-item--error',
-    isRequired.value && 'apron-form-item--required',
-    ctx.disabled && 'apron-form-item--disabled',
-    props.class,
-  ].filter(Boolean).join(' ')
-})
+const classes = computed(() => [
+  'apron-form-item',
+  `apron-form-item--${formContext.layout}`,
+  useFloatingLabel.value && 'apron-form-item--floating-label',
+  useFloatingLabel.value && (isFocused.value || hasValue.value) && 'apron-form-item--floating-active',
+  error.value && 'apron-form-item--error',
+  isRequired.value && 'apron-form-item--required',
+  formContext.disabled && 'apron-form-item--disabled',
+  props.class,
+].filter(Boolean).join(' '))
 
 const labelStyle = computed(() => {
-  const ctx = formContext.value
   const style: Record<string, string> = {}
-  if (labelWidth.value && ctx.layout === 'horizontal') {
+  if (labelWidth.value && formContext.layout === 'horizontal') {
     style.width = typeof labelWidth.value === 'number' ? `${labelWidth.value}px` : String(labelWidth.value)
-    style.textAlign = ctx.labelAlign
+    style.textAlign = formContext.labelAlign
   }
   return style
 })
@@ -253,7 +216,7 @@ const labelStyle = computed(() => {
 defineExpose({
   focus: handleFocus,
   blur: handleBlur,
-  validate: () => props.name ? formContext.value.validateField(props.name) : Promise.resolve()
+  validate: () => props.name ? formContext.validateField(props.name) : Promise.resolve()
 })
 </script>
 
@@ -346,10 +309,12 @@ defineExpose({
       font-weight: @font-weight-normal;
       pointer-events: none;
       transition: all @transition-fast;
-      z-index: 1;
+      z-index: 10; /* 提高 z-index 确保优先级 */
       background-color: transparent;
       padding: 0 4px;
       margin-left: -4px;
+      /* 添加额外的优先级确保样式不被覆盖 */
+      line-height: 1.5;
     }
 
     .apron-form-item__required {
